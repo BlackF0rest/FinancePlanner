@@ -1,4 +1,4 @@
-from ._anvil_designer import Form1_copy_copy_copyTemplate
+from ._anvil_designer import SettingsTemplate
 from anvil import *
 import anvil.tables as tables
 import anvil.tables.query as q
@@ -7,7 +7,7 @@ import anvil.server
 import plotly.graph_objects as go
 
 
-class Form1_copy_copy_copy(Form1_copy_copy_copyTemplate):
+class Settings(SettingsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
