@@ -17,3 +17,31 @@ class Home(HomeTemplate):
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
+
+  def button_now_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Home')
+
+  def button_logs_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('InOut')
+
+  def button_insights_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Insights')
+
+  def button_setting_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Settings')
+
+  def button_1_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Income')
+
+  def button_3_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Transfer')
+
+  def button_2_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Expense')

@@ -5,10 +5,27 @@ components:
     properties: {bold: true, font: arial, font_size: 16, text: Settings}
     type: Label
   - components:
-    - layout_properties: {grid_position: 'FYSXNK,OUBIQG'}
-      name: column_panel_2
+    - components:
+      - layout_properties: {col_xs: 0, row: NWDAGW, width_xs: 12}
+        name: button_1
+        properties: {text: Setting 1}
+        type: Button
+      - layout_properties: {col_xs: 0, row: HRXSUU, width_xs: 12}
+        name: button_2
+        properties: {text: Setting 2}
+        type: Button
+      - layout_properties: {col_xs: 0, row: MAVTYA, width_xs: 12}
+        name: radio_button_1
+        properties: {align: center, selected: false, text: Setting 4}
+        type: RadioButton
+      - layout_properties: {col_xs: 0, row: MSBLMX, width_xs: 12}
+        name: drop_down_1
+        properties: {include_placeholder: true, placeholder: Setting 5}
+        type: DropDown
+      layout_properties: {grid_position: 'FGLZDG,AUALZO'}
+      name: grid_panel_1
       properties: {}
-      type: ColumnPanel
+      type: GridPanel
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
     properties: {role: outlined-card}
@@ -23,19 +40,23 @@ components:
   properties: {bold: true, font: arial, text: Finance Planner}
   type: Label
 - components:
-  - layout_properties: {grid_position: 'RZILLR,UUPIOP'}
+  - event_bindings: {click: button_now_click}
+    layout_properties: {grid_position: 'TDTDDO,KECLQX'}
     name: button_now
     properties: {icon: 'fa:line-chart', role: outlined-button, text: Home}
     type: Button
-  - layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
+  - event_bindings: {click: button_logs_click}
+    layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
     name: button_logs
     properties: {icon: 'fa:arrows-h', role: outlined-button, text: In/Out}
     type: Button
-  - layout_properties: {grid_position: 'BJFQPW,ACICKG'}
+  - event_bindings: {click: button_insights_click}
+    layout_properties: {grid_position: 'BJFQPW,ACICKG'}
     name: button_insights
     properties: {icon: 'fa:area-chart', role: outlined-button, text: Insights}
     type: Button
-  - layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
+  - event_bindings: {click: button_setting_click}
+    layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
     name: button_setting
     properties: {icon: 'fa:cc-visa', role: outlined-button, text: Settings}
     type: Button
