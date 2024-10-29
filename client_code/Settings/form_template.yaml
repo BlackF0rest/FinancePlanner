@@ -1,12 +1,14 @@
 components:
 - components:
+  - layout_properties: {grid_position: 'JIVCVT,SABBEH'}
+    name: label_1
+    properties: {bold: true, font: arial, font_size: 16, text: Settings}
+    type: Label
   - components:
-    - data_bindings: []
-      event_bindings: {show: plot_now_show}
-      layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
-      name: plot_now
+    - layout_properties: {grid_position: 'FYSXNK,OUBIQG'}
+      name: column_panel_2
       properties: {}
-      type: Plot
+      type: ColumnPanel
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
     properties: {role: outlined-card}
@@ -18,12 +20,12 @@ components:
 - data_bindings: []
   layout_properties: {slot: title}
   name: Heading
-  properties: {bold: true, font: arialbold, text: Finance Planner}
+  properties: {bold: true, font: arial, text: Finance Planner}
   type: Label
 - components:
-  - layout_properties: {grid_position: 'TDTDDO,KECLQX'}
+  - layout_properties: {grid_position: 'RZILLR,UUPIOP'}
     name: button_now
-    properties: {icon: 'fa:line-chart', role: outlined-button, text: Now}
+    properties: {icon: 'fa:line-chart', role: outlined-button, text: Home}
     type: Button
   - layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
     name: button_logs
