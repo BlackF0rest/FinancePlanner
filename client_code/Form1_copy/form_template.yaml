@@ -1,7 +1,9 @@
 components:
 - components:
   - components:
-    - layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
+    - data_bindings: []
+      event_bindings: {show: plot_now_show}
+      layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
       name: plot_now
       properties: {}
       type: Plot
@@ -19,7 +21,7 @@ components:
   properties: {bold: true, font: arialbold, text: Finance Planner}
   type: Label
 - components:
-  - layout_properties: {full_width_row: false, grid_position: 'OAULPZ,QFWYIG'}
+  - layout_properties: {grid_position: 'TDTDDO,KECLQX'}
     name: button_now
     properties: {icon: 'fa:line-chart', role: outlined-button, text: Now}
     type: Button
