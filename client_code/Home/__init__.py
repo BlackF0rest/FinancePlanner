@@ -33,3 +33,15 @@ class Home(HomeTemplate):
   def button_setting_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Settings')
+
+  def button_1_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Income')
+
+  def button_3_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Transfer')
+
+  def button_2_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Expense')

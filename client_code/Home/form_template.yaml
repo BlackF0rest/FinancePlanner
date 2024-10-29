@@ -20,15 +20,18 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
-    - layout_properties: {col_xs: 1, row: GAFVGP, width_xs: 3}
+    - event_bindings: {click: button_1_click}
+      layout_properties: {col_xs: 1, row: GAFVGP, width_xs: 3}
       name: button_1
       properties: {text: Income}
       type: Button
-    - layout_properties: {col_xs: 5, row: GAFVGP, width_xs: 3}
+    - event_bindings: {click: button_3_click}
+      layout_properties: {col_xs: 5, row: GAFVGP, width_xs: 3}
       name: button_3
       properties: {text: Transfer}
       type: Button
-    - layout_properties: {col_xs: 9, row: GAFVGP, width_xs: 3}
+    - event_bindings: {click: button_2_click}
+      layout_properties: {col_xs: 9, row: GAFVGP, width_xs: 3}
       name: button_2
       properties: {text: Expense}
       type: Button
