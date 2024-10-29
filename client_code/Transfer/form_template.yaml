@@ -1,4 +1,16 @@
 components:
+- layout_properties: {grid_position: 'WQFXXW,MQKKKP'}
+  name: input_numb
+  properties: {align: center, placeholder: '0,00', role: outlined, type: number}
+  type: TextBox
+- layout_properties: {grid_position: 'XKCOTP,LXTTBJ'}
+  name: input_name
+  properties: {align: center, placeholder: name, role: outlined}
+  type: TextBox
+- layout_properties: {grid_position: 'WGFRNN,IHPKWA'}
+  name: dropdown_account
+  properties: {align: full, include_placeholder: true, placeholder: Account}
+  type: DropDown
 - components:
   - event_bindings: {click: outlined_button_2_click}
     layout_properties: {col_xs: 0, row: GDDWWJ, width_xs: 6}

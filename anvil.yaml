@@ -1,10 +1,22 @@
 allow_embedding: false
 db_schema:
-  data:
+  accounts:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: UserID
+      target: users
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: Account Name
+      type: string
+    server: full
+    title: accounts
+  inoutcomes:
     client: none
     columns: []
     server: full
-    title: Data
+    title: InOutcomes
   users:
     client: none
     columns:
@@ -13,6 +25,12 @@ db_schema:
       type: string
     - admin_ui: {order: 1, width: 200}
       name: Surname
+      type: string
+    - admin_ui: {order: -1, width: 200}
+      name: UserID
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: mail
       type: string
     server: full
     title: Users
