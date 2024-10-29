@@ -17,3 +17,19 @@ class Insights(InsightsTemplate):
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
+    
+  def button_now_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Home')
+
+  def button_logs_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('InOut')
+
+  def button_insights_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Insights')
+
+  def button_setting_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    open_form('Settings')

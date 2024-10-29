@@ -21,19 +21,23 @@ components:
   properties: {bold: true, font: arialbold, text: Finance Planner}
   type: Label
 - components:
-  - layout_properties: {grid_position: 'ZNQLFG,NTTFKC'}
-    name: button_now_copy
+  - event_bindings: {click: button_now_click}
+    layout_properties: {grid_position: 'TDTDDO,KECLQX'}
+    name: button_now
     properties: {icon: 'fa:line-chart', role: outlined-button, text: Home}
     type: Button
-  - layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
+  - event_bindings: {click: button_logs_click}
+    layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
     name: button_logs
     properties: {icon: 'fa:arrows-h', role: outlined-button, text: In/Out}
     type: Button
-  - layout_properties: {grid_position: 'BJFQPW,ACICKG'}
+  - event_bindings: {click: button_insights_click}
+    layout_properties: {grid_position: 'BJFQPW,ACICKG'}
     name: button_insights
     properties: {icon: 'fa:area-chart', role: outlined-button, text: Insights}
     type: Button
-  - layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
+  - event_bindings: {click: button_setting_click}
+    layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
     name: button_setting
     properties: {icon: 'fa:cc-visa', role: outlined-button, text: Settings}
     type: Button
