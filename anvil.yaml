@@ -10,6 +10,9 @@ db_schema:
     - admin_ui: {order: 1, width: 200}
       name: Account Name
       type: string
+    - admin_ui: {order: 0.5, width: 200}
+      name: AccountId
+      type: number
     server: full
     title: accounts
   inoutcomes:
