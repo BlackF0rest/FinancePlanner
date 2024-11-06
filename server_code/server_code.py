@@ -20,4 +20,7 @@ import anvil.server
 #
 
 def get_daily_total_data():
-  daily_total = app_tables.dailytotals
+  daily_total = app_tables.dailytotals.search()
+
+  # Preparation for plotting
+  
