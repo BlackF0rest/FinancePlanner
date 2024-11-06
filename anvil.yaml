@@ -69,23 +69,6 @@ db_schema:
       type: link_single
     server: full
     title: Transactions
-  users:
-    client: none
-    columns:
-    - admin_ui: {order: 0, width: 200}
-      name: Name
-      type: string
-    - admin_ui: {order: 1, width: 200}
-      name: Surname
-      type: string
-    - admin_ui: {order: -1, width: 200}
-      name: UserID
-      type: number
-    - admin_ui: {order: 2, width: 200}
-      name: mail
-      type: string
-    server: full
-    title: Users
 dependencies: []
 name: M3 App 2
 package_name: M3_App_2
@@ -99,5 +82,11 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
+- client_config: {allow_remember_me: true, allow_signup: true, confirm_email: false, enable_automatically: true, remember_me_days: 7, use_email: true, use_google: true}
+  server_config: {user_table: users}
+  source: /runtime/services/anvil/users.yml
+- client_config: {}
+  server_config: {}
+  source: /runtime/services/google.yml
 startup: {module: Home, type: form}
 startup_form: null
