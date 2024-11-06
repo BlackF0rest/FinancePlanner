@@ -20,6 +20,7 @@ class Income(IncomeTemplate):
     """This method is called when the button is clicked"""
     open_form('Home')
 
-  def outlined_button_1_click(self, **event_args):
+  def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
+    anvil.server.call('write_transaction', type='income', amount=self.input_numb.text, name=self.input_name.text)
     open_form('Home')

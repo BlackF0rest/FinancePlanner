@@ -237,9 +237,9 @@ components:
       text: |
         Cancel
     type: Button
-  - event_bindings: {click: outlined_button_1_click}
+  - event_bindings: {click: bt_add_click}
     layout_properties: {col_xs: 6, row: GDDWWJ, width_xs: 6}
-    name: outlined_button_1
+    name: bt_add
     properties: {role: outlined-button, text: Add}
     type: Button
   layout_properties: {full_width_row: true, grid_position: 'SFXJFF,BNLKBI'}

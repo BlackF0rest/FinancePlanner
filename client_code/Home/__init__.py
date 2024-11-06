@@ -16,6 +16,12 @@ class Home(HomeTemplate):
     self.init_components(**properties)
     self.user = anvil.users.login_with_form()
 
+    data = anvil.server.call('get_daily_total_data')
+    dates = data['dates']
+    totals = data['net_totals']
+
+    self.plot_now.data = [go.Scatter(x=dates, y=totals, mode='lines+markers')]
+  
     # Any code you write here will run before the form opens.
 
   def plot_now_show(self, **event_args):
