@@ -23,3 +23,7 @@ class Expense(ExpenseTemplate):
   def outlined_button_2_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')
+
+  def radio_button_1_change(self, **event_args):
+    """This method is called when this radio button is selected (but not deselected)"""
+     self.date_picker_1.visible = self.radio_button_1.selected

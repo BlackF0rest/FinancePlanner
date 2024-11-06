@@ -24,3 +24,8 @@ class Income(IncomeTemplate):
     """This method is called when the button is clicked"""
     anvil.server.call('write_transaction', type='income', amount=self.input_numb.text, name=self.input_name.text)
     open_form('Home')
+
+  def radio_button_1_change(self, **event_args):
+    """This method is called when this radio button is selected (but not deselected)"""
+    self.date_picker_1.visible = self.radio_button_1.selected
+
