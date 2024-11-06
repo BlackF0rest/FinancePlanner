@@ -4,22 +4,71 @@ db_schema:
     client: none
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: UserID
+      name: User_ID
       target: users
       type: link_single
     - admin_ui: {order: 1, width: 200}
-      name: Account Name
+      name: Account_Name
       type: string
-    - admin_ui: {order: 0.5, width: 200}
-      name: AccountId
+    - admin_ui: {order: -1, width: 200}
+      name: Account_ID
       type: number
     server: full
     title: accounts
-  inoutcomes:
+  dailytotals:
     client: none
-    columns: []
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: date
+      type: date
+    - admin_ui: {order: 1, width: 200}
+      name: total_income
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: total_outcome
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: net_total
+      type: number
     server: full
-    title: InOutcomes
+    title: DailyTotals
+  icons:
+    client: none
+    columns:
+    - admin_ui: {order: 1, width: 200}
+      name: Icon
+      type: media
+    - admin_ui: {order: 0, width: 200}
+      name: category
+      type: string
+    server: full
+    title: Icons
+  transactions:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: InOut_ID
+      type: number
+    - admin_ui: {order: 1, width: 200}
+      name: Type
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: Category
+      target: icons
+      type: link_single
+    - admin_ui: {order: 3, width: 200}
+      name: Amount
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: From_Account_ID
+      target: accounts
+      type: link_single
+    - admin_ui: {order: 5, width: 200}
+      name: To_Account_ID
+      target: accounts
+      type: link_single
+    server: full
+    title: Transactions
   users:
     client: none
     columns:

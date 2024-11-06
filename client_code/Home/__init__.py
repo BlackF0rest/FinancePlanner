@@ -22,7 +22,7 @@ class Home(HomeTemplate):
     """This method is called when the button is clicked"""
     open_form('Home')
 
-  def button_logs_click(self, **event_args):
+  def button_transaction_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('InOut')
 
@@ -34,14 +34,14 @@ class Home(HomeTemplate):
     """This method is called when the button is clicked"""
     open_form('Settings')
 
-  def button_1_click(self, **event_args):
+  def button_income_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Income')
 
-  def button_3_click(self, **event_args):
+  def button_transfer_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Transfer')
 
-  def button_2_click(self, **event_args):
+  def button_expense_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Expense')
