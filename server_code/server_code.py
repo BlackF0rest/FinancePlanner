@@ -20,7 +20,16 @@ import anvil.server
 #
 
 def get_daily_total_data():
-  daily_total = app_tables.dailytotals.search()
+  filters = {}
+  if account_name:
+    filters['account'] = account_name
+      
+  daily_total = app_tables.dailytotals.search(**filters)
 
   # Preparation for plotting
-  
+  dates = []
+  amounts = []
+
+for day in transactions:
+  dates.append(transaction['date'])
+  amo
