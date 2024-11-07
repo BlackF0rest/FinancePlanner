@@ -38,7 +38,7 @@ def get_daily_total_data(account_name=None):
   return {"dates": dates, "net_totals" : net_totals}
 
 @anvil.server.callable
-def get_more_data():
+def get_pt_data(**kwargs):
   #class to get data from server
   pass
 
