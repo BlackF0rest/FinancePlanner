@@ -1,19 +1,104 @@
 allow_embedding: false
 db_schema:
-  data:
+  accounts:
     client: none
-    columns: []
+    columns:
+    - admin_ui: {order: 1, width: 200}
+      name: Account_Name
+      type: string
+    - admin_ui: {width: 200}
+      name: User
+      target: users
+      type: link_single
     server: full
-    title: Data
-  users:
+    title: accounts
+  dailytotals:
     client: none
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: Name
-      type: string
+      name: date
+      type: date
     - admin_ui: {order: 1, width: 200}
-      name: Surname
+      name: total_income
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: total_outcome
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: net_total
+      type: number
+    - admin_ui: {width: 200}
+      name: account
+      target: accounts
+      type: link_single
+    server: full
+    title: DailyTotals
+  icons:
+    client: none
+    columns:
+    - admin_ui: {order: 1, width: 200}
+      name: Icon
+      type: media
+    - admin_ui: {order: 0, width: 200}
+      name: category
       type: string
+    server: full
+    title: Icons
+  settings:
+    client: none
+    columns: []
+    server: full
+    title: Settings
+  transactions:
+    client: none
+    columns:
+    - admin_ui: {order: 1, width: 200}
+      name: Type
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: Category
+      target: icons
+      type: link_single
+    - admin_ui: {order: 3, width: 200}
+      name: Amount
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: account
+      target: accounts
+      type: link_single
+    - admin_ui: {order: 5, width: 200}
+      name: To_Account
+      target: accounts
+      type: link_single
+    server: full
+    title: Transactions
+  users:
+    client: none
+    columns:
+    - admin_ui: {width: 200}
+      name: email
+      type: string
+    - admin_ui: {width: 200}
+      name: enabled
+      type: bool
+    - admin_ui: {width: 200}
+      name: last_login
+      type: datetime
+    - admin_ui: {width: 200}
+      name: password_hash
+      type: string
+    - admin_ui: {width: 200}
+      name: n_password_failures
+      type: number
+    - admin_ui: {width: 200}
+      name: confirmed_email
+      type: bool
+    - admin_ui: {width: 200}
+      name: remembered_logins
+      type: simpleObject
+    - admin_ui: {width: 200}
+      name: signed_up
+      type: datetime
     server: full
     title: Users
 dependencies: []
@@ -29,5 +114,11 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
+- client_config: {allow_remember_me: true, allow_signup: true, confirm_email: false, enable_automatically: true, remember_me_days: 7, use_email: true, use_google: true}
+  server_config: {user_table: users}
+  source: /runtime/services/anvil/users.yml
+- client_config: {}
+  server_config: {}
+  source: /runtime/services/google.yml
 startup: {module: Home, type: form}
 startup_form: null

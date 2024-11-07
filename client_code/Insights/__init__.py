@@ -1,5 +1,8 @@
 from ._anvil_designer import InsightsTemplate
 from anvil import *
+import anvil.google.auth, anvil.google.drive
+from anvil.google.drive import app_files
+import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
@@ -17,7 +20,7 @@ class Insights(InsightsTemplate):
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
-    
+    w
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')
