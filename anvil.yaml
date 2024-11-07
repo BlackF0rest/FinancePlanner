@@ -44,6 +44,11 @@ db_schema:
       type: string
     server: full
     title: Icons
+  settings:
+    client: none
+    columns: []
+    server: full
+    title: Settings
   transactions:
     client: none
     columns:
