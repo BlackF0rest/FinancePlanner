@@ -9,7 +9,6 @@ from anvil.tables import app_tables
 import anvil.server
 import plotly.graph_objects as go
 
-
 class Home(HomeTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
