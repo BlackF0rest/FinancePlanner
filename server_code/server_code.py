@@ -23,28 +23,17 @@ import random
 
 @anvil.server.callable
 def get_daily_total_data(account_id):
-  filters = []
+  filters = {}
   if account_id:
     account = app_tables.accounts.get_by_id(account_id)
     if account:
-        filters.append('account' == account)
+        filters['account'] = account
   
   today = datetime.now().date()
   yesterday = today - timedelta(days=1)
   tomorrow = today + timedelta(days=1)
-
-  date_filter = q.any_of(
-        'date' == today,
-        'date' == yesterday,
-        'date' == tomorrow
-
-    )
-
-  combined_filter = q.all_of(*filters, date_filter)
-
-  print(combined_filter)
-
-  daily_totals = app_tables.dailytotals.search(combined_filter)
+  
+  daily_totals = app_tables.dailytotals.search(**filters)
 
   # Preparation for plotting
   dates = []

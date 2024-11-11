@@ -14,21 +14,16 @@ class Home(HomeTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    #anvil.server.call('update_daily_totals')
+    # Initialize accounts dict
+    self.accounts = None
 
-    accounts = anvil.server.call('get_user_accounts')
-
-    self.drop_down_1.items = [(account['name'], account['id']) for account in accounts]
-
-    if accounts:
-      self.drop_down_1.selected_value = accounts[0]['id']
-    
+    # Handle Login
     self.user = anvil.users.login_with_form()
-    self.update_main_graph(accounts[0]['id'])
 
-  def plot_now_show(self, **event_args):
-    """This method is called when the Plot is shown on the screen"""
-    pass
+    # get Users accounts
+    self.update_accounts()
+    # initialize main graph
+    self.update_main_graph(self.accounts[0]['id'])
 
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -62,6 +57,15 @@ class Home(HomeTemplate):
     """This method is called when an item is selected"""
     selected_account_id = self.drop_down_1.selected_value
     self.update_main_graph(selected_account_id)
+
+
+  def update_accounts(self):
+    self.accounts = anvil.server.call('get_user_accounts')
+
+    self.drop_down_1.items = [(account['name'], account['id']) for account in self.accounts]
+
+    if self.accounts:
+      self.drop_down_1.selected_value = self.accounts[0]['id']
 
   def update_main_graph(self, account_id):
     data = anvil.server.call('get_daily_total_data', account_id)
