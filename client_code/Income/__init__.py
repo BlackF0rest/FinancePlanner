@@ -14,9 +14,9 @@ class Income(IncomeTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    categories = anvil.server.call('get_icon_categories')
+    #categories = anvil.server.call('get_icon_categories')
     #self.icons_repeater.items = categories
-    self.selected_category = None
+    #self.selected_category = None
 
     print()
 
@@ -26,7 +26,7 @@ class Income(IncomeTemplate):
 
   def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
-    #anvil.server.call('write_transaction', type='income', amount=float(self.input_numb.text), name=self.input_name.text, accoung=)
+    anvil.server.call('write_transaction', type='income', category=None, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
     open_form('Home')
 
   def radio_button_1_change(self, **event_args):

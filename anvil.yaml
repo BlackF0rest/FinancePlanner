@@ -81,6 +81,9 @@ db_schema:
       name: To_Account
       target: accounts
       type: link_single
+    - admin_ui: {order: 6, width: 200}
+      name: name
+      type: string
     server: full
     title: Transactions
   users:

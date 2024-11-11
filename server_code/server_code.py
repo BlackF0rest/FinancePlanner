@@ -5,7 +5,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import random
 
 # This is a server module. It runs on the Anvil server,
@@ -28,10 +28,12 @@ def get_daily_total_data(account_id):
     account = app_tables.accounts.get_by_id(account_id)
     if account:
         filters['account'] = account
-  
-  today = datetime.now().date()
-  yesterday = today - timedelta(days=1)
-  tomorrow = today + timedelta(days=1)
+
+  today = date(2024,11,7) #datetime.now().date()
+  yesterday =   today - timedelta(days=1)
+  tomorrow =   today + timedelta(days=1)
+
+  filters['date'] = q.any_of(*[today, yesterday, tomorrow])
   
   daily_totals = app_tables.dailytotals.search(**filters)
 
@@ -55,10 +57,11 @@ def get_icon_categories():
   return app_tables.icons.search()
 
 @anvil.server.callable
-def write_transaction(type, category, amount, name, account, to_account=None):
+def write_transaction(type, category, amount, name, account_id, to_account=None):
   # Write the transaction different, depending on what it is.
   print("writing transactions")
-  app_tables.transactions.add_row(account=app_tables.settings.get(user=anvil.users.get_user()))
+  print(type + ' ' + str(category) +' ' + str(amount) + ' ' + name + ' ' + account_id + ' ' + str(to_account))
+  app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), To_Account=to_account)
 
 @anvil.server.callable
 def get_user_accounts():
@@ -157,4 +160,11 @@ def update_daily_totals(account=None, change_date=None):
                 print(f"Added total for {date} for account {account['id']}: "
 
                       f"Income={total_income}, Outcome={total_outcome}, Net={net_total}")
-    
+
+@anvil.server.callable
+def set_account_setting(account_id, user):
+  app_tables.settings.get(user=user).update(current_account=app_tables.accounts.get_by_id(account_id))
+
+@anvil.server.callable
+def get_current_account_id(user):
+  return app_tables.settings.get(user=user)['current_account'].get_id()
