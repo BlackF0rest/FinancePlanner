@@ -1,0 +1,15 @@
+components:
+- layout_properties: {grid_position: 'WNWLDO,QEHSPP'}
+  name: img_icon
+  properties: {}
+  type: Image
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,DJTYDH'}
+  name: lb_name
+  properties: {align: center, bold: true, font: arial, font_size: 20}
+  type: Label
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK ZGEPTX,RGXDHX'}
+  name: lb_amount
+  properties: {align: center, font: arial}
+  type: Label
+container: {type: ColumnPanel}
+is_package: true

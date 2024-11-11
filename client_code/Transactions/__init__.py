@@ -14,8 +14,8 @@ class Transactions(TransactionsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-
-    # Any code you write here will run before the form opens.
+    self.update_accounts()
+    self.update_transactions()
 
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
@@ -36,3 +36,22 @@ class Transactions(TransactionsTemplate):
   def button_setting_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Settings')
+
+  def update_transactions(self):
+    incomes, expenses, transfers = anvil.server.call('get_transactions', anvil.server.call('get_current_account_id', anvil.users.get_user()))
+    self.prppn_income.items = incomes
+
+  def dd_account_change(self, **event_args):
+    """This method is called when an item is selected"""
+    selected_account_id = self.drop_down_1.selected_value
+    anvil.server.call('set_account_setting', selected_account_id, anvil.users.get_user())
+    self.update_main_graph(selected_account_id)
+
+  def update_accounts(self):
+      self.accounts = anvil.server.call('get_user_accounts')
+  
+      self.dd_account.items = [(account['name'], account['id']) for account in self.accounts]
+  
+      if self.accounts:
+        self.dd_account.selected_value = self.accounts[0]['id']
+

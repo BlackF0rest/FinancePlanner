@@ -57,11 +57,11 @@ def get_icon_categories():
   return app_tables.icons.search()
 
 @anvil.server.callable
-def write_transaction(type, category, amount, name, account_id, to_account=None):
+def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None):
   # Write the transaction different, depending on what it is.
   print("writing transactions")
-  print(type + ' ' + str(category) +' ' + str(amount) + ' ' + name + ' ' + account_id + ' ' + str(to_account))
-  app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), To_Account=to_account)
+  print(type + ' ' + str(category) +' ' + str(amount) + ' ' + name + ' ' + account_id + ' ' + str(to_account) + ' ' + str(date))
+  app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account)
 
 @anvil.server.callable
 def get_user_accounts():
@@ -168,3 +168,34 @@ def set_account_setting(account_id, user):
 @anvil.server.callable
 def get_current_account_id(user):
   return app_tables.settings.get(user=user)['current_account'].get_id()
+
+@anvil.server.callable
+def get_transactions(account_id, date=datetime.now().date()):
+  incomes = app_tables.transactions.search(Type='income', date=date)
+  expenses = app_tables.transactions.search(Type='expense', date=date)
+  transfers = app_tables.transactions.search(Type='transfer', date=date)
+
+  income_data = []
+  expense_data = []
+  transfer_data = []
+  
+  for income in incomes:
+    income_data.append({
+      'name': income['name'],
+      'category': income['Category'],
+      'amount': income['Amount']
+    })
+  for expense in expenses:
+    expense_data.append({
+      'name': expense['name'],
+      'category': expense['Category'],
+      'amount': expense['Amount']
+    })
+  for transfer in transfers:
+    transfer_data.append({
+      'name': transfer['name'],
+      'category': transfer['Category'],
+      'amount': transfer['Amount']
+    })
+
+  return income_data, expense_data, transfer_data
