@@ -18,8 +18,6 @@ class Income(IncomeTemplate):
     #self.icons_repeater.items = categories
     #self.selected_category = None
 
-    print()
-
   def outlined_button_2_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')

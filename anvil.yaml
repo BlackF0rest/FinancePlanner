@@ -58,6 +58,9 @@ db_schema:
       name: user
       target: users
       type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: max_days_ahead_from_today
+      type: number
     server: full
     title: Settings
   transactions:
@@ -137,5 +140,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup: {module: Transactions, type: form}
+startup: {module: Expense, type: form}
 startup_form: null

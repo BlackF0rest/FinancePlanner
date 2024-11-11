@@ -16,14 +16,15 @@ class Expense(ExpenseTemplate):
 
     # Any code you write here will run before the form opens.
 
-  def outlined_button_1_click(self, **event_args):
+  def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
+    anvil.server.call('write_transaction', type='expense', category=None, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
     open_form('Home')
 
   def outlined_button_2_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')
 
-  def radio_button_1_change(self, **event_args):
+  def rd_recurring_change(self, **event_args):
     """This method is called when this radio button is selected (but not deselected)"""
-     self.date_picker_1.visible = self.radio_button_1.selected
+    pass

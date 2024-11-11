@@ -7,244 +7,27 @@ components:
   name: input_name
   properties: {align: center, placeholder: name, role: outlined}
   type: TextBox
-- event_bindings: {change: radio_button_1_change}
+- event_bindings: {change: rd_recurring_change}
   layout_properties: {grid_position: ''}
-  name: radio_button_1
+  name: rd_recurring
   properties: {align: center, text: Recurring}
   type: RadioButton
 - layout_properties: {grid_position: ''}
-  name: date_picker_1
+  name: dt_recurring
   properties: {visible: false}
   type: DatePicker
 - layout_properties: {grid_position: 'FIRLJP,SNWDQU'}
-  name: radio_button_2
+  name: rd_spreadout
   properties: {align: center, text: Spread Out}
   type: RadioButton
 - layout_properties: {grid_position: 'JUFSDQ,IUUJWX'}
-  name: date_picker_1_copy
+  name: dt_spreadout
   properties: {visible: false}
   type: DatePicker
-- components:
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_5_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_5_copy_3
-    properties: {visible: true, wrap_on: mobile}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_8
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_8
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_copy_3
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_2_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_2_copy_3
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_3_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_3_copy_3
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_4_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: LDYJWX, width_xs: 2}
-    name: link_1_copy_4_copy_3
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_5_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_5_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_7
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_7
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_2_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_2_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_3_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_3_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_4_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: OMOQSP, width_xs: 2}
-    name: link_1_copy_4_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_5_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_5_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_6
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_6
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_2_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_2_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_3_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_3_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_4_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: VQRBBO, width_xs: 2}
-    name: link_1_copy_4_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_4
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 0, row: ICVWIY, width_xs: 2}
-    name: link_1_copy_4
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_3
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 2, row: ICVWIY, width_xs: 2}
-    name: link_1_copy_3
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_2
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 4, row: ICVWIY, width_xs: 2}
-    name: link_1_copy_2
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 6, row: ICVWIY, width_xs: 2}
-    name: link_1_copy
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 8, row: ICVWIY, width_xs: 2}
-    name: link_1
-    properties: {}
-    type: Link
-  - components:
-    - layout_properties: {grid_position: 'ZNRDRC,TFRIXT'}
-      name: image_1_copy_5
-      properties: {height: 109}
-      type: Image
-    layout_properties: {col_xs: 10, row: ICVWIY, width_xs: 2}
-    name: link_1_copy_5
-    properties: {}
-    type: Link
-  layout_properties: {grid_position: 'FDNLYS,KRZZOH'}
-  name: grid_panel_2
-  properties: {}
-  type: GridPanel
+- layout_properties: {grid_position: 'PXNTYN,JMDTAL'}
+  name: rppn_icons
+  properties: {item_template: Expense.ItemTemplate6}
+  type: RepeatingPanel
 - components:
   - event_bindings: {click: outlined_button_2_click}
     layout_properties: {col_xs: 0, row: GDDWWJ, width_xs: 6}
@@ -254,9 +37,9 @@ components:
       text: |
         Cancel
     type: Button
-  - event_bindings: {click: outlined_button_1_click}
+  - event_bindings: {click: bt_add_click}
     layout_properties: {col_xs: 6, row: GDDWWJ, width_xs: 6}
-    name: outlined_button_1
+    name: bt_add
     properties: {role: outlined-button, text: Add}
     type: Button
   layout_properties: {grid_position: 'FSYOQM,OJFKHN'}

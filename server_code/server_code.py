@@ -60,8 +60,21 @@ def get_icon_categories():
 def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None):
   # Write the transaction different, depending on what it is.
   print("writing transactions")
-  print(type + ' ' + str(category) +' ' + str(amount) + ' ' + name + ' ' + account_id + ' ' + str(to_account) + ' ' + str(date))
   app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account)
+  recalc_daily_totals(date)
+
+def recalc_daily_totals(from_date, account):
+  days_ahead_from_today = app_tables.settings.get(user=anvil.users.get_user())['max_days_ahead_from_today']
+  if from_date != datetime.now().date():
+    days_to_calc = ((datetime.now().date() + timedelta(days=days_ahead_from_today)) - from_date).days
+  else:
+    days_to_calc = days_ahead_from_today
+  
+  daterange = [from_date - datetime.timedelta(days=x) for x in range(days_to_calc)]
+
+  for day in daterange:
+    app_tables.dailytotals.ge
+    daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)))['net_total'] + app_tables.dailytotals.get(date=day)['total_income'] - app_tables.dailytotals.get(date=day)['total_outcome']
 
 @anvil.server.callable
 def get_user_accounts():

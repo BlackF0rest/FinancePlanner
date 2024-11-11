@@ -150,6 +150,12 @@ color: %color:On Primary Container%;
   line-height: 1.5;
 }
 
+.anvil-role-icon-grid > div {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 3%; /*adjust as needed*/
+}
+
 .anvil-role-body > .label-text, .anvil-role-body .link-text {
   padding-top: 0;
   padding-bottom: 0;
