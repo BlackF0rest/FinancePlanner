@@ -4,10 +4,10 @@ db_schema:
     client: none
     columns:
     - admin_ui: {order: 1, width: 200}
-      name: Account_Name
+      name: account_name
       type: string
-    - admin_ui: {width: 200}
-      name: User
+    - admin_ui: {order: 2, width: 200}
+      name: user
       target: users
       type: link_single
     server: full
@@ -42,11 +42,22 @@ db_schema:
     - admin_ui: {order: 0, width: 200}
       name: category
       type: string
+    - admin_ui: {order: 2, width: 200}
+      name: type
+      type: string
     server: full
     title: Icons
   settings:
     client: none
-    columns: []
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: current_account
+      target: accounts
+      type: link_single
+    - admin_ui: {order: -1, width: 200}
+      name: user
+      target: users
+      type: link_single
     server: full
     title: Settings
   transactions:
@@ -120,5 +131,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup: {module: Home, type: form}
+startup: {module: Income, type: form}
 startup_form: null

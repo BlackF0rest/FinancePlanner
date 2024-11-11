@@ -13,15 +13,18 @@ class Home(HomeTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
+
+    #anvil.server.call('update_daily_totals')
+
+    accounts = anvil.server.call('get_user_accounts')
+
+    self.drop_down_1.items = [(account['name'], account['id']) for account in accounts]
+
+    if accounts:
+      self.drop_down_1.selected_value = accounts[0]['id']
+    
     self.user = anvil.users.login_with_form()
-
-    data = anvil.server.call('get_daily_total_data')
-    dates = data['dates']
-    totals = data['net_totals']
-
-    self.plot_now.data = [go.Scatter(x=dates, y=totals, mode='lines+markers')]
-  
-    # Any code you write here will run before the form opens.
+    self.update_main_graph(accounts[0]['id'])
 
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
@@ -54,3 +57,16 @@ class Home(HomeTemplate):
   def button_expense_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Expense')
+
+  def drop_down_1_change(self, **event_args):
+    """This method is called when an item is selected"""
+    selected_account_id = self.drop_down_1.selected_value
+    self.update_main_graph(selected_account_id)
+
+  def update_main_graph(self, account_id):
+    data = anvil.server.call('get_daily_total_data', account_id)
+    dates = data['dates']
+    totals = data['net_totals']
+
+    self.plot_now.data = [go.Scatter(x=dates, y=totals, mode='lines+markers')]
+ 
