@@ -121,7 +121,7 @@ def get_transactions(account_id, date=datetime.now().date()):
       'name': transfer['name'],
       'category': transfer['Category'],
       'amount': transfer['Amount'],
-      'to': transfer['To_Account'].textq
+      'to': transfer['To_Account']['account_name']
     })
 
   return income_data, expense_data, transfer_data

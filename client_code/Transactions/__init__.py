@@ -8,7 +8,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 import plotly.graph_objects as go
-import datetime
+from datetime import datetime
 
 
 class Transactions(TransactionsTemplate):
@@ -36,8 +36,8 @@ class Transactions(TransactionsTemplate):
     """This method is called when the button is clicked"""
     open_form('Settings')
 
-  def update_transactions(self):
-    incomes, expenses, transfers = anvil.server.call('get_transactions', anvil.server.call('get_current_account_id', anvil.users.get_user()))
+  def update_transactions(self, date=datetime.now().date()):
+    incomes, expenses, transfers = anvil.server.call('get_transactions', anvil.server.call('get_current_account_id', anvil.users.get_user()), date)
     self.rppn_income.items = incomes
     self.rppn_transfers.items = transfers
     self.rppn_expense.items = expenses
