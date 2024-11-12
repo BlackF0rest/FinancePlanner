@@ -73,17 +73,17 @@ components:
   - event_bindings: {click: button_logs_click}
     layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
     name: button_logs
-    properties: {icon: 'fa:arrows-h', role: outlined-button, text: In/Out}
+    properties: {icon: 'fa:arrows-h', role: outlined-button, text: Transactions}
     type: Button
   - event_bindings: {click: button_insights_click}
     layout_properties: {grid_position: 'BJFQPW,ACICKG'}
     name: button_insights
-    properties: {icon: 'fa:area-chart', role: outlined-button, text: Insights}
+    properties: {enabled: false, icon: 'fa:area-chart', role: outlined-button, text: Insights}
     type: Button
   - event_bindings: {click: button_setting_click}
     layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
     name: button_setting
-    properties: {icon: 'fa:cc-visa', role: outlined-button, text: Settings}
+    properties: {icon: 'fa:gear', role: outlined-button, text: Settings}
     type: Button
   layout_properties: {slot: left-nav}
   name: column_panel_1

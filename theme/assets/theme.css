@@ -101,8 +101,9 @@ body {
   font-family: Roboto, Noto, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.4286;
-  color: %color:On Surface%;
-  background-color: %color:Background%;
+  height: 100vh;
+  margin: 0;
+  background:  linear-gradient(90deg, rgba(141, 139, 226, 0.56), rgba(253, 187, 203, 0.56));
   min-height: calc(100vh - 56px)
 }
 

@@ -23,20 +23,24 @@ components:
         properties: {include_placeholder: true, placeholder: Setting 5}
         type: DropDown
       - layout_properties: {col_xs: 0, row: JZULVC, width_xs: 12}
-        name: label_2
-        properties: {align: center, text: Months calculated into the future (affects performance)}
+        name: lb_days_into_future
+        properties: {align: center, text: Days calculated into the future (affects performance)}
         type: Label
       - layout_properties: {col_xs: 0, row: LPIREU, width_xs: 3}
-        name: outlined_button_2
+        name: bt_minus_days
         properties: {role: outlined-button, text: '-'}
         type: Button
       - layout_properties: {col_xs: 4, row: LPIREU, width_xs: 4}
-        name: label_3
+        name: lb_days_future
         properties: {align: center, text: '24'}
         type: Label
       - layout_properties: {col_xs: 9, row: LPIREU, width_xs: 3}
-        name: outlined_button_1
+        name: bt_plus_days
         properties: {role: outlined-button, text: +}
+        type: Button
+      - layout_properties: {col_xs: 0, row: GAFUOK, width_xs: 12}
+        name: bt_dev_tip
+        properties: {role: outlined-button, text: Tip the Developer}
         type: Button
       layout_properties: {grid_position: 'FGLZDG,AUALZO'}
       name: grid_panel_1
@@ -64,7 +68,7 @@ components:
   - event_bindings: {click: button_logs_click}
     layout_properties: {grid_position: 'UFRLDB,PNHTZZ'}
     name: button_logs
-    properties: {icon: 'fa:arrows-h', role: outlined-button, text: In/Out}
+    properties: {icon: 'fa:arrows-h', role: outlined-button, text: Transactions}
     type: Button
   - event_bindings: {click: button_insights_click}
     layout_properties: {grid_position: 'BJFQPW,ACICKG'}
@@ -74,7 +78,7 @@ components:
   - event_bindings: {click: button_setting_click}
     layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
     name: button_setting
-    properties: {icon: 'fa:cc-visa', role: outlined-button, text: Settings}
+    properties: {enabled: false, icon: 'fa:gear', role: outlined-button, text: Settings}
     type: Button
   layout_properties: {slot: left-nav}
   name: column_panel_1

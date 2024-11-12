@@ -14,6 +14,8 @@ from datetime import datetime
 class Transactions(TransactionsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
+    self.accounts = None
+    
     self.init_components(**properties)
     self.update_accounts()
     self.update_transactions()
@@ -26,7 +28,7 @@ class Transactions(TransactionsTemplate):
 
   def button_logs_click(self, **event_args):
     """This method is called when the button is clicked"""
-    open_form('InOut')
+    pass
 
   def button_insights_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -51,8 +53,11 @@ class Transactions(TransactionsTemplate):
   def update_accounts(self):
       self.accounts = anvil.server.call('get_user_accounts')
       self.dd_account.items = [(account['name'], account['id']) for account in self.accounts]
+    
       if self.accounts:
-        self.dd_account.selected_value = self.accounts[0]['id']
+        for account in self.accounts:
+          if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+            self.dd_account.selected_value = account['id']
 
   def date_transactions_change(self, **event_args):
     """This method is called when the selected date changes"""

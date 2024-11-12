@@ -68,7 +68,9 @@ class Home(HomeTemplate):
     self.drop_down_1.items = [(account['name'], account['id']) for account in self.accounts]
 
     if self.accounts:
-      self.drop_down_1.selected_value = self.accounts[0]['id']
+      for account in self.accounts:
+        if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+          self.drop_down_1.selected_value = account['id']
 
   def update_main_graph(self, account_id):
     data = anvil.server.call('get_daily_total_data', account_id)
