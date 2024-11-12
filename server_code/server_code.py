@@ -63,6 +63,7 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
   app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account)
   recalc_daily_totals(date)
 
+@anvil.server.callable
 def recalc_daily_totals(from_date, account):
   days_ahead_from_today = app_tables.settings.get(user=anvil.users.get_user())['max_days_ahead_from_today']
   if from_date != datetime.now().date():
@@ -70,11 +71,12 @@ def recalc_daily_totals(from_date, account):
   else:
     days_to_calc = days_ahead_from_today
   
-  daterange = [from_date - datetime.timedelta(days=x) for x in range(days_to_calc)]
+  daterange = [from_date - timedelta(days=x) for x in range(days_to_calc)]
 
   for day in daterange:
-    app_tables.dailytotals.ge
+    daily_expense = sum(app_tables.transactions.search(Type='expense', date=day)['amount']) + sum(app_tables.transactions.search(Type='transfer', date=day, account=account)['amount'])
     daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)))['net_total'] + app_tables.dailytotals.get(date=day)['total_income'] - app_tables.dailytotals.get(date=day)['total_outcome']
+    print(day + " = " + daily_total)
 
 @anvil.server.callable
 def get_user_accounts():
