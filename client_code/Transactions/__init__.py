@@ -8,6 +8,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 import plotly.graph_objects as go
+import datetime
 
 
 class Transactions(TransactionsTemplate):
@@ -17,9 +18,7 @@ class Transactions(TransactionsTemplate):
     self.update_accounts()
     self.update_transactions()
 
-  def plot_now_show(self, **event_args):
-    """This method is called when the Plot is shown on the screen"""
-    pass
+    self.date_transactions.date = datetime.now().date()  
 
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -39,7 +38,9 @@ class Transactions(TransactionsTemplate):
 
   def update_transactions(self):
     incomes, expenses, transfers = anvil.server.call('get_transactions', anvil.server.call('get_current_account_id', anvil.users.get_user()))
-    self.prppn_income.items = incomes
+    self.rppn_income.items = incomes
+    self.rppn_transfers.items = transfers
+    self.rppn_expense.items = expenses
 
   def dd_account_change(self, **event_args):
     """This method is called when an item is selected"""
@@ -52,4 +53,9 @@ class Transactions(TransactionsTemplate):
       self.dd_account.items = [(account['name'], account['id']) for account in self.accounts]
       if self.accounts:
         self.dd_account.selected_value = self.accounts[0]['id']
+
+  def date_transactions_change(self, **event_args):
+    """This method is called when the selected date changes"""
+    selected_date = self.date_transactions.date
+    self.update_transactions(selected_date)
 

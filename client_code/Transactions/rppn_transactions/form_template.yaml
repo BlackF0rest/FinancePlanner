@@ -1,0 +1,25 @@
+components:
+- layout_properties: {grid_position: 'WNWLDO,QEHSPP'}
+  name: img_icon
+  properties: {height: 111}
+  type: Image
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK XUSZCP,WTVUKF'}
+  name: lb_amount
+  properties: {align: center, bold: true, font: arial, font_size: 20}
+  type: Label
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,DJTYDH'}
+  name: lb_name
+  properties: {align: center, bold: false, font: arial, font_size: 20}
+  type: Label
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,WYIMPY'}
+  name: lb_arrow
+  properties: {align: center, font_size: 20, icon: 'fa:arrow-circle-o-right', visible: false}
+  type: Label
+- layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,PLQWTN'}
+  name: lb_to
+  properties: {align: center, font_size: 20, visible: false}
+  type: Label
+container:
+  properties: {col_widths: '{"QEHSPP":15,"FYJUFK":45,"DJTYDH":30,"WYIMPY":5,"PLQWTN":25}'}
+  type: ColumnPanel
+is_package: true

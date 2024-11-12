@@ -87,94 +87,6 @@ def get_user_accounts():
     return []
 
 @anvil.server.callable
-def update_daily_totals(account=None, change_date=None):
-  # Update the Daily Totals for a certain account from the date of change until a user setting.
-  #TODO FOR REAL ONLY FOR TESTING
-  # Get today's date and the dates for yesterday and tomorrow
-
-    today = datetime.now().date()
-
-    yesterday = today - timedelta(days=1)
-
-    tomorrow = today + timedelta(days=1)
-
-
-    # Retrieve all accounts
-
-    accounts = app_tables.accounts.search()
-
-
-    # Loop through each account to check for daily totals
-
-    for account in accounts:
-
-        # Check if daily totals exist for yesterday, today, and tomorrow
-
-        totals_exist = {
-
-            'yesterday': app_tables.dailytotals.search(
-
-                account=account,
-
-                date=yesterday
-
-            ),
-
-            'today': app_tables.dailytotals.search(
-
-                account=account,
-
-                date=today
-
-            ),
-
-            'tomorrow': app_tables.dailytotals.search(
-
-                account=account,
-
-                date=tomorrow
-
-            )
-
-        }
-
-
-        # Check for missing totals and generate new rows if necessary
-
-        for date, total in totals_exist.items():
-
-            if not total:  # If no totals exist for this date
-
-                # Generate random values for total_income, total_outcome, and net_total
-
-                total_income = random.randint(100, 1000)  # Example range for income
-
-                total_outcome = random.randint(50, 500)    # Example range for outcome
-
-                net_total = total_income - total_outcome
-
-
-                # Create a new row in the dailytotals table
-
-                app_tables.dailytotals.add_row(
-
-                    account=account,
-
-                    date=eval(date),  # Use eval to get the date variable
-
-                    total_income=total_income,
-
-                    total_outcome=total_outcome,
-
-                    net_total=net_total
-
-                )
-
-                print(f"Added total for {date} for account {account['id']}: "
-
-                      f"Income={total_income}, Outcome={total_outcome}, Net={net_total}")
-
-@anvil.server.callable
 def set_account_setting(account_id, user):
   app_tables.settings.get(user=user).update(current_account=app_tables.accounts.get_by_id(account_id))
 
@@ -208,7 +120,8 @@ def get_transactions(account_id, date=datetime.now().date()):
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
-      'amount': transfer['Amount']
+      'amount': transfer['Amount'],
+      'to': transfer['To_Account'].textq
     })
 
   return income_data, expense_data, transfer_data

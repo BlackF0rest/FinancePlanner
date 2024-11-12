@@ -10,8 +10,9 @@ components:
     properties: {include_placeholder: true, placeholder: Konto}
     type: DropDown
   - data_bindings: []
+    event_bindings: {change: date_transactions_change}
     layout_properties: {grid_position: 'EULTIZ,LNETGT'}
-    name: date_inout
+    name: date_transactions
     properties: {date: null, format: DD/MM/YYYY, pick_time: false}
     type: DatePicker
   - components:
@@ -20,8 +21,8 @@ components:
       properties: {bold: true, text: Income}
       type: Label
     - layout_properties: {grid_position: 'ROKJFF,ZWSUWZ'}
-      name: prppn_income
-      properties: {item_template: Transactions.rppn_income}
+      name: rppn_income
+      properties: {item_template: Transactions.rppn_transactions}
       type: RepeatingPanel
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
@@ -32,10 +33,10 @@ components:
       name: label_2_copy_2
       properties: {bold: true, text: Transfers}
       type: Label
-    - layout_properties: {grid_position: 'YVJLLC,CVFPFW'}
-      name: panel_transfer
-      properties: {}
-      type: LinearPanel
+    - layout_properties: {grid_position: 'MYOYCC,EELLRL'}
+      name: rppn_transfers
+      properties: {item_template: Transactions.rppn_transactions}
+      type: RepeatingPanel
     layout_properties: {grid_position: 'CVKZAZ,TEYVXP'}
     name: outlined_card_1_copy_2
     properties: {role: outlined-card}
@@ -45,10 +46,10 @@ components:
       name: label_2_copy
       properties: {bold: true, text: Expenses}
       type: Label
-    - layout_properties: {grid_position: 'YVJLLC,CVFPFW'}
-      name: panel_expenses
-      properties: {}
-      type: LinearPanel
+    - layout_properties: {grid_position: 'UJQNRC,TEBLVG'}
+      name: rppn_expense
+      properties: {item_template: Transactions.rppn_transactions}
+      type: RepeatingPanel
     layout_properties: {grid_position: 'DQBLJX,KUAWPX'}
     name: outlined_card_1_copy
     properties: {role: outlined-card}
