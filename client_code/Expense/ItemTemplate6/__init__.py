@@ -14,7 +14,7 @@ class ItemTemplate6(ItemTemplate6Template):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    #self.icon = icon
+    self.icon = self.item['icon']
 
     # Any code you write here will run before the form opens.
 
