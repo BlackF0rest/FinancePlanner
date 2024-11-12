@@ -103,7 +103,7 @@ body {
   line-height: 1.4286;
   height: 100vh;
   margin: 0;
-  background:  linear-gradient(90deg, rgba(141, 139, 226, 0.56), rgba(253, 187, 203, 0.56));
+  background:  linear-gradient(0deg, rgba(65, 164, 253, 1), rgba(14, 244, 255, 1));
   min-height: calc(100vh - 56px)
 }
 

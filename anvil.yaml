@@ -125,8 +125,9 @@ db_schema:
     server: full
     title: Users
 dependencies: []
-name: M3 App 2
-package_name: M3_App_2
+metadata: {title: Finance Planner}
+name: Finance Planner
+package_name: Finance_Planner
 renamed: true
 runtime_options:
   client_version: '3'
