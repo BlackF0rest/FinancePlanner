@@ -26,7 +26,7 @@ components:
   type: DatePicker
 - layout_properties: {grid_position: 'PXNTYN,JMDTAL'}
   name: rppn_icons
-  properties: {item_template: Expense.ItemTemplate6}
+  properties: {item_template: rppn_icons}
   type: RepeatingPanel
 - components:
   - event_bindings: {click: outlined_button_2_click}

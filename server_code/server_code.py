@@ -144,7 +144,8 @@ def get_icon(icon_category):
 @anvil.server.callable
 def get_all_icons():
   rows = app_tables.icons.search()
-
-  column_values = [row['Icon'] for row in rows]
-  
-  return column_values
+  icon_list = []
+  for row in rows:
+    icon_list.append({row['category']:row['Icon']})
+    
+  return icon_list

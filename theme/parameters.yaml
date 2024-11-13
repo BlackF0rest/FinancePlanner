@@ -331,7 +331,4 @@ roles:
   name: outlined-error
 - components: [TextBox, TextArea, DatePicker, DropDown]
   name: input-error
-- components: [RepeatingPanel]
-  display_in_toolbox: true
-  name: icon-grid
-  title: Icon-Grid
+- {components: null, display_in_toolbox: true, name: icon-grid, title: Icon-Grid}
