@@ -136,3 +136,7 @@ def get_transactions(account_id, date=datetime.now().date()):
     })
 
   return income_data, expense_data, transfer_data
+
+@anvil.server.callable
+def get_icon(icon_category):
+  
