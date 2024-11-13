@@ -14,4 +14,5 @@ class ItemTemplate7(ItemTemplate7Template):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
+    self.lnk_img.source = self.item
     # Any code you write here will run before the form opens.

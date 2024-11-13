@@ -1,3 +1,12 @@
-components: []
+components:
+- components:
+  - layout_properties: {grid_position: 'AUIBFK,EPPYTA'}
+    name: lnk_img
+    properties: {}
+    type: Image
+  layout_properties: {grid_position: 'QTHXZL,NBRHVY'}
+  name: lnk_1
+  properties: {}
+  type: Link
 container: {type: ColumnPanel}
 is_package: true

@@ -140,3 +140,11 @@ def get_transactions(account_id, date=datetime.now().date()):
 @anvil.server.callable
 def get_icon(icon_category):
   return app_tables.icons.get(category=icon_category)['Icon']
+
+@anvil.server.callable
+def get_all_icons():
+  rows = app_tables.icons.search()
+
+  column_values = [row['Icon'] for row in rows]
+  
+  return column_values

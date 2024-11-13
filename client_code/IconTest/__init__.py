@@ -14,6 +14,6 @@ class IconTest(IconTestTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
-    self.img.source = anvil.server.call('get_icon', 'Abos')
+    self.rppn_test.items = anvil.server.call('get_all_icons')
 
     # Any code you write here will run before the form opens.
