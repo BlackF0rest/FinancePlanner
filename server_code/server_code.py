@@ -149,3 +149,11 @@ def get_all_icons():
     icon_list.append({row['category']:row['Icon']})
     
   return icon_list
+
+@anvil.server.callable
+def get_settings(user):
+  return app_tables.settings.get(user=user)
+
+@anvil.server.callable
+def set_days_into_future(user, days):
+  app_tables.settings.get(user=user).update(max_days_ahead_from_today=days)

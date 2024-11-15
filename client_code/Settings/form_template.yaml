@@ -6,27 +6,12 @@ components:
     type: Label
   - components:
     - components:
-      - layout_properties: {col_xs: 0, row: NWDAGW, width_xs: 12}
-        name: button_1
-        properties: {text: Months into the future (affects performance)}
-        type: Button
-      - layout_properties: {col_xs: 0, row: HRXSUU, width_xs: 12}
-        name: button_2
-        properties: {text: Setting 2}
-        type: Button
-      - layout_properties: {col_xs: 0, row: MAVTYA, width_xs: 12}
-        name: radio_button_1
-        properties: {align: center, selected: false, text: Setting 4}
-        type: RadioButton
-      - layout_properties: {col_xs: 0, row: MSBLMX, width_xs: 12}
-        name: drop_down_1
-        properties: {include_placeholder: true, placeholder: Setting 5}
-        type: DropDown
       - layout_properties: {col_xs: 0, row: JZULVC, width_xs: 12}
-        name: lb_days_into_future
+        name: lb_days
         properties: {align: center, text: Days calculated into the future (affects performance)}
         type: Label
-      - layout_properties: {col_xs: 0, row: LPIREU, width_xs: 3}
+      - event_bindings: {click: bt_minus_days_click}
+        layout_properties: {col_xs: 0, row: LPIREU, width_xs: 3}
         name: bt_minus_days
         properties: {role: outlined-button, text: '-'}
         type: Button
@@ -34,7 +19,8 @@ components:
         name: lb_days_future
         properties: {align: center, text: '24'}
         type: Label
-      - layout_properties: {col_xs: 9, row: LPIREU, width_xs: 3}
+      - event_bindings: {click: bt_plus_days_click}
+        layout_properties: {col_xs: 9, row: LPIREU, width_xs: 3}
         name: bt_plus_days
         properties: {role: outlined-button, text: +}
         type: Button

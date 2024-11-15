@@ -1,22 +1,34 @@
 components:
-- layout_properties: {grid_position: 'JUGDFK,GSCWYE'}
+- layout_properties: {grid_position: 'JUGDFK,UPZXTC'}
+  name: img_icon
+  properties: {height: 93}
+  type: Image
+- event_bindings: {change: input_numb_change}
+  layout_properties: {grid_position: 'JUGDFK,GSCWYE XUPBBL,NCFLZY'}
   name: input_numb
   properties: {align: center, placeholder: '0,00', role: outlined, type: number}
   type: TextBox
-- layout_properties: {grid_position: 'URVNWF,NDENCX'}
+- layout_properties: {grid_position: 'JUGDFK,GSCWYE ERPQKT,XHOALR'}
   name: input_name
-  properties: {align: center, placeholder: name, role: outlined}
+  properties: {align: center, background: '', border: '', placeholder: name, role: outlined}
   type: TextBox
-- event_bindings: {change: rd_recurring_change}
+- event_bindings: {clicked: rd_one_time_clicked}
+  layout_properties: {grid_position: 'VBQMBF,IVYSNJ'}
+  name: rd_one_time
+  properties: {align: center, selected: true, text: One TIme}
+  type: RadioButton
+- data_bindings: []
+  event_bindings: {change: rd_recurring_change, clicked: rd_recurring_clicked}
   layout_properties: {grid_position: ''}
   name: rd_recurring
-  properties: {align: center, text: Recurring}
+  properties: {align: center, enabled: true, selected: false, text: Recurring}
   type: RadioButton
 - layout_properties: {grid_position: ''}
   name: dt_recurring
   properties: {visible: false}
   type: DatePicker
-- layout_properties: {grid_position: 'FIRLJP,SNWDQU'}
+- event_bindings: {clicked: rd_spreadout_clicked}
+  layout_properties: {grid_position: 'FIRLJP,SNWDQU'}
   name: rd_spreadout
   properties: {align: center, text: Spread Out}
   type: RadioButton
@@ -24,9 +36,14 @@ components:
   name: dt_spreadout
   properties: {visible: false}
   type: DatePicker
+- event_bindings: {click: bt_set_icon_click}
+  layout_properties: {grid_position: 'VITWHX,NYNBNI'}
+  name: bt_set_icon
+  properties: {border: '', role: outlined-button, text: Set Icon}
+  type: Button
 - layout_properties: {grid_position: 'PXNTYN,JMDTAL'}
   name: rppn_icons
-  properties: {item_template: rppn_icons}
+  properties: {item_template: rppn_icons, role: icon-grid, visible: false}
   type: RepeatingPanel
 - components:
   - event_bindings: {click: outlined_button_2_click}
@@ -46,5 +63,7 @@ components:
   name: grid_panel_1
   properties: {}
   type: GridPanel
-container: {type: ColumnPanel}
+container:
+  properties: {col_widths: '{"NYNBNI":50,"UPZXTC":15,"GSCWYE":45}'}
+  type: ColumnPanel
 is_package: true

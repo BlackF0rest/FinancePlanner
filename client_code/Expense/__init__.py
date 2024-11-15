@@ -20,12 +20,17 @@ class Expense(ExpenseTemplate):
 
     self.selected_icon = None
 
-    # Any code you write here will run before the form opens.
-
   def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
-    anvil.server.call('write_transaction', type='expense', category=self.selected_icon, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
-    open_form('Home')
+    if not self.input_numb.text :
+      self.input_numb.border = "2px solid red"
+    elif not self.input_name.text:
+      self.input_name.border = "2px solid red"
+    elif not self.selected_icon:
+      self.img_icon.border = "2px solid red"
+    else: 
+      anvil.server.call('write_transaction', type='expense', category=self.selected_icon, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
+      open_form('Home')
 
   def outlined_button_2_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -37,4 +42,31 @@ class Expense(ExpenseTemplate):
 
   def set_selected_icon(self, **event_args):
     self.selected_icon = event_args['icon_category']
-    self.raise_event_on_children('x-set-visible')
+    self.rppn_icons.visible = False
+    self.img_icon.source = anvil.server.call('get_icon', event_args['icon_category'])
+    self.img_icon.border = ""
+
+  def bt_set_icon_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    self.rppn_icons.visible = True
+
+  def rd_recurring_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    self.rd_recurring.selected != self.rd_recurring.selected
+    self.dt_spreadout.visible = False
+    self.dt_recurring.visible = self.rd_recurring.selected
+
+  def rd_spreadout_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    self.rd_spreadout.selected != self.rd_spreadout.selected
+    self.dt_recurring.visible = False
+    self.dt_spreadout.visible = self.rd_spreadout.selected
+
+  def rd_one_time_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    self.dt_recurring.visible = False
+    self.dt_spreadout.visible = False
+
+  def input_numb_change(self, **event_args):
+    """This method is called when the text in this text box is edited"""
+    if self.input_numb.border != 

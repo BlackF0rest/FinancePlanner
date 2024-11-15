@@ -78,4 +78,8 @@ class Home(HomeTemplate):
     totals = data['net_totals']
 
     self.plot_now.data = [go.Scatter(x=dates, y=totals, mode='lines+markers')]
+
+  def plot_now_show(self, **event_args):
+    """This method is called when the Plot is shown on the screen"""
+    pass
  
