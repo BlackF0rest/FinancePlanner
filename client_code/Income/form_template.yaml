@@ -1,30 +1,54 @@
 components:
-- layout_properties: {grid_position: 'RNXVGD,EKJLXY'}
+- layout_properties: {grid_position: 'RNXVGD,ZQMYOU'}
+  name: img_icon
+  properties: {height: 91}
+  type: Image
+- event_bindings: {change: input_numb_change}
+  layout_properties: {grid_position: 'RNXVGD,EKJLXY HRGLCW,NKJZPK'}
   name: input_numb
   properties: {align: center, placeholder: '0,00', role: outlined, type: number}
   type: TextBox
-- layout_properties: {grid_position: 'GRESXY,ASNGVW'}
+- event_bindings: {change: input_name_change}
+  layout_properties: {grid_position: 'RNXVGD,EKJLXY GCICRY,WRKIZA'}
   name: input_name
   properties: {align: center, placeholder: name, role: outlined}
   type: TextBox
-- event_bindings: {change: radio_button_1_change, clicked: radio_button_1_clicked}
+- event_bindings: {clicked: rb_one_time_clicked}
+  layout_properties: {grid_position: 'YZTUUB,WNJWYE'}
+  name: rb_one_time
+  properties: {align: center, selected: true, text: One Time}
+  type: RadioButton
+- event_bindings: {change: rd_recurring_change, clicked: radio_button_1_clicked}
   layout_properties: {grid_position: 'JWIEFD,BDNGIV'}
-  name: radio_button_1
+  name: rd_recurring
   properties: {align: center, text: Recurring}
   type: RadioButton
 - layout_properties: {grid_position: 'ZRJNVA,WEORLR'}
-  name: date_picker_1
-  properties: {visible: false}
+  name: dt_recurring
+  properties: {placeholder: '', visible: false}
   type: DatePicker
-- event_bindings: {change: radio_button_2_change, clicked: radio_button_2_clicked}
+- event_bindings: {change: rd_spreadout_change, clicked: radio_button_2_clicked}
   layout_properties: {grid_position: 'FSFFHI,JAHCNU'}
-  name: radio_button_2
+  name: rd_spreadout
   properties: {align: center, text: Spread Out}
   type: RadioButton
 - layout_properties: {grid_position: ',undefined'}
-  name: date_picker_1_copy
+  name: dt_start_spreadout
   properties: {visible: false}
   type: DatePicker
+- layout_properties: {grid_position: 'IBUZMA,YERKZG'}
+  name: dt_end_spreadout
+  properties: {visible: false}
+  type: DatePicker
+- event_bindings: {click: bt_set_icon_click}
+  layout_properties: {grid_position: 'WCTDZH,CWXBOQ'}
+  name: bt_set_icon
+  properties: {role: outlined-button, text: Set Icon}
+  type: Button
+- layout_properties: {grid_position: 'TFYWHE,GZUFPG'}
+  name: rppn_icons
+  properties: {item_template: rppn_icons, role: icon-grid}
+  type: RepeatingPanel
 - components:
   - event_bindings: {click: outlined_button_2_click}
     layout_properties: {col_xs: 0, row: GDDWWJ, width_xs: 6}
@@ -43,5 +67,7 @@ components:
   name: grid_panel_1
   properties: {spacing_below: small}
   type: GridPanel
-container: {type: ColumnPanel}
+container:
+  properties: {col_widths: '{"ZQMYOU":10,"EKJLXY":50}'}
+  type: ColumnPanel
 is_package: true
