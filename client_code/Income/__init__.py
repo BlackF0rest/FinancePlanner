@@ -41,14 +41,15 @@ class Income(IncomeTemplate):
         end_date = self.dt_spreadout.date
         total_value = float(self.input_numb.text)
         daily_value = total_value / (end_date-today)
-      anvil.server.call('write_transaction', type='expense', category=self.selected_icon, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
+        print(daily_value)
+      #anvil.server.call('write_transaction', type='expense', category=self.selected_icon, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       open_form('Home')
 
   def rd_recurring_change(self, **event_args):
     """This method is called when this radio button is selected (but not deselected)"""
     self.date_picker_1.visible = self.radio_button_1.selected
     self.date_picker_1_copy.visible = False
-    self. radio_button_2.selected != self.radio_button_1.selected
+    self.radio_button_2.selected != self.radio_button_1.selected
 
   def rd_spreadout_change(self, **event_args):
     """This method is called when this radio button is selected (but not deselected)"""
@@ -76,7 +77,8 @@ class Income(IncomeTemplate):
     """This method is called when this radio button is selected"""
     self.rd_spreadout.selected != self.rd_spreadout.selected
     self.dt_recurring.visible = False
-    self.dt_spreadout.visible = self.rd_spreadout.selected
+    self.dt_start_spreadout.visible = self.rd_spreadout.selected
+    self.dt_end_spreadout.visible = self.rd_spreadout.selected
 
   def rb_one_time_clicked(self, **event_args):
     """This method is called when this radio button is selected"""

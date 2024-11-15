@@ -47,7 +47,7 @@ components:
   type: Button
 - layout_properties: {grid_position: 'TFYWHE,GZUFPG'}
   name: rppn_icons
-  properties: {item_template: rppn_icons, role: icon-grid}
+  properties: {item_template: rppn_icons, role: icon-grid, visible: false}
   type: RepeatingPanel
 - components:
   - event_bindings: {click: outlined_button_2_click}

@@ -7,7 +7,7 @@ import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
-
+from datetime import datetime, timedelta, date
 
 class Expense(ExpenseTemplate):
   def __init__(self, **properties):
@@ -29,7 +29,16 @@ class Expense(ExpenseTemplate):
     elif not self.selected_icon:
       self.img_icon.border = "2px solid red"
     else: 
-      anvil.server.call('write_transaction', type='expense', category=self.selected_icon, amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
+      if self.rd_recurring.selected:
+        pass
+      elif self.rd_spreadout.selected:
+        today = datetime.now().date()
+        end_date = self.dt_spreadout.date
+        total_value = float(self.input_numb.text)
+        daily_value = total_value / (end_date-today).days
+        round_daily_value = round(daily_value, 2)
+        print(round_dailz_value)
+      #anvil.server.call('write_transaction', type='expense', category=app_tables.icons.get(category=self.selected_icon), amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       open_form('Home')
 
   def outlined_button_2_click(self, **event_args):
