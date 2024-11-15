@@ -5,14 +5,14 @@ components:
     properties: {bold: true, font: arial, font_size: 16, text: Insights}
     type: Label
   - layout_properties: {grid_position: 'RKHRZF,BYFNOK'}
-    name: drop_down_1
+    name: dp_accounts
     properties: {include_placeholder: true, placeholder: All}
     type: DropDown
   - components:
     - data_bindings: []
-      event_bindings: {show: plot_now_show}
+      event_bindings: {show: pt_fixcosts_show}
       layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
-      name: plot_now
+      name: pt_fixcosts
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
@@ -21,7 +21,7 @@ components:
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'LZCKJQ,AWTPES'}
-      name: plot_1
+      name: pt_pie_where_went_money
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'EUYXAE,WNGWCG'}
@@ -29,8 +29,12 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
+    - layout_properties: {grid_position: 'MXFXVQ,QWHTCE'}
+      name: bt_cost_per_dm
+      properties: {role: outlined-button, text: Per Day/Per Month}
+      type: Button
     - layout_properties: {grid_position: 'YQISHN,ZDPIEN'}
-      name: plot_2
+      name: pt_category_cost_per_dm
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'NYWOJZ,FAHMEE'}
@@ -38,8 +42,12 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
+    - layout_properties: {grid_position: 'YAMRON,PCXXOT'}
+      name: bt_per
+      properties: {role: outlined-button, text: Per Year/ Per quarter}
+      type: Button
     - layout_properties: {grid_position: 'BADDRD,ZGOFNM'}
-      name: plot_3
+      name: pt_costs_per_qy
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'WDRVSL,INGLEA'}
@@ -48,11 +56,20 @@ components:
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'YMBJRB,FXZASY'}
-      name: plot_4
+      name: pt_pie_spread
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'EEYFUK,WLBBFU'}
     name: outlined_card_5
+    properties: {role: outlined-card}
+    type: ColumnPanel
+  - components:
+    - layout_properties: {grid_position: 'KLIKIU,KHDDCM'}
+      name: pt_income_outcome
+      properties: {}
+      type: Plot
+    layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
+    name: outlined_card_6
     properties: {role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}

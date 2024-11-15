@@ -15,9 +15,13 @@ class Insights(InsightsTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
 
+    self.accounts = None
+
+    self.update_accounts()
+
     # Any code you write here will run before the form opens.
 
-  def plot_now_show(self, **event_args):
+  def pt_fixcosts_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
     
@@ -36,3 +40,11 @@ class Insights(InsightsTemplate):
   def button_setting_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Settings')
+
+  def update_accounts(self):
+    self.accounts = anvil.server.call('get_user_accounts')
+
+    self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
+
+  def update_charts(self):
+    pass
