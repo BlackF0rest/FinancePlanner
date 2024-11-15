@@ -57,11 +57,11 @@ def get_icon_categories():
   return app_tables.icons.search()
 
 @anvil.server.callable
-def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None):
+def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None, recurring=False, end_date=None):
   # Write the transaction different, depending on what it is.
   print("writing transactions")
-  app_tables.transactions.add_row(Type=type, Category=category, Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account)
-  recalc_daily_totals(date)
+  app_tables.transactions.add_row(Type=type, Category=app_tables.icons.get(category=category), Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account, recurring=recurring, end_date=end_date)
+  recalc_daily_totals(date, get_current_account_id(anvil.users.get_user()))
 
 def recalc_daily_totals(from_date, account_id):
   account = app_tables.accounts.get_by_id(account_id)
@@ -72,14 +72,20 @@ def recalc_daily_totals(from_date, account_id):
     days_to_calc = days_ahead_from_today
   
   daterange = [from_date + timedelta(days=x) for x in range(days_to_calc)]
-  print(daterange)
-
+  
   for day in daterange:
-    daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='expense', date=day, account=account)) + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', date=day, account=account)))
-    daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', date=day, account=account)) + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', date=day, To_Account=account)))
-    print((day - timedelta(days=1)))
-    daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account)['net_total'] + daily_income - daily_expense
+    daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type=q.any_of('expense', 'transfer'), date=day, account=account))
+                     + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type=q.any_of('expense', 'transfer'), recurring=True, account=account)))
+    daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', date=day, account=account)) 
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', date=day, To_Account=account))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type='income', recurring=True, account=account))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type='transfer', recurring=True, To_Account=account)))
     
+    if app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account) is not None:
+      daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account)['net_total'] + daily_income - daily_expense
+    else:
+      daily_total = daily_income - daily_expense
+      
     if app_tables.dailytotals.get(date=day, account=account) is not None:
       print('edited Row')
       app_tables.dailytotals.get(date=day, account=account).update(total_income=daily_income, total_outcome=daily_expense, net_total=daily_total)

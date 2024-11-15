@@ -18,6 +18,10 @@ class Expense(ExpenseTemplate):
 
     self.rppn_icons.items = anvil.server.call('get_all_icons')
 
+    self.dt_main.date = datetime.now().date()
+    self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
+    self.dt_spreadout.min_date = self.dt_main.date + timedelta(days=1)
+
     self.selected_icon = None
 
   def bt_add_click(self, **event_args):
@@ -28,17 +32,30 @@ class Expense(ExpenseTemplate):
       self.input_name.border = "2px solid red"
     elif not self.selected_icon:
       self.img_icon.border = "2px solid red"
+    elif not self.dt_main.date:
+      self.dt_main.border = '2px solid red'
     else: 
       if self.rd_recurring.selected:
-        pass
+        if not self.dt_recurring.date:
+          self.dt_recurring.border = '2px solid red'
+        else:
+          today = self.dt_main.date
+          recurring_days = (self.dt_recurring.date - today).days
+          total_value = float(self.input_numb.text)
+          daily_value = round((total_value / recurring_days), 2)
+          end_date = self.dt_end_recurring.date
+          anvil.server.call('write_transaction', type='expense', date=today, category=self.selected_icon, amount=daily_value, name=self.input_name.text, recurring=True, end_date=end_date, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       elif self.rd_spreadout.selected:
-        today = datetime.now().date()
-        end_date = self.dt_spreadout.date
-        total_value = float(self.input_numb.text)
-        daily_value = total_value / (end_date-today).days
-        round_daily_value = round(daily_value, 2)
-        print(round_dailz_value)
-      #anvil.server.call('write_transaction', type='expense', category=app_tables.icons.get(category=self.selected_icon), amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
+        if not self.rd_spreadout.date:
+          self.rd_spreadout.border = '2px solid red'
+        else:
+          today = self.dt_main.date
+          end_date = self.dt_spreadout.date
+          total_value = float(self.input_numb.text)
+          daily_value = round((total_value / (end_date-today).days),2)
+          anvil.server.call('write_transaction', type='expense', date=today, category=app_tables.icons.get(category=self.selected_icon), amount=daily_value, name=self.input_name.text, recurring=True, end_date=end_date, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
+      else:
+        anvil.server.call('write_transaction', type='expense', date=today, category=app_tables.icons.get(category=self.selected_icon), amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       open_form('Home')
 
   def outlined_button_2_click(self, **event_args):
@@ -63,18 +80,30 @@ class Expense(ExpenseTemplate):
     """This method is called when this radio button is selected"""
     self.rd_recurring.selected != self.rd_recurring.selected
     self.dt_spreadout.visible = False
+    self.lb_spreadout.visible = False
     self.dt_recurring.visible = self.rd_recurring.selected
+    self.lb_recurring.visible = self.rd_recurring.selected
+    self.dt_end_recurring.visible = self.rd_recurring.selected
+    self.lb_end_recurring.visible = self.rd_recurring.selected
 
   def rd_spreadout_clicked(self, **event_args):
     """This method is called when this radio button is selected"""
     self.rd_spreadout.selected != self.rd_spreadout.selected
     self.dt_recurring.visible = False
+    self.lb_recurring.visible = False
+    self.dt_end_recurring.visible = False
+    self.lb_end_recurring.visible = False
     self.dt_spreadout.visible = self.rd_spreadout.selected
+    self.lb_spreadout.visible = self.rd_spreadout.selected
 
   def rd_one_time_clicked(self, **event_args):
     """This method is called when this radio button is selected"""
     self.dt_recurring.visible = False
+    self.lb_recurring.visible = False
     self.dt_spreadout.visible = False
+    self.lb_spreadout.visible = False
+    self.dt_end_recurring.visible = False
+    self.lb_end_recurring.visible = False
 
   def input_numb_change(self, **event_args):
     """This method is called when the text in this text box is edited"""
@@ -85,3 +114,21 @@ class Expense(ExpenseTemplate):
     """This method is called when the text in this text box is edited"""
     if self.input_name.border != '':
       self.input_name.border = ''
+
+  def dt_main_change(self, **event_args):
+    """This method is called when the selected date changes"""
+    self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
+    self.dt_spreadout.min_date = self.dt_main.date + timedelta(days=1)
+    if self.dt_main.border != '':
+      self.dt_main.border = ''
+
+  def dt_recurring_change(self, **event_args):
+    """This method is called when the selected date changes"""
+    self.dt_end_recurring.min_date = self.dt_recurring.date + timedelta(days=1)
+    if self.dt_recurring != '':
+      self.dt_recurring = ''
+
+  def dt_spreadout_change(self, **event_args):
+    """This method is called when the selected date changes"""
+    if self.dt_spreadout != '':
+      self.dt_spreadout = ''

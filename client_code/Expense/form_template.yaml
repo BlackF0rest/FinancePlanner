@@ -1,7 +1,7 @@
 components:
 - layout_properties: {grid_position: 'JUGDFK,UPZXTC'}
   name: img_icon
-  properties: {height: 93}
+  properties: {height: 147}
   type: Image
 - event_bindings: {change: input_numb_change}
   layout_properties: {grid_position: 'JUGDFK,GSCWYE XUPBBL,NCFLZY'}
@@ -13,6 +13,11 @@ components:
   name: input_name
   properties: {align: center, background: '', border: '', placeholder: name, role: outlined}
   type: TextBox
+- event_bindings: {change: dt_main_change}
+  layout_properties: {grid_position: 'JUGDFK,GSCWYE ZUYEBB,WQZUWX'}
+  name: dt_main
+  properties: {}
+  type: DatePicker
 - event_bindings: {clicked: rd_one_time_clicked}
   layout_properties: {grid_position: 'VBQMBF,IVYSNJ'}
   name: rd_one_time
@@ -20,12 +25,25 @@ components:
   type: RadioButton
 - data_bindings: []
   event_bindings: {change: rd_recurring_change, clicked: rd_recurring_clicked}
-  layout_properties: {grid_position: ''}
+  layout_properties: {grid_position: ',undefined'}
   name: rd_recurring
   properties: {align: center, enabled: true, selected: false, text: Recurring}
   type: RadioButton
-- layout_properties: {grid_position: ''}
+- layout_properties: {grid_position: 'ZIKSIZ,RYUEJX'}
+  name: lb_recurring
+  properties: {align: center, text: 'When will the next payment be?', visible: false}
+  type: Label
+- event_bindings: {change: dt_recurring_change}
+  layout_properties: {grid_position: 'OSYBJS,LZRNJW'}
   name: dt_recurring
+  properties: {visible: false}
+  type: DatePicker
+- layout_properties: {grid_position: 'XRRCER,ETQHSP'}
+  name: lb_end_recurring
+  properties: {align: center, text: 'When will the last payment be? (Leave empty if forever)', visible: false}
+  type: Label
+- layout_properties: {grid_position: 'AHIQDG,IZJNJT'}
+  name: dt_end_recurring
   properties: {visible: false}
   type: DatePicker
 - event_bindings: {clicked: rd_spreadout_clicked}
@@ -33,7 +51,13 @@ components:
   name: rd_spreadout
   properties: {align: center, text: Spread Out}
   type: RadioButton
-- layout_properties: {grid_position: 'JUFSDQ,IUUJWX'}
+- data_bindings: []
+  layout_properties: {grid_position: 'ZNAATI,AYYIOC'}
+  name: lb_spreadout
+  properties: {align: center, text: 'Until when?', visible: false}
+  type: Label
+- event_bindings: {change: dt_spreadout_change}
+  layout_properties: {grid_position: 'JUFSDQ,IUUJWX'}
   name: dt_spreadout
   properties: {visible: false}
   type: DatePicker
