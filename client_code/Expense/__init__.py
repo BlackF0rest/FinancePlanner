@@ -70,4 +70,9 @@ class Expense(ExpenseTemplate):
   def input_numb_change(self, **event_args):
     """This method is called when the text in this text box is edited"""
     if self.input_numb.border != '':
-      self.input_numb.border =  
+      self.input_numb.border = ''
+
+  def input_name_change(self, **event_args):
+    """This method is called when the text in this text box is edited"""
+    if self.input_name.border != '':
+      self.input_name.border = ''
