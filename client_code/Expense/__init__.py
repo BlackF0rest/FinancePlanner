@@ -125,10 +125,10 @@ class Expense(ExpenseTemplate):
   def dt_recurring_change(self, **event_args):
     """This method is called when the selected date changes"""
     self.dt_end_recurring.min_date = self.dt_recurring.date + timedelta(days=1)
-    if self.dt_recurring != '':
-      self.dt_recurring = ''
+    if self.dt_recurring.border != '':
+      self.dt_recurring.border = ''
 
   def dt_spreadout_change(self, **event_args):
     """This method is called when the selected date changes"""
-    if self.dt_spreadout != '':
-      self.dt_spreadout = ''
+    if self.dt_spreadout.border != '':
+      self.dt_spreadout.border = ''
