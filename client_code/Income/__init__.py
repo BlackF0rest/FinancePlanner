@@ -80,6 +80,7 @@ class Income(IncomeTemplate):
             ),
           )
       else:
+        today = self.dt_main.date
         anvil.server.call(
           "write_transaction",
           type="income",

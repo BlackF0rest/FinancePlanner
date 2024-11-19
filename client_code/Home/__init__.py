@@ -77,9 +77,63 @@ class Home(HomeTemplate):
     dates = data['dates']
     totals = data['net_totals']
 
-    self.plot_now.data = [go.Scatter(x=dates, y=totals, mode='lines+markers')]
+    # Initialize a list for marker colors
+    marker_colors = []
+    
+    # Determine colors for each marker based on the specified conditions
+    for i in range(len(totals)):    
+        if i == 0:  # First marker
+            if totals[i] < 0:  
+                marker_colors.append('red')   
+            else: 
+                marker_colors.append('black')
+        elif i == 1:  # Second marker
+            if totals[i] > totals[i - 1]:   
+                marker_colors.append('green')   
+            elif totals[i] == totals[i - 1]: 
+                marker_colors.append('black')
+            else:
+                marker_colors.append('red')
+        elif i == 2:  # Third marker
+            if totals[i] > totals[i - 1]:
+                marker_colors.append('green')
+            elif totals[i] == totals[i - 1]:
+                marker_colors.append('black')
+            else:
+                marker_colors.append('red')
+    
+    self.plot_now.data = [go.Scatter(x=dates, y=totals, text=totals, textposition='top center', marker=dict(size=10, color=marker_colors), mode='lines+markers+text')]
+
+    self.plot_now.layout = go.Layout(
+    showlegend=False,  # Hide the legend if not needed
+    xaxis=dict(
+        showgrid=False,   # Hide grid lines
+        zeroline=False,   # Hide the zero line
+        showline=False,   # Hide the axis line
+        title='',         # Optionally remove the title
+        tickvals=dates,
+        ticktext=dates,
+        ticks='outside',
+      ),
+      yaxis=dict(
+        showgrid=False,   # Hide grid lines
+        zeroline=False,   # Hide the zero line
+        showline=False,   # Hide the axis line
+        title='',         # Optionally remove the title
+        showticklabels=False,
+      ),
+      plot_bgcolor='rgba(255,255, 255,0.5)',  # Optional: Set background color to transparent
+      paper_bgcolor='rgba(255,255,255,0.5)'
+    )
+
+    
+    self.plot_now.interactive = False
 
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
+
+  def recalc_daily_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    anvil.server.call('test_recalc')
  

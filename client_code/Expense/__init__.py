@@ -55,6 +55,7 @@ class Expense(ExpenseTemplate):
           daily_value = round((total_value / (end_date-today).days),2)
           anvil.server.call('write_transaction', type='expense', date=today, category=app_tables.icons.get(category=self.selected_icon), amount=daily_value, name=self.input_name.text, recurring=True, end_date=end_date, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       else:
+        today = self.dt_main.date
         anvil.server.call('write_transaction', type='expense', date=today, category=app_tables.icons.get(category=self.selected_icon), amount=float(self.input_numb.text), name=self.input_name.text, account_id=anvil.server.call('get_current_account_id', anvil.users.get_user()))
       open_form('Home')
 

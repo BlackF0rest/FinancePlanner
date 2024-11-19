@@ -62,6 +62,12 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
   print("writing transactions")
   app_tables.transactions.add_row(Type=type, Category=app_tables.icons.get(category=category), Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account, recurring=recurring, end_date=end_date)
   recalc_daily_totals(date, get_current_account_id(anvil.users.get_user()))
+  if type == 'transfer':
+    recalc_daily_totals(date, to_account)
+
+@anvil.server.callable
+def test_recalc():
+  recalc_daily_totals(datetime.now().date(), anvil.users.get_user())
 
 def recalc_daily_totals(from_date, account_id):
   account = app_tables.accounts.get_by_id(account_id)
@@ -92,6 +98,10 @@ def recalc_daily_totals(from_date, account_id):
     else:
       app_tables.dailytotals.add_row(account=account, date=day, total_income=daily_income, total_outcome=daily_expense, net_total=daily_total)
       print('added Row')
+
+@anvil.server.callable
+def get_account_from_id(account_id):
+  return app_tables.accounts.get_by_id(account_id)
 
 @anvil.server.callable
 def get_user_accounts():

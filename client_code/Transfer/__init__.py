@@ -32,7 +32,7 @@ class Transfer(TransferTemplate):
   def update_accounts(self):
     self.accounts = anvil.server.call('get_user_accounts')
 
-    excluded_account_id = anvil.server.call('get_current_account_id')  # Replace with the account ID you want to exclude
+    excluded_account_id = anvil.server.call('get_current_account_id', anvil.users.get_user())  # Replace with the account ID you want to exclude
 
     self.dp_accounts.items = [
 
@@ -64,7 +64,7 @@ class Transfer(TransferTemplate):
           end_date = self.dt_end_recurring.date
           anvil.server.call(
             "write_transaction",
-            type="expense",
+            type="transfer",
             date=today,
             category=self.selected_icon,
             amount=daily_value,
@@ -74,6 +74,7 @@ class Transfer(TransferTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
+            to_account = anvil.server.call('get_account_from_id',self.dp_accounts.selected_value),
           )
       elif self.rd_spreadout.selected:
         if not self.rd_spreadout.date:
@@ -85,9 +86,9 @@ class Transfer(TransferTemplate):
           daily_value = round((total_value / (end_date - today).days), 2)
           anvil.server.call(
             "write_transaction",
-            type="expense",
+            type="transfer",
             date=today,
-            category=app_tables.icons.get(category=self.selected_icon),
+            category=self.selected_icon,
             amount=daily_value,
             name=self.input_name.text,
             recurring=True,
@@ -95,18 +96,21 @@ class Transfer(TransferTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
+            to_account = anvil.server.call('get_account_from_id',self.dp_accounts.selected_value),
           )
       else:
+        today = self.dt_main.date
         anvil.server.call(
           "write_transaction",
-          type="expense",
+          type="transfer",
           date=today,
-          category=app_tables.icons.get(category=self.selected_icon),
+          category=self.selected_icon,
           amount=float(self.input_numb.text),
           name=self.input_name.text,
           account_id=anvil.server.call(
             "get_current_account_id", anvil.users.get_user()
           ),
+          to_account = anvil.server.call('get_account_from_id',self.dp_accounts.selected_value),
         )
       open_form("Home")
 
