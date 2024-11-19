@@ -53,14 +53,60 @@ def get_pt_data(account, **kwargs):
   pass
 
 @anvil.server.callable
+def is_get_fixcosts_month(all_accounts=False):
+  # Sum of all recurring expenses in a month
+  if all_accounts:
+    pass
+  else:
+    pass
+
+@anvil.server.callable
+def is_get_expense_data(all_accounts = None):
+  year = datetime.now().year
+  month = datetime.now().month
+
+  first_day = datetime(year, month, 1)
+  if month == 12:
+    last_day = datetime(year+1, 1, 1) - timedelta(days=1)
+  else:
+    last_day = datetime(year, month+1, 1) - timedelta(days=1)
+  
+  if all_accounts:
+    pass
+  else:
+    transactions = app_tables.transactions.search(
+      Type='expense', 
+      date=q.between(first_day.date(), last_day.date()))
+
+  category_counts = {}
+
+  for transaction in transactions:
+      category = transaction['Category']['category']
+      if category in category_counts:
+        category_counts[category] += 1
+      else:
+        category_counts[category] = 1
+
+  return category_counts
+
+@anvil.server.callable
 def get_icon_categories():
   return app_tables.icons.search()
 
 @anvil.server.callable
-def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None, recurring=False, end_date=None):
+def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None, recurring=False, end_date=None, spread_out=False):
   # Write the transaction different, depending on what it is.
   print("writing transactions")
-  app_tables.transactions.add_row(Type=type, Category=app_tables.icons.get(category=category), Amount=amount, name=name, account=app_tables.accounts.get_by_id(account_id), date=date,To_Account=to_account, recurring=recurring, end_date=end_date)
+  app_tables.transactions.add_row(
+    Type=type, 
+    Category=app_tables.icons.get(category=category), 
+    Amount=amount, 
+    name=name, 
+    account=app_tables.accounts.get_by_id(account_id), 
+    date=date,To_Account=to_account, 
+    recurring=recurring, 
+    end_date=end_date, 
+    spread_out=spread_out)
   recalc_daily_totals(date, get_current_account_id(anvil.users.get_user()))
   if type == 'transfer':
     recalc_daily_totals(date, to_account)

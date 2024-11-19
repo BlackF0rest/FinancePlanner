@@ -19,6 +19,7 @@ class Insights(InsightsTemplate):
 
     self.update_accounts()
 
+    self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
   def pt_fixcosts_show(self, **event_args):
@@ -48,3 +49,13 @@ class Insights(InsightsTemplate):
 
   def update_charts(self):
     pass
+
+  def update_pie_where_went(self):
+    data = anvil.server.call('is_get_expense_data')
+    labels = list(data.keys())
+    sizes = list(data.values())
+
+    self.pt_pie_where_went_money.data = go.Pie(
+      labels=labels,
+      values=sizes
+    )

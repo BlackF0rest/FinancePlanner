@@ -77,6 +77,8 @@ class Home(HomeTemplate):
     dates = data['dates']
     totals = data['net_totals']
 
+    totals = [int(round(total)) for total in totals]
+
     # Initialize a list for marker colors
     marker_colors = []
     
@@ -101,8 +103,18 @@ class Home(HomeTemplate):
                 marker_colors.append('black')
             else:
                 marker_colors.append('red')
-    
-    self.plot_now.data = [go.Scatter(x=dates, y=totals, text=totals, textposition='top center', marker=dict(size=10, color=marker_colors), mode='lines+markers+text')]
+              
+    self.plot_now.data = [go.Scatter(
+      x=dates, 
+      y=totals, 
+      text=totals, 
+      textposition='center', 
+      textfont=dict(
+        size=18,
+        color='white',
+      ), 
+      marker=dict(size=40, color=marker_colors), 
+      mode='lines+markers+text')]
 
     self.plot_now.layout = go.Layout(
     showlegend=False,  # Hide the legend if not needed
@@ -122,11 +134,10 @@ class Home(HomeTemplate):
         title='',         # Optionally remove the title
         showticklabels=False,
       ),
-      plot_bgcolor='rgba(255,255, 255,0.5)',  # Optional: Set background color to transparent
-      paper_bgcolor='rgba(255,255,255,0.5)'
+      plot_bgcolor='rgba(255,255,255,0)',  # Optional: Set background color to transparent
+      paper_bgcolor='rgba(255,255,255,0)',
     )
 
-    
     self.plot_now.interactive = False
 
   def plot_now_show(self, **event_args):
@@ -136,4 +147,8 @@ class Home(HomeTemplate):
   def recalc_daily_click(self, **event_args):
     """This method is called when the button is clicked"""
     anvil.server.call('test_recalc')
+
+  def tst_bttn_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    anvil.server.call('is_get_expense_data')
  

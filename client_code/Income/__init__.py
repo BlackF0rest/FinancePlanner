@@ -78,6 +78,7 @@ class Income(IncomeTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
+            spread_out=True
           )
       else:
         today = self.dt_main.date
