@@ -45,7 +45,7 @@ class Home(HomeTemplate):
 
   def button_income_click(self, **event_args):
     """This method is called when the button is clicked"""
-    open_form('Income')
+    open_form('Transaction_Form', type='income')
 
   def button_transfer_click(self, **event_args):
     """This method is called when the button is clicked"""

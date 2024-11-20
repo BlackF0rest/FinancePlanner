@@ -219,3 +219,12 @@ def get_settings(user):
 @anvil.server.callable
 def set_days_into_future(user, days):
   app_tables.settings.get(user=user).update(max_days_ahead_from_today=days)
+
+@anvil.server.callable
+def get_time_values():
+  data = app_tables.time_values.search()
+  time_dict = []
+  for row in data:
+    time_dict[row['name']] = row['value']
+
+  return time_dict
