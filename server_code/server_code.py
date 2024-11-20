@@ -297,26 +297,26 @@ def get_transactions(date=datetime.now().date()):
   expense_data = []
   transfer_data = []
   
-  for income in (incomes and extra_incomes):
+  for income in itertools.chain(incomes, extra_incomes):
     income_data.append({
       'name': income['name'],
       'category': income['Category'],
       'amount': income['Amount']
     })
-  for expense in itertools:
+  for expense in itertools.chain(expenses, extra_expenses):
     expense_data.append({
       'name': expense['name'],
       'category': expense['Category'],
       'amount': expense['Amount']
     })
-  for transfer in expense_transfers and expense_extra_transfers:
+  for transfer in itertools.chain(expense_transfers, expense_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
       'amount': (0 - transfer['Amount']),
       'to': transfer['To_Account']['account_name']
     })
-  for transfer in income_transfers and income_extra_transfers:
+  for transfer in itertools.chain(income_transfers, income_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
