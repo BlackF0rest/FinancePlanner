@@ -63,6 +63,17 @@ db_schema:
       type: number
     server: full
     title: Settings
+  time_values:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: name
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: value
+      type: number
+    server: full
+    title: Time Values
   transactions:
     client: none
     columns:
