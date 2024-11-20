@@ -27,6 +27,26 @@ class Transaction_Form(Transaction_FormTemplate):
 
     self.selected_icon = None
 
+    self.accounts = None
+
+    if self.type == 'transfer':
+      self.dp_accounts.visible = True
+      self.dp_accounts.enabled = True
+      self.update_accounts()
+
+  def update_accounts(self):
+    self.accounts = anvil.server.call("get_user_accounts")
+
+    excluded_account_id = anvil.server.call(
+      "get_current_account_id", anvil.users.get_user()
+    )  # Replace with the account ID you want to exclude
+
+    self.dp_accounts.items = [
+      (account["name"], account["id"])
+      for account in self.accounts
+      if account["id"] != excluded_account_id
+    ]
+
   def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
     if not self.input_numb.text:
@@ -49,7 +69,7 @@ class Transaction_Form(Transaction_FormTemplate):
           end_date = self.dt_end_recurring.date
           anvil.server.call(
             "write_transaction",
-            type="expense",
+            type="transfer",
             date=today,
             category=self.selected_icon,
             amount=daily_value,
@@ -58,6 +78,9 @@ class Transaction_Form(Transaction_FormTemplate):
             end_date=end_date,
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
+            ),
+            to_account=anvil.server.call(
+              "get_account_from_id", self.dp_accounts.selected_value
             ),
           )
       elif self.rd_spreadout.selected:
@@ -70,9 +93,9 @@ class Transaction_Form(Transaction_FormTemplate):
           daily_value = round((total_value / (end_date - today).days), 2)
           anvil.server.call(
             "write_transaction",
-            type="expense",
+            type="transfer",
             date=today,
-            category=app_tables.icons.get(category=self.selected_icon),
+            category=self.selected_icon,
             amount=daily_value,
             name=self.input_name.text,
             recurring=True,
@@ -80,19 +103,24 @@ class Transaction_Form(Transaction_FormTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
-            spread_out=True,
+            to_account=anvil.server.call(
+              "get_account_from_id", self.dp_accounts.selected_value
+            ),
           )
       else:
         today = self.dt_main.date
         anvil.server.call(
           "write_transaction",
-          type="expense",
+          type="transfer",
           date=today,
-          category=app_tables.icons.get(category=self.selected_icon),
+          category=self.selected_icon,
           amount=float(self.input_numb.text),
           name=self.input_name.text,
           account_id=anvil.server.call(
             "get_current_account_id", anvil.users.get_user()
+          ),
+          to_account=anvil.server.call(
+            "get_account_from_id", self.dp_accounts.selected_value
           ),
         )
       open_form("Home")

@@ -7,6 +7,7 @@ from anvil.tables import app_tables
 import anvil.server
 from datetime import datetime, timedelta, date
 import random
+import itertools
 
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
@@ -160,13 +161,13 @@ def is_5_costs_qt():
   return return_list
 
 @anvil.server.callable
-def is_6_saving_goal_selector():
+def is_6_saving_goal():
   last_day = datetime.now().date() - timedelta(days=30)
   results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], Type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
 
   return_list = []
   
-  
+  pass
     
     
 @anvil.server.callable
@@ -248,33 +249,79 @@ def get_current_account_id(user):
   return app_tables.settings.get(user=user)['current_account'].get_id()
 
 @anvil.server.callable
-def get_transactions(account_id, date=datetime.now().date()):
-  incomes = app_tables.transactions.search(Type='income', date=date)
-  expenses = app_tables.transactions.search(Type='expense', date=date)
-  transfers = app_tables.transactions.search(Type='transfer', date=date)
-
+def get_transactions(date=datetime.now().date()):
+  curr_account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
+  incomes = app_tables.transactions.search(Type='income', 
+                                           date=date, 
+                                           recurring=False, 
+                                           account=curr_account)
+  extra_incomes = app_tables.transactions.search(Type='income',
+                                                date=q.less_than_or_equal_to(datetime.now().date()),
+                                                recurring=True,
+                                                account=curr_account,
+                                                end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
+  expenses = app_tables.transactions.search(Type='expense', 
+                                            date=date,
+                                            recurring=False,
+                                            account=curr_account
+                                           )
+  extra_expenses = app_tables.transactions.search(Type='expense',
+                                                date=q.less_than_or_equal_to(datetime.now().date()),
+                                                recurring=True,
+                                                account=curr_account,
+                                                end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
+  expense_transfers = app_tables.transactions.search(Type='transfer', 
+                                            date=date,
+                                            recurring=False,
+                                            account=curr_account,
+                                            )
+  expense_extra_transfers = app_tables.transactions.search(Type='transfer',
+                                                  date=q.less_than_or_equal_to(datetime.now().date()),
+                                                  recurring=True,
+                                                  account=curr_account,
+                                                  end_date=q.any_of(None, q.greater_than_or_equal_to(date))
+                                                  )
+  income_transfers = app_tables.transactions.search(Type='transfer', 
+                                              date=date,
+                                              recurring=False,
+                                              To_Account=curr_account,
+                                              )
+  income_extra_transfers = app_tables.transactions.search(Type='transfer',
+                                                  date=q.less_than_or_equal_to(datetime.now().date()),
+                                                  recurring=True,
+                                                  To_Account=curr_account,
+                                                  end_date=q.any_of(None, q.greater_than_or_equal_to(date))
+                                                  )
+  
   income_data = []
   expense_data = []
   transfer_data = []
   
-  for income in incomes:
+  for income in (incomes and extra_incomes):
     income_data.append({
       'name': income['name'],
       'category': income['Category'],
       'amount': income['Amount']
     })
-  for expense in expenses:
+  for expense in itertools:
     expense_data.append({
       'name': expense['name'],
       'category': expense['Category'],
       'amount': expense['Amount']
     })
-  for transfer in transfers:
+  for transfer in expense_transfers and expense_extra_transfers:
+    transfer_data.append({
+      'name': transfer['name'],
+      'category': transfer['Category'],
+      'amount': (0 - transfer['Amount']),
+      'to': transfer['To_Account']['account_name']
+    })
+  for transfer in income_transfers and income_extra_transfers:
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
       'amount': transfer['Amount'],
-      'to': transfer['To_Account']['account_name']
+      'from': transfer['account']['account_name']
     })
 
   return income_data, expense_data, transfer_data

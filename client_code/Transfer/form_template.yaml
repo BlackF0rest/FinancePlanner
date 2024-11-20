@@ -20,7 +20,7 @@ components:
   type: DatePicker
 - layout_properties: {grid_position: 'LLCCQY,DVPIIH'}
   name: dp_accounts
-  properties: {align: full, include_placeholder: true, placeholder: To Account}
+  properties: {align: full, enabled: false, include_placeholder: true, placeholder: To Account, visible: false}
   type: DropDown
 - event_bindings: {clicked: rd_one_time_clicked}
   layout_properties: {grid_position: 'VBQMBF,IVYSNJ'}
