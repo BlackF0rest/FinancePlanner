@@ -16,7 +16,7 @@ class rppn_transactions(rppn_transactionsTemplate):
 
     self.lb_name.text = self.item['name']
     self.lb_amount.text = f"${self.item['amount']:.2f}"
-    self.img_icon.source = anvil.server.call('get_icon', self.item['Category'])
+    self.img_icon.source = self.item['category']['Icon']
     
     if 'to' in self.item :
       self.lb_to.visible = True
