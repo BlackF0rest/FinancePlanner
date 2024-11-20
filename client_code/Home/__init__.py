@@ -150,5 +150,5 @@ class Home(HomeTemplate):
 
   def tst_bttn_click(self, **event_args):
     """This method is called when the button is clicked"""
-    anvil.server.call('is_get_expense_data')
+    anvil.server.call('is_1_get_fix_month')
  

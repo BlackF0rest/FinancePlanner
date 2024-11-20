@@ -61,7 +61,58 @@ def is_get_fixcosts_month(all_accounts=False):
     pass
 
 @anvil.server.callable
-def is_get_expense_data(all_accounts = None):
+def is_1_get_fix_month():
+  # every (actual) Month not theoretical with 30.xx days
+  year = datetime.now().year
+  return_dict = []
+  
+  for month in range(1, 13):
+    first_day = datetime(year, month, 1)
+    if month == 12:
+      last_day = datetime(year+1, 1, 1) - timedelta(days=1)
+    else:
+      last_day = datetime(year, month+1, 1) - timedelta(days=1)
+      
+    transactions = app_tables.transactions.search(
+    Type='expense',
+    recurring=True,
+    spread_out=False,
+    date=q.less_than_or_equal_to(last_day),
+    end_date=q.greater_than_or_equal_to(first_day))
+
+    return_dict[month] = sum(transaction['Amount'] for transaction in transactions)
+
+  print(return_dict)
+  return return_dict
+
+@anvil.server.callable
+def is_2_ic_oc_month():
+  #total income vs outcome everey month (real month values)
+  year = datetime.now().year
+  return_list = []
+  
+  for month in range(1, 13):
+    first_day = datetime(year, month, 1)
+    if month == 12:
+      last_day = datetime(year+1, 1, 1) - timedelta(days=1)
+    else:
+      last_day = datetime(year, month+1, 1) - timedelta(days=1)
+
+    daily_rows = app_tables.dailytotals.search(
+      account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+      date=q.between(first_day, last_day)
+    )
+    month_dict = {}
+
+    month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
+    month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+
+  return_list.append(month_dict)
+  print(return_list)
+  return return_list
+
+@anvil.server.callable
+def is_3_get_expense_data(all_accounts = None):
   year = datetime.now().year
   month = datetime.now().month
 
@@ -83,11 +134,30 @@ def is_get_expense_data(all_accounts = None):
   for transaction in transactions:
       category = transaction['Category']['category']
       if category in category_counts:
-        category_counts[category] += 1
+        category_counts[category] += transaction['Amount']
       else:
-        category_counts[category] = 1
+        category_counts[category] = transaction['Amount']
 
   return category_counts
+
+@anvil.server.callable
+def is_5_costs_qt():
+  year = datetime.now().year
+  qt_starts = [datetime.date(year,1,1), datetime.date(year,4,1), datetime.date(year,7,1), datetime.date(year,10,1)]
+  return_list = []
+  
+  for qt in range(4):
+    first_day = qt_starts[qt]
+    if qt == 3:
+      last_day = datetime.date(year,12,31)
+    else:
+      last_day = qt_starts[(qt+1)] - timedelta(days=1)
+  
+    dailies = app_tables.dailytotals.search(account=app_tables.settings.get(current_account=anvil.users.get_user()), date=q.between(first_day, last_day))
+    return_list.append(sum(daily['total_outcome'] for daily in dailies))
+
+  print(return_list)
+  return return_list
 
 @anvil.server.callable
 def get_icon_categories():
