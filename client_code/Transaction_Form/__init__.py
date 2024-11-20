@@ -11,10 +11,10 @@ from datetime import datetime, timedelta, date
 
 
 class Transaction_Form(Transaction_FormTemplate):
-  def __init__(self, **properties):
+  def __init__(self, type,**properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-
+    self.type = type
     print(self.type)
 
     self.set_event_handler("x-set-icon", self.set_selected_icon)
@@ -57,7 +57,13 @@ class Transaction_Form(Transaction_FormTemplate):
       self.img_icon.border = "2px solid red"
     elif not self.dt_main.date:
       self.dt_main.border = "2px solid red"
+    elif self.type == 'transfer' and not self.dp_accounts:
+      self.dp_accounts.border = "2px solid red"
     else:
+      if self.type == 'transfer':
+        to_account = anvil.server.call("get_account_from_id", self.dp_accounts.selected_value)
+      else:
+        to_account = None
       if self.rd_recurring.selected:
         if not self.dt_recurring.date:
           self.dt_recurring.border = "2px solid red"
@@ -69,7 +75,7 @@ class Transaction_Form(Transaction_FormTemplate):
           end_date = self.dt_end_recurring.date
           anvil.server.call(
             "write_transaction",
-            type="transfer",
+            type=self.type,
             date=today,
             category=self.selected_icon,
             amount=daily_value,
@@ -79,9 +85,7 @@ class Transaction_Form(Transaction_FormTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
-            to_account=anvil.server.call(
-              "get_account_from_id", self.dp_accounts.selected_value
-            ),
+            to_account=to_account,
           )
       elif self.rd_spreadout.selected:
         if not self.rd_spreadout.date:
@@ -103,9 +107,7 @@ class Transaction_Form(Transaction_FormTemplate):
             account_id=anvil.server.call(
               "get_current_account_id", anvil.users.get_user()
             ),
-            to_account=anvil.server.call(
-              "get_account_from_id", self.dp_accounts.selected_value
-            ),
+            to_account=to_account,
           )
       else:
         today = self.dt_main.date
@@ -119,9 +121,7 @@ class Transaction_Form(Transaction_FormTemplate):
           account_id=anvil.server.call(
             "get_current_account_id", anvil.users.get_user()
           ),
-          to_account=anvil.server.call(
-            "get_account_from_id", self.dp_accounts.selected_value
-          ),
+          to_account=to_account,
         )
       open_form("Home")
 
@@ -199,3 +199,8 @@ class Transaction_Form(Transaction_FormTemplate):
     """This method is called when the selected date changes"""
     if self.dt_spreadout.border != "":
       self.dt_spreadout.border = ""
+
+  def dp_accounts_change(self, **event_args):
+    """This method is called when an item is selected"""
+    if self.dp_accounts.border != "":
+      self.dp_accounts.border = ""

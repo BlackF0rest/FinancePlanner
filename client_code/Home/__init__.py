@@ -49,11 +49,11 @@ class Home(HomeTemplate):
 
   def button_transfer_click(self, **event_args):
     """This method is called when the button is clicked"""
-    open_form('Transfer')
+    open_form('Transaction_Form', type='transfer')
 
   def button_expense_click(self, **event_args):
     """This method is called when the button is clicked"""
-    open_form('Expense')
+    open_form('Transaction_Form', type='expense')
 
   def drop_down_1_change(self, **event_args):
     """This method is called when an item is selected"""

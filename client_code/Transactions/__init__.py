@@ -39,7 +39,7 @@ class Transactions(TransactionsTemplate):
     open_form('Settings')
 
   def update_transactions(self, date=datetime.now().date()):
-    incomes, expenses, transfers = anvil.server.call('get_transactions', anvil.server.call('get_current_account_id', anvil.users.get_user()), date)
+    incomes, expenses, transfers = anvil.server.call('get_transactions', date)
     self.rppn_income.items = incomes
     self.rppn_transfers.items = transfers
     self.rppn_expense.items = expenses
