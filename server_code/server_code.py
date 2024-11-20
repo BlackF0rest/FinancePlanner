@@ -164,9 +164,9 @@ def is_6_saving_goal_selector():
   last_day = datetime.now().date() - timedelta(days=30)
   results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], Type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
 
-  retu
+  return_list = []
   
-  for result in results:
+  
     
     
 @anvil.server.callable
