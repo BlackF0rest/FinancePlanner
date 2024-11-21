@@ -65,10 +65,40 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
-    - layout_properties: {grid_position: 'KLIKIU,KHDDCM'}
-      name: pt_six
+    - layout_properties: {grid_position: 'ABRTSE,GFQQZS'}
+      name: dp_six
       properties: {}
-      type: Plot
+      type: DropDown
+    - components: []
+      data_bindings: []
+      layout_properties: {grid_position: 'QQUJDJ,LKJAXC'}
+      name: linear_panel_1
+      properties:
+        background: green
+        spacing:
+          margin: [null, 920, null, null]
+          padding: [null, 18, null, null]
+      type: LinearPanel
+    - layout_properties: {grid_position: 'IIEBNT,SZELFP'}
+      name: image_1
+      properties: {}
+      type: Image
+    - layout_properties: {grid_position: 'IIEBNT,NOEZLA YSSHOH,WBOQGY'}
+      name: label_2
+      properties: {}
+      type: Label
+    - layout_properties: {grid_position: 'IIEBNT,NOEZLA FCPJLN,SGQPVV'}
+      name: label_3
+      properties: {}
+      type: Label
+    - layout_properties: {grid_position: 'IIEBNT,NOEZLA KDHCDY,LYFNYP'}
+      name: label_4
+      properties: {}
+      type: Label
+    - layout_properties: {grid_position: 'IIEBNT,NOEZLA EVPKBI,GNLNAK'}
+      name: label_5
+      properties: {}
+      type: Label
     layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
     name: outlined_card_6
     properties: {role: outlined-card}

@@ -20,7 +20,11 @@ class Insights(InsightsTemplate):
     self.update_accounts()
     self.update_pt_one()
     self.update_pt_two()
-
+    self.update_pt_three()
+    self.update_pt_four()
+    self.update_pt_five()
+    self.update_pt_six()
+    self.update_pt_seven()
     #self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
@@ -100,3 +104,36 @@ class Insights(InsightsTemplate):
         textposition='auto'
       )
     ]
+
+  def update_pt_three(self):
+    data = anvil.server.call('is_3_get_expense_data')
+
+    categories = list(data.keys())
+    amounts = list(data.values())
+
+    self.pt_three.data = go.Pie(
+      labels=categories,
+      values=amounts
+    )
+
+  def update_pt_four(self):
+    pass
+
+  def update_pt_five(self):
+    data = anvil.server.call('is_5_costs_qt')
+
+    labels = ['1','2','3','4']
+    sizes = data
+
+    self.pt_five.data = go.Scatter(
+      x=labels, 
+      y=sizes)
+
+  def update_pt_six(self):
+    data = anvil.server.call('is_6_saving_goal')
+
+    
+    
+
+  def update_pt_seven(self):
+    pass

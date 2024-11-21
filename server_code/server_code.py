@@ -174,11 +174,11 @@ def is_6_saving_goal():
     elif result['date'] > datetime.now().date():
       perc_done = 0
     else:
-      perc_done = round((((datetime.now().date() - result['date']).days / (results['end_date'] - result['date']).days) * 100), 0)
+      perc_done = round((((datetime.now().date() - result['date']).days / (result['end_date'] - result['date']).days) * 100), 0)
     return_list.append({
-      'name':['name'],
-      'amount':['Amount'],
-      'to_date':['end_date'],
+      'name':result['name'],
+      'amount':result['Amount'],
+      'to_date':result['end_date'],
       'perc_done': perc_done,
     })
     
