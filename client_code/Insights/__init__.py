@@ -134,7 +134,7 @@ class Insights(InsightsTemplate):
 
     self.lb_name.text = data[0]['name']
     self.lb_amount.text = data[0]['amount']
-    self.lb_days_to_go.text = f'{days} To Go', data[0]['to_go']
+    self.lb_days_to_go.text = str(data[0]['to_go']) + 'To Go'
     
 
   def update_pt_seven(self):
