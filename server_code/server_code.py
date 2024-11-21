@@ -166,9 +166,28 @@ def is_6_saving_goal():
   results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], Type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
 
   return_list = []
-  
-  pass
+
+  for result in results:
+    if result['end_date'] <= datetime.now().date():
+      perc_done = 100
+    elif result['date'] > datetime.now().date():
+      perc_done = 0
+    else:
+      perc_done = round((((datetime.now().date() - result['date']).days / (results['end_date'] - result['date']).days) * 100), 0)
+    return_list.append({
+      'name':['name'],
+      'amount':['Amount'],
+      'to_date':['end_date'],
+      'perc_done': perc_done,
+    })
     
+  return_list.sort(key= lambda x: x['to_date'], reverse=True)
+
+  print(return_list)
+  return return_list
+
+@anvil.server.callable
+def
     
 @anvil.server.callable
 def get_icon_categories():
