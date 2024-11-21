@@ -10,9 +10,9 @@ components:
     type: DropDown
   - components:
     - data_bindings: []
-      event_bindings: {show: pt_fixcosts_show}
+      event_bindings: {show: pt_one_show}
       layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
-      name: pt_fixcosts
+      name: pt_one
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
@@ -22,7 +22,7 @@ components:
   - components:
     - data_bindings: []
       layout_properties: {grid_position: 'LZCKJQ,AWTPES'}
-      name: pt_pie_where_went_money
+      name: pt_two
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'EUYXAE,WNGWCG'}
@@ -35,7 +35,7 @@ components:
       properties: {role: outlined-button, text: Per Day/Per Month}
       type: Button
     - layout_properties: {grid_position: 'YQISHN,ZDPIEN'}
-      name: pt_category_cost_per_dm
+      name: pt_three
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'NYWOJZ,FAHMEE'}
@@ -48,7 +48,7 @@ components:
       properties: {role: outlined-button, text: Per Year/ Per quarter}
       type: Button
     - layout_properties: {grid_position: 'BADDRD,ZGOFNM'}
-      name: pt_costs_per_qy
+      name: pt_four
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'WDRVSL,INGLEA'}
@@ -57,7 +57,7 @@ components:
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'YMBJRB,FXZASY'}
-      name: pt_pie_spread
+      name: pt_five
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'EEYFUK,WLBBFU'}
@@ -66,11 +66,20 @@ components:
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'KLIKIU,KHDDCM'}
-      name: pt_income_outcome
+      name: pt_six
       properties: {}
       type: Plot
     layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
     name: outlined_card_6
+    properties: {role: outlined-card}
+    type: ColumnPanel
+  - components:
+    - layout_properties: {grid_position: 'DXZLVH,HHGKCF'}
+      name: pt_seven
+      properties: {}
+      type: Plot
+    layout_properties: {grid_position: 'KWARTX,NGFSYN'}
+    name: outlined_card_7
     properties: {role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}

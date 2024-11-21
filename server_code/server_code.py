@@ -65,7 +65,7 @@ def is_get_fixcosts_month(all_accounts=False):
 def is_1_get_fix_month():
   # every (actual) Month not theoretical with 30.xx days
   year = datetime.now().year
-  return_dict = []
+  return_dict = {}
   
   for month in range(1, 13):
     first_day = datetime(year, month, 1)
@@ -81,7 +81,7 @@ def is_1_get_fix_month():
     date=q.less_than_or_equal_to(last_day),
     end_date=q.greater_than_or_equal_to(first_day))
 
-    return_dict[month] = sum(transaction['Amount'] for transaction in transactions)
+    return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
 
   print(return_dict)
   return return_dict
@@ -108,7 +108,7 @@ def is_2_ic_oc_month():
     month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
     month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
 
-  return_list.append(month_dict)
+    return_list.append(month_dict)
   print(return_list)
   return return_list
 
@@ -134,27 +134,28 @@ def is_3_get_expense_data(all_accounts = None):
 
   for transaction in transactions:
       category = transaction['Category']['category']
-      if category in category_counts:
+      if category in category_counts.keys():
         category_counts[category] += transaction['Amount']
       else:
         category_counts[category] = transaction['Amount']
 
+  print(category_counts)
   return category_counts
 
 @anvil.server.callable
 def is_5_costs_qt():
   year = datetime.now().year
-  qt_starts = [datetime.date(year,1,1), datetime.date(year,4,1), datetime.date(year,7,1), datetime.date(year,10,1)]
+  qt_starts = [date(year,1,1), date(year,4,1), date(year,7,1), date(year,10,1)]
   return_list = []
   
   for qt in range(4):
     first_day = qt_starts[qt]
     if qt == 3:
-      last_day = datetime.date(year,12,31)
+      last_day = date(year,12,31)
     else:
       last_day = qt_starts[(qt+1)] - timedelta(days=1)
   
-    dailies = app_tables.dailytotals.search(account=app_tables.settings.get(current_account=anvil.users.get_user()), date=q.between(first_day, last_day))
+    dailies = app_tables.dailytotals.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], date=q.between(first_day, last_day))
     return_list.append(sum(daily['total_outcome'] for daily in dailies))
 
   print(return_list)
@@ -188,19 +189,19 @@ def is_6_saving_goal():
 
 @anvil.server.callable
 def is_7_perc_pm():
-  year = datetime.now().year()
+  year = datetime.now().year
 
   return_list = []
 
   for month in range(1,13):
-    start_day = datetime.date(year, month, 1)
+    start_day = date(year, month, 1)
     if month == 12:
-      end_day = datetime.date(year+1, 1,1)-timedelta(days=1)
+      end_day = date(year+1, 1,1)-timedelta(days=1)
     else:
-      end_day = datetime.date(year, month+1, 1)-timedelta(days=1)
+      end_day = date(year, month+1, 1)-timedelta(days=1)
 
     results = app_tables.dailytotals.search(
-      account=app_tables.settings.get(user=anvil.users.get_user()),
+      account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
       date=q.between(start_day, end_day)
     )
     monthly_income = 0
@@ -212,7 +213,10 @@ def is_7_perc_pm():
 
     total_month = monthly_income + monthly_outcome
 
-    ratio = ((monthly_income/total_month)-(monthly_outcome/total_month))
+    if total_month == 0:
+      ratio = 0
+    else:
+      ratio = round(((monthly_income*100/total_month)-(monthly_outcome*100/total_month)),1)
 
     return_list.append({
       'income':monthly_income,

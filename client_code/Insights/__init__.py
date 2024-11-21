@@ -18,11 +18,13 @@ class Insights(InsightsTemplate):
     self.accounts = None
 
     self.update_accounts()
+    self.update_pt_one()
+    self.update_pt_two()
 
-    self.update_pie_where_went()
+    #self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
-  def pt_fixcosts_show(self, **event_args):
+  def pt_one_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
     
@@ -48,7 +50,7 @@ class Insights(InsightsTemplate):
     self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
 
   def update_charts(self):
-    pass
+    self.update_pt_one()
 
   def update_pie_where_went(self):
     data = anvil.server.call('is_get_expense_data')
@@ -59,3 +61,42 @@ class Insights(InsightsTemplate):
       labels=labels,
       values=sizes
     )
+
+  def update_pt_one(self):
+    data = anvil.server.call('is_1_get_fix_month')
+    labels = list(data.keys())
+    sizes = list(data.values())
+
+    self.pt_one.data = go.Bar(
+      x=labels,
+      y=sizes,
+      text=sizes,
+      textposition='auto'
+    )
+
+  def update_pt_two(self):
+    data = anvil.server.call('is_2_ic_oc_month')
+
+    incomes = [item['income'] for item in data]
+    outcomes = [item['expense'] for item in data]
+
+    months = ['1','2','3','4','5','6','7','8','9','10','11','12']
+
+    self.pt_two.data = [
+      go.Bar(
+        x=months,
+        y=incomes,
+        name='Income',
+        marker_color='blue',
+        text=incomes,
+        textposition='auto'
+      ),
+      go.Bar(
+        x=months,
+        y=outcomes,
+        name='Outcome',
+        marker_color='red',
+        text=outcomes,
+        textposition='auto'
+      )
+    ]
