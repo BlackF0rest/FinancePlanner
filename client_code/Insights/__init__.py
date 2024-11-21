@@ -133,8 +133,8 @@ class Insights(InsightsTemplate):
     data = anvil.server.call('is_6_saving_goal')
 
     self.lb_name.text = data[0]['name']
-    self.lb_amount = data[0]['amount']
-    self.lb_days_to_go.text = f'{days} To Go', data['to_go'])
+    self.lb_amount.text = data[0]['amount']
+    self.lb_days_to_go.text = f'{days} To Go', data[0]['to_go']
     
 
   def update_pt_seven(self):
