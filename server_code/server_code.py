@@ -187,7 +187,41 @@ def is_6_saving_goal():
   return return_list
 
 @anvil.server.callable
-def
+def is_7_perc_pm():
+  year = datetime.now().year()
+
+  return_list = []
+
+  for month in range(1,13):
+    start_day = datetime.date(year, month, 1)
+    if month == 12:
+      end_day = datetime.date(year+1, 1,1)-timedelta(days=1)
+    else:
+      end_day = datetime.date(year, month+1, 1)-timedelta(days=1)
+
+    results = app_tables.dailytotals.search(
+      account=app_tables.settings.get(user=anvil.users.get_user()),
+      date=q.between(start_day, end_day)
+    )
+    monthly_income = 0
+    monthly_outcome = 0
+
+    for day in results:
+      monthly_income += day['total_income']
+      monthly_outcome += day['total_outcome']
+
+    total_month = monthly_income + monthly_outcome
+
+    ratio = ((monthly_income/total_month)-(monthly_outcome/total_month))
+
+    return_list.append({
+      'income':monthly_income,
+      'outcome':monthly_outcome,
+      'ratio':ratio
+    })
+
+  print(return_list)
+  return return_list
     
 @anvil.server.callable
 def get_icon_categories():
