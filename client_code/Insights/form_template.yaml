@@ -17,7 +17,7 @@ components:
       type: Plot
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
-    properties: {role: outlined-card}
+    properties: {background: '', role: outlined-card}
     type: ColumnPanel
   - components:
     - data_bindings: []

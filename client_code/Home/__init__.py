@@ -135,7 +135,7 @@ class Home(HomeTemplate):
         showticklabels=False,
       ),
       plot_bgcolor='rgba(255,255,255,0)',  # Optional: Set background color to transparent
-      paper_bgcolor='rgba(255,255,255,0)',
+      paper_bgcolor='rgba(0,0,0,0.2)',
     )
 
     self.plot_now.interactive = False
