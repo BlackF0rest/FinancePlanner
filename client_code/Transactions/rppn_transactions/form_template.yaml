@@ -20,6 +20,10 @@ components:
   properties: {align: center, font_size: 20, visible: false}
   type: Label
 container:
-  properties: {col_widths: '{"QEHSPP":15,"FYJUFK":45,"DJTYDH":30,"WYIMPY":5,"PLQWTN":25}'}
+  properties:
+    border: solid black 1px
+    col_widths: '{"QEHSPP":15,"FYJUFK":45,"DJTYDH":30,"WYIMPY":5,"PLQWTN":25}'
+    spacing:
+      margin: [0, null, 3, null]
   type: ColumnPanel
 is_package: true

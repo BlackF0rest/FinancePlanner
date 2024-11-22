@@ -53,6 +53,11 @@ class Insights(InsightsTemplate):
 
     self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
 
+    if self.accounts:
+      for account in self.accounts:
+        if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+          self.dp_accounts.selected_value = account['id']
+
   def update_charts(self):
     self.update_pt_one()
 
@@ -157,6 +162,7 @@ class Insights(InsightsTemplate):
 
   def update_pt_six(self):
     self.six_data = anvil.server.call('is_6_saving_goal')
+    currency = anvil.server.call('get_currency')
 
     items = [goal['name'] for goal in self.six_data]
     print(self.lb_progress.width)
@@ -165,8 +171,8 @@ class Insights(InsightsTemplate):
     self.lb_progress.width = str(self.six_data[0]['perc_done'])+'%'
     self.img_six.source = self.six_data[0]['icon']
     self.lb_name.text = self.six_data[0]['name']
-    self.lb_amount.text = self.six_data[0]['amount']
-    self.lb_amount_payed.text = self.six_data[0]['amount_payed']
+    self.lb_amount.text = str(self.six_data[0]['amount']) + currency
+    self.lb_amount_payed.text = str(self.six_data[0]['amount_payed']) + currency
     self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
 
   def dp_six_change(self, **event_args):
@@ -175,11 +181,11 @@ class Insights(InsightsTemplate):
     for goal in self.six_data:
       if goal['name'] == self.dp_six.selected_value:
         self.lb_name.text = goal['name']
-        self.lb_amount.text = goal['amount'] + currency
+        self.lb_amount.text = str(goal['amount']) + currency
         self.lb_days_to_go.text = str(-goal['to_go']) + ' Days to go'
         self.lb_progress.width = str(goal['perc_done'])+'%'
         self.img_six.source = goal['icon']
-        self.lb_amount_payed.text = goal['amount_payed'] + currency
+        self.lb_amount_payed.text = str(goal['amount_payed']) + currency
 
   def update_pt_seven(self):
     data = anvil.server.call('is_7_perc_pm')
@@ -197,3 +203,7 @@ class Insights(InsightsTemplate):
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
       )
+
+  def dp_accounts_change(self, **event_args):
+    """This method is called when an item is selected"""
+    if sstomelf.dp_accounts.

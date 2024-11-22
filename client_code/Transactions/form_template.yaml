@@ -26,7 +26,7 @@ components:
       type: RepeatingPanel
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
-    properties: {role: outlined-card}
+    properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'QRLRNN,CZZYNR'}
@@ -39,7 +39,7 @@ components:
       type: RepeatingPanel
     layout_properties: {grid_position: 'CVKZAZ,TEYVXP'}
     name: outlined_card_1_copy_2
-    properties: {role: outlined-card}
+    properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
     type: ColumnPanel
   - components:
     - layout_properties: {grid_position: 'QRLRNN,CZZYNR'}
@@ -52,7 +52,7 @@ components:
       type: RepeatingPanel
     layout_properties: {grid_position: 'DQBLJX,KUAWPX'}
     name: outlined_card_1_copy
-    properties: {role: outlined-card}
+    properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}
   name: content_panel

@@ -4,9 +4,10 @@ components:
     name: label_1
     properties: {bold: true, font: arial, font_size: 16, text: Insights}
     type: Label
-  - layout_properties: {grid_position: 'RKHRZF,BYFNOK'}
+  - event_bindings: {change: dp_accounts_change}
+    layout_properties: {grid_position: 'RKHRZF,BYFNOK'}
     name: dp_accounts
-    properties: {include_placeholder: true, placeholder: All}
+    properties: {include_placeholder: true, placeholder: Custom}
     type: DropDown
   - data_bindings: []
     event_bindings: {show: pt_one_show}

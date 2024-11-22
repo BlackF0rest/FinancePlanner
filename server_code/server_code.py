@@ -48,43 +48,52 @@ def get_daily_total_data(account_id):
     net_totals.append(day['net_total'])
 
   return {"dates": dates, "net_totals" : net_totals}
-
-@anvil.server.callable
-def get_pt_data(account, **kwargs):
-  #class to get data from server
-  pass
-
-@anvil.server.callable
-def is_get_fixcosts_month(all_accounts=False):
-  # Sum of all recurring expenses in a month
-  if all_accounts:
-    pass
-  else:
-    pass
-
-@anvil.server.callable
-def is_1_get_fix_month():
-  # every (actual) Month not theoretical with 30.xx days
-  year = datetime.now().year
-  return_dict = {}
   
-  for month in range(1, 13):
-    first_day = datetime(year, month, 1)
-    if month == 12:
-      last_day = datetime(year+1, 1, 1) - timedelta(days=1)
-    else:
-      last_day = datetime(year, month+1, 1) - timedelta(days=1)
+@anvil.server.callable
+def is_1_get_fix_month(accounts=None):
+  # every (actual) Month not theoretical with 30.xx days
+  if accounts:
+    for account in accounts:
+      year = datetime.now().year
+      return_dict = {}
       
-    transactions = app_tables.transactions.search(
-    Type='expense',
-    recurring=True,
-    spread_out=False,
-    date=q.less_than_or_equal_to(last_day),
-    end_date=q.greater_than_or_equal_to(first_day))
+      for month in range(1, 13):
+        first_day = datetime(year, month, 1)
+        if month == 12:
+          last_day = datetime(year+1, 1, 1) - timedelta(days=1)
+        else:
+          last_day = datetime(year, month+1, 1) - timedelta(days=1)
+          
+        transactions = app_tables.transactions.search(
+        Type='expense',
+        recurring=True,
+        spread_out=False,
+        date=q.less_than_or_equal_to(last_day),
+        end_date=q.greater_than_or_equal_to(first_day))
 
-    return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
+        if return_dict[str(month)]:
+          return_dict[str(month)] += sum(transaction['Amount'] for transaction in transactions)
+        else:
+          return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
+  else:
+    year = datetime.now().year
+    return_dict = {}
+    
+    for month in range(1, 13):
+      first_day = datetime(year, month, 1)
+      if month == 12:
+        last_day = datetime(year+1, 1, 1) - timedelta(days=1)
+      else:
+        last_day = datetime(year, month+1, 1) - timedelta(days=1)
+        
+      transactions = app_tables.transactions.search(
+      Type='expense',
+      recurring=True,
+      spread_out=False,
+      date=q.less_than_or_equal_to(last_day),
+      end_date=q.greater_than_or_equal_to(first_day))
 
-  print(return_dict)
+      return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
   return return_dict
 
 @anvil.server.callable

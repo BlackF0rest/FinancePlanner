@@ -17,6 +17,12 @@ class Settings(SettingsTemplate):
     self.settings = None
     self.update_days()
     
+    selected_currency = anvil.server.call('get_currency')
+    if selected_currency == '€':
+      self.rd_euro.selected = True
+    else:
+      self.rd_dollar.selected = True
+    
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
@@ -52,3 +58,11 @@ class Settings(SettingsTemplate):
     days = self.settings['max_days_ahead_from_today'] - 1
     anvil.server.call('set_days_into_future', anvil.users.get_user(), days)
     self.update_days()
+
+  def rd_dollar_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    anvil.server.call('set_currency', '$')
+
+  def rd_euro_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    anvil.server.call('set_currency', '€')
