@@ -170,18 +170,23 @@ def is_6_saving_goal():
   return_list = []
 
   for result in results:
+    total_amount = (result['end_date'] - result['date']).days * result['Amount']
     if result['end_date'] <= datetime.now().date():
       perc_done = 100
       to_go = (result['end_date']-result['date']).days
+      amount_payed = total_amount
     elif result['date'] > datetime.now().date():
       perc_done = 0
       to_go = 'Done'
+      amount_payed = 0
     else:
       perc_done = round((((datetime.now().date() - result['date']).days / (result['end_date'] - result['date']).days) * 100), 0)
-      to_go = (datetime.now().date()-result['end_date']).days
+      to_go = (result['end_date']-datetime.now().date()).days
+      amount_payed = amount_payed = (datetime.now().date() - result['date']).days * result['Amount']
     return_list.append({
       'name':result['name'],
-      'amount':result['Amount'],
+      'amount':total_amount,
+      'amount_payed':amount_payed,
       'to_date':result['end_date'],
       'to_go':to_go,
       'perc_done': perc_done,
@@ -409,6 +414,14 @@ def get_time_values():
     time_dict[row['name']] = row['value']
 
   return time_dict
+
+@anvil.server.callable
+def get_currency():
+  return app_tables.settings.get(user=anvil.users.get_user())['currency']
+
+@anvil.server.callable
+def set_currency(currency):
+  app_tables.settings.get(user=anvil.users.get_user()).update(currency=currency)
 
 def get_month_range():
 

@@ -75,8 +75,15 @@ class Insights(InsightsTemplate):
       x=labels,
       y=sizes,
       text=sizes,
-      textposition='auto'
+      textposition='auto',
     )
+    self.pt_one.layout = go.Layout(
+      title='Fix Costs per Month',
+      xaxis=dict(title='Month'),
+      yaxis=dict(title='Amount'),
+      paper_bgcolor='rgba(0,0,0,0.2)',
+      plot_bgcolor='rgba(255,255,255,0)',
+      )
 
   def update_pt_two(self):
     data = anvil.server.call('is_2_ic_oc_month')
@@ -104,6 +111,13 @@ class Insights(InsightsTemplate):
         textposition='auto'
       )
     ]
+    self.pt_two.layout = go.Layout(
+      title='Income vs. Expenses',
+      xaxis=dict(title='Month'),
+      yaxis=dict(title='Amount'),
+      paper_bgcolor='rgba(0,0,0,0.2)',
+      plot_bgcolor='rgba(255,255,255,0)',
+      )
 
   def update_pt_three(self):
     data = anvil.server.call('is_3_get_expense_data')
@@ -115,6 +129,11 @@ class Insights(InsightsTemplate):
       labels=categories,
       values=amounts
     )
+    self.pt_three.layout = go.Layout(
+      title='Portion per Category this Month',
+      paper_bgcolor='rgba(0,0,0,0.2)',
+      plot_bgcolor='rgba(255,255,255,0)',
+      )
 
   def update_pt_four(self):
     pass
@@ -128,6 +147,13 @@ class Insights(InsightsTemplate):
     self.pt_five.data = go.Scatter(
       x=labels, 
       y=sizes)
+    self.pt_five.layout = go.Layout(
+      title='Costs per quarter',
+      xaxis=dict(title='Quarter'),
+      yaxis=dict(title='Amount'),
+      paper_bgcolor='rgba(0,0,0,0.2)',
+      plot_bgcolor='rgba(255,255,255,0)',
+      )
 
   def update_pt_six(self):
     self.six_data = anvil.server.call('is_6_saving_goal')
@@ -140,17 +166,20 @@ class Insights(InsightsTemplate):
     self.img_six.source = self.six_data[0]['icon']
     self.lb_name.text = self.six_data[0]['name']
     self.lb_amount.text = self.six_data[0]['amount']
+    self.lb_amount_payed.text = self.six_data[0]['amount_payed']
     self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
 
   def dp_six_change(self, **event_args):
     """This method is called when an item is selected"""
+    currency = anvil.server.call('get_currency')
     for goal in self.six_data:
       if goal['name'] == self.dp_six.selected_value:
         self.lb_name.text = goal['name']
-        self.lb_amount.text = goal['amount']
+        self.lb_amount.text = goal['amount'] + currency
         self.lb_days_to_go.text = str(-goal['to_go']) + ' Days to go'
         self.lb_progress.width = str(goal['perc_done'])+'%'
         self.img_six.source = goal['icon']
+        self.lb_amount_payed.text = goal['amount_payed'] + currency
 
   def update_pt_seven(self):
     data = anvil.server.call('is_7_perc_pm')
@@ -161,3 +190,10 @@ class Insights(InsightsTemplate):
       x=labels,
       y=sizes
     )
+    self.pt_seven.layout = go.Layout(
+      title='Percent of Change per Month',
+      xaxis=dict(title='Month'),
+      yaxis=dict(title='Change in %'),
+      paper_bgcolor='rgba(0,0,0,0.2)',
+      plot_bgcolor='rgba(255,255,255,0)',
+      )

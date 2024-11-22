@@ -8,63 +8,33 @@ components:
     name: dp_accounts
     properties: {include_placeholder: true, placeholder: All}
     type: DropDown
-  - components:
-    - data_bindings: []
-      event_bindings: {show: pt_one_show}
-      layout_properties: {full_width_row: false, grid_position: 'IYFVTN,FYNKAO'}
-      name: pt_one
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
-    name: outlined_card_1
-    properties: {background: '', role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - data_bindings: []
-      layout_properties: {grid_position: 'LZCKJQ,AWTPES'}
-      name: pt_two
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'EUYXAE,WNGWCG'}
-    name: outlined_card_2
-    properties: {role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - layout_properties: {grid_position: 'YETDRN,VGMKKO'}
-      name: pt_seven
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'JWBTTP,GGKMSE'}
-    name: outlined_card_7
-    properties: {role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - layout_properties: {grid_position: 'YQISHN,ZDPIEN'}
-      name: pt_three
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'NYWOJZ,FAHMEE'}
-    name: outlined_card_3
-    properties: {role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - layout_properties: {grid_position: 'BADDRD,ZGOFNM'}
-      name: pt_four
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'WDRVSL,INGLEA'}
-    name: outlined_card_4
-    properties: {role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - layout_properties: {grid_position: 'YMBJRB,FXZASY'}
-      name: pt_five
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'EEYFUK,WLBBFU'}
-    name: outlined_card_5
-    properties: {role: outlined-card}
-    type: ColumnPanel
+  - data_bindings: []
+    event_bindings: {show: pt_one_show}
+    layout_properties: {grid_position: 'ZBYIFD,ZIVJPE', row_background: 'rgba(255,255,255,0.2)'}
+    name: pt_one
+    properties: {interactive: false}
+    type: Plot
+  - data_bindings: []
+    layout_properties: {grid_position: 'RSROXE,UWQPDX'}
+    name: pt_two
+    properties: {}
+    type: Plot
+  - layout_properties: {grid_position: 'GTFCCO,YZQLPK'}
+    name: pt_seven
+    properties: {}
+    type: Plot
+  - layout_properties: {grid_position: 'KHXACD,UDYVRH'}
+    name: pt_three
+    properties: {}
+    type: Plot
+  - layout_properties: {grid_position: 'BUDTJY,UDCOYA'}
+    name: pt_four
+    properties: {visible: false}
+    type: Plot
+  - layout_properties: {grid_position: 'RCMRTI,ABJAZA'}
+    name: pt_five
+    properties: {}
+    type: Plot
   - components:
     - event_bindings: {change: dp_six_change}
       layout_properties: {grid_position: 'ABRTSE,GFQQZS'}
@@ -97,7 +67,7 @@ components:
       type: Label
     layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
     name: outlined_card_6
-    properties: {col_widths: '{"SZELFP":15,"NOEZLA":45}', role: outlined-card}
+    properties: {background: 'rgba(0,0,0,0.2)', col_widths: '{"SZELFP":15,"NOEZLA":45}', role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}
   name: content_panel

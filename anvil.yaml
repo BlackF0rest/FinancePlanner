@@ -61,6 +61,9 @@ db_schema:
     - admin_ui: {order: 1, width: 200}
       name: max_days_ahead_from_today
       type: number
+    - admin_ui: {order: 2, width: 200}
+      name: currency
+      type: string
     server: full
     title: Settings
   time_values:
