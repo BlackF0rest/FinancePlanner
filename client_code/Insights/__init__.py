@@ -130,12 +130,34 @@ class Insights(InsightsTemplate):
       y=sizes)
 
   def update_pt_six(self):
-    data = anvil.server.call('is_6_saving_goal')
+    self.six_data = anvil.server.call('is_6_saving_goal')
 
-    self.lb_name.text = data[0]['name']
-    self.lb_amount.text = data[0]['amount']
-    self.lb_days_to_go.text = str(data[0]['to_go']) + 'To Go'
-    
+    items = [goal['name'] for goal in self.six_data]
+    print(self.lb_progress.width)
+
+    self.dp_six.items = items
+    self.lb_progress.width = str(self.six_data[0]['perc_done'])+'%'
+    self.img_six.source = self.six_data[0]['icon']
+    self.lb_name.text = self.six_data[0]['name']
+    self.lb_amount.text = self.six_data[0]['amount']
+    self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
+
+  def dp_six_change(self, **event_args):
+    """This method is called when an item is selected"""
+    for goal in self.six_data:
+      if goal['name'] == self.dp_six.selected_value:
+        self.lb_name.text = goal['name']
+        self.lb_amount.text = goal['amount']
+        self.lb_days_to_go.text = str(-goal['to_go']) + ' Days to go'
+        self.lb_progress.width = str(goal['perc_done'])+'%'
+        self.img_six.source = goal['icon']
 
   def update_pt_seven(self):
-    pass
+    data = anvil.server.call('is_7_perc_pm')
+    sizes = list(data.values())
+    labels = list(data.keys())
+
+    self.pt_seven.data = go.Scatter(
+      x=labels,
+      y=sizes
+    )

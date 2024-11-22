@@ -30,10 +30,15 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
-    - layout_properties: {grid_position: 'MXFXVQ,QWHTCE'}
-      name: bt_cost_per_dm
-      properties: {role: outlined-button, text: Per Day/Per Month}
-      type: Button
+    - layout_properties: {grid_position: 'YETDRN,VGMKKO'}
+      name: pt_seven
+      properties: {}
+      type: Plot
+    layout_properties: {grid_position: 'JWBTTP,GGKMSE'}
+    name: outlined_card_7
+    properties: {role: outlined-card}
+    type: ColumnPanel
+  - components:
     - layout_properties: {grid_position: 'YQISHN,ZDPIEN'}
       name: pt_three
       properties: {}
@@ -43,10 +48,6 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
-    - layout_properties: {grid_position: 'YAMRON,PCXXOT'}
-      name: bt_per
-      properties: {role: outlined-button, text: Per Year/ Per quarter}
-      type: Button
     - layout_properties: {grid_position: 'BADDRD,ZGOFNM'}
       name: pt_four
       properties: {}
@@ -65,22 +66,17 @@ components:
     properties: {role: outlined-card}
     type: ColumnPanel
   - components:
-    - layout_properties: {grid_position: 'ABRTSE,GFQQZS'}
+    - event_bindings: {change: dp_six_change}
+      layout_properties: {grid_position: 'ABRTSE,GFQQZS'}
       name: dp_six
       properties: {}
       type: DropDown
-    - components: []
-      data_bindings: []
-      layout_properties: {grid_position: 'QQUJDJ,LKJAXC'}
-      name: lp_progress
-      properties:
-        background: green
-        spacing:
-          margin: [null, 920, null, null]
-          padding: [null, 18, null, null]
-      type: LinearPanel
+    - layout_properties: {grid_position: 'TQQVLD,XPMZOG'}
+      name: lb_progress
+      properties: {background: green}
+      type: Label
     - layout_properties: {grid_position: 'IIEBNT,SZELFP'}
-      name: image_1
+      name: img_six
       properties: {height: 117}
       type: Image
     - layout_properties: {grid_position: 'IIEBNT,NOEZLA YSSHOH,WBOQGY'}
@@ -102,15 +98,6 @@ components:
     layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
     name: outlined_card_6
     properties: {col_widths: '{"SZELFP":15,"NOEZLA":45}', role: outlined-card}
-    type: ColumnPanel
-  - components:
-    - layout_properties: {grid_position: 'DXZLVH,HHGKCF'}
-      name: pt_seven
-      properties: {}
-      type: Plot
-    layout_properties: {grid_position: 'KWARTX,NGFSYN'}
-    name: outlined_card_7
-    properties: {role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}
   name: content_panel

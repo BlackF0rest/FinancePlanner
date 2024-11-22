@@ -8,6 +8,7 @@ import anvil.server
 from datetime import datetime, timedelta, date
 import random
 import itertools
+import calendar
 
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
@@ -184,6 +185,7 @@ def is_6_saving_goal():
       'to_date':result['end_date'],
       'to_go':to_go,
       'perc_done': perc_done,
+      'icon':result['Category']['Icon']
     })
     
   return_list.sort(key= lambda x: x['to_date'], reverse=True)
@@ -193,16 +195,11 @@ def is_6_saving_goal():
 
 @anvil.server.callable
 def is_7_perc_pm():
-  year = datetime.now().year
+  return_dict = {}
 
-  return_list = []
-
-  for month in range(1,13):
-    start_day = date(year, month, 1)
-    if month == 12:
-      end_day = date(year+1, 1,1)-timedelta(days=1)
-    else:
-      end_day = date(year, month+1, 1)-timedelta(days=1)
+  month_range = get_month_range()
+  
+  for start_day, end_day in month_range:
 
     results = app_tables.dailytotals.search(
       account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
@@ -222,14 +219,10 @@ def is_7_perc_pm():
     else:
       ratio = round(((monthly_income*100/total_month)-(monthly_outcome*100/total_month)),1)
 
-    return_list.append({
-      'income':monthly_income,
-      'outcome':monthly_outcome,
-      'ratio':ratio
-    })
+    return_dict[f'{start_day.month}']=ratio
 
-  print(return_list)
-  return return_list
+  print(return_dict)
+  return return_dict
     
 @anvil.server.callable
 def get_icon_categories():
@@ -416,3 +409,74 @@ def get_time_values():
     time_dict[row['name']] = row['value']
 
   return time_dict
+
+def get_month_range():
+
+    # Get the current date
+
+    current_date = datetime.now()
+
+    
+
+    # Calculate the start and end months
+
+    start_month = current_date.month - 6
+
+    start_year = current_date.year
+
+    end_month = current_date.month + 6
+
+    end_year = current_date.year
+
+
+    # Adjust start year and month if needed
+
+    if start_month <= 0:
+
+        start_year -= 1
+
+        start_month += 12
+
+
+    # Adjust end year and month if needed
+
+    if end_month > 12:
+
+        end_year += 1
+
+        end_month -= 12
+
+
+    # Create a list to hold the first and last days of each month
+
+    month_ranges = []
+
+
+    # Loop through the range of months
+
+    for i in range(-6, 7):  # From -6 to +6
+
+        # Calculate the month and year
+
+        month = (current_date.month + i - 1) % 12 + 1
+
+        year = current_date.year + (current_date.month + i - 1) // 12
+
+        
+
+        # Get the first day of the month
+
+        first_day = datetime(year, month, 1)
+
+        
+
+        # Get the last day of the month
+
+        last_day = datetime(year, month, calendar.monthrange(year, month)[1])
+
+        
+
+        month_ranges.append((first_day, last_day))
+
+
+    return month_ranges
