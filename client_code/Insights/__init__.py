@@ -18,6 +18,11 @@ class Insights(InsightsTemplate):
     self.accounts = None
 
     self.update_accounts()
+    self.update_all_pt()
+    #self.update_pie_where_went()
+    # Any code you write here will run before the form opens.
+
+  def update_all_pt(self):
     self.update_pt_one()
     self.update_pt_two()
     self.update_pt_three()
@@ -25,9 +30,7 @@ class Insights(InsightsTemplate):
     self.update_pt_five()
     self.update_pt_six()
     self.update_pt_seven()
-    #self.update_pie_where_went()
-    # Any code you write here will run before the form opens.
-
+  
   def pt_one_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
     pass
@@ -55,7 +58,7 @@ class Insights(InsightsTemplate):
 
     if self.accounts:
       for account in self.accounts:
-        if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+        if account['id'] == anvil.server.call('get_current_account_id'):
           self.dp_accounts.selected_value = account['id']
 
   def update_charts(self):
@@ -164,17 +167,26 @@ class Insights(InsightsTemplate):
     self.six_data = anvil.server.call('is_6_saving_goal')
     currency = anvil.server.call('get_currency')
 
-    items = [goal['name'] for goal in self.six_data]
-    print(self.lb_progress.width)
-
-    self.dp_six.items = items
-    self.lb_progress.width = str(self.six_data[0]['perc_done'])+'%'
-    self.img_six.source = self.six_data[0]['icon']
-    self.lb_name.text = self.six_data[0]['name']
-    self.lb_amount.text = str(self.six_data[0]['amount']) + currency
-    self.lb_amount_payed.text = str(self.six_data[0]['amount_payed']) + currency
-    self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
-
+    if self.six_data:
+    
+      items = [goal['name'] for goal in self.six_data]
+  
+      self.dp_six.items = items
+      self.lb_progress.width = str(self.six_data[0]['perc_done'])+'%'
+      self.img_six.source = self.six_data[0]['icon']
+      self.lb_name.text = self.six_data[0]['name']
+      self.lb_amount.text = str(self.six_data[0]['amount']) + currency
+      self.lb_amount_payed.text = str(self.six_data[0]['amount_payed']) + currency
+      self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
+    else:
+      self.dp_six.
+      self.lb_progress.width = 0
+      self.img_six.source = None
+      self.lb_name.text = None
+      self.lb_amount.text = None
+      self.lb_amount_payed.text = None
+      self.lb_days_to_go.text = None
+  
   def dp_six_change(self, **event_args):
     """This method is called when an item is selected"""
     currency = anvil.server.call('get_currency')
@@ -206,4 +218,9 @@ class Insights(InsightsTemplate):
 
   def dp_accounts_change(self, **event_args):
     """This method is called when an item is selected"""
-    if sstomelf.dp_accounts.
+    if self.dp_accounts.selected_value is None:
+      print('custom')
+    else:
+      anvil.server.call('set_account_setting', self.dp_accounts.selected_value)
+      self.update_all_pt()
+      

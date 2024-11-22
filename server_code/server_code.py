@@ -309,12 +309,12 @@ def get_user_accounts():
     return []
 
 @anvil.server.callable
-def set_account_setting(account_id, user):
-  app_tables.settings.get(user=user).update(current_account=app_tables.accounts.get_by_id(account_id))
+def set_account_setting(account_id):
+  app_tables.settings.get(user=anvil.users.get_user()).update(current_account=app_tables.accounts.get_by_id(account_id))
 
 @anvil.server.callable
-def get_current_account_id(user):
-  return app_tables.settings.get(user=user)['current_account'].get_id()
+def get_current_account_id():
+  return app_tables.settings.get(user=anvil.users.get_user())['current_account'].get_id()
 
 @anvil.server.callable
 def get_transactions(date=datetime.now().date()):

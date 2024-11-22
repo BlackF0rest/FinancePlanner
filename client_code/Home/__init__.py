@@ -25,7 +25,7 @@ class Home(HomeTemplate):
     # get Users accounts
     self.update_accounts()
     # initialize main graph
-    self.update_main_graph(anvil.server.call('get_current_account_id', anvil.users.get_user()))
+    self.update_main_graph(anvil.server.call('get_current_account_id'))
 
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -69,7 +69,7 @@ class Home(HomeTemplate):
 
     if self.accounts:
       for account in self.accounts:
-        if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+        if account['id'] == anvil.server.call('get_current_account_id'):
           self.drop_down_1.selected_value = account['id']
 
   def update_main_graph(self, account_id):
