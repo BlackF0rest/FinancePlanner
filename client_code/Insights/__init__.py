@@ -16,9 +16,11 @@ class Insights(InsightsTemplate):
     self.init_components(**properties)
 
     self.accounts = None
+    self.selected_accounts = []
 
     self.update_accounts()
     self.update_all_pt()
+    self.update_grid_panel()
     #self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
@@ -179,7 +181,7 @@ class Insights(InsightsTemplate):
       self.lb_amount_payed.text = str(self.six_data[0]['amount_payed']) + currency
       self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
     else:
-      self.dp_six.
+      self.dp_six.items = []
       self.lb_progress.width = 0
       self.img_six.source = None
       self.lb_name.text = None
@@ -219,8 +221,31 @@ class Insights(InsightsTemplate):
   def dp_accounts_change(self, **event_args):
     """This method is called when an item is selected"""
     if self.dp_accounts.selected_value is None:
-      print('custom')
+      self.grid_panel_1.visible = True
     else:
+      self.grid_panel_1.visible = False
       anvil.server.call('set_account_setting', self.dp_accounts.selected_value)
       self.update_all_pt()
-      
+
+  def update_grid_panel(self):
+    """This method is called when the grid panel is shown on the screen"""
+    col = 0
+    row = 0
+    for account in self.accounts:
+      check_box = anvil.CheckBox(text=account['name'])
+      check_box.add_event_handler('change', self.on_change_grid_check_boxes)
+      self.grid_panel_1.add_component(check_box, row=row, width_xs=3)
+      col += 1
+      if col == 3:
+        col = 0
+        row += 1
+
+  def on_change_grid_check_boxes(self, **event_args):
+    for account in self.accounts:
+      if event_args['sender'].text == account['name']:
+        if account['id'] in self.selected_accounts:
+          self.selected_accounts.remove(account['id'])
+        else:
+          self.selected_accounts.append(account['id'])
+
+    print(self.selected_accounts)
