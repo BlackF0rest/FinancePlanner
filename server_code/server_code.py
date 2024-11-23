@@ -96,7 +96,7 @@ def is_1_get_fix_month(accounts=None):
   return return_dict, month_list
 
 @anvil.server.callable
-def is_2_ic_oc_month():
+def is_2_ic_oc_month(accounts=[]):
   #total income vs outcome everey month (real month values)
   month_range = get_month_range()
   return_list = []
