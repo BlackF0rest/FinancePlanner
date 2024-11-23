@@ -22,16 +22,16 @@ class Transaction_Form(Transaction_FormTemplate):
     self.rppn_icons.items = anvil.server.call("get_all_icons")
 
     self.dt_main.date = datetime.now().date()
-    self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
+    #self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
     self.dt_spreadout.min_date = self.dt_main.date + timedelta(days=1)
 
     self.selected_icon = None
 
     self.accounts = None
 
-    self.intervalls = anvil.server.call('get')
+    #self.intervalls = anvil.server.call('get')
 
-    self.dp_recurring.items = [(intervall['name'], intervall['id']) for intervall in self.intervalls]
+    #self.dp_recurring.items = [(intervall['name'], intervall['id']) for intervall in self.intervalls]
 
     if self.type == 'transfer':
       self.dp_accounts.visible = True

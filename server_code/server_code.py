@@ -91,6 +91,7 @@ def is_1_get_fix_month(accounts=None):
 
       return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
       month_list.append(first_day.month)
+      
   print(return_dict)
   print(month_list)
   return return_dict, month_list
@@ -99,13 +100,15 @@ def is_1_get_fix_month(accounts=None):
 def is_2_ic_oc_month(accounts=[]):
   #total income vs outcome everey month (real month values)
   month_range = get_month_range()
-  return_list = []
+  return_dict = {}
+  month_list = []
   if accounts != []:
-    month_list = []
     i=0
     for account in accounts:
-      m = 0
       for first_day, last_day in month_range:
+        if i==0:
+          month_list.append(first_day.month)
+        month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
           date=q.between(first_day, last_day)
@@ -122,9 +125,35 @@ def is_2_ic_oc_month(accounts=[]):
             month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
             month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
 
-        return_list[m]=month_dict
-  print(return_list)
-  return return_list
+        if str(month) in return_dict.keys():
+          for key in month_dict.keys():
+            return_dict[str(month)][key] += month_dict[key]
+        else:
+          return_dict[str(month)] = month_dict
+
+    i += 1
+  else:
+    for first_day, last_day in month_range:
+        month_list.append(first_day.month)
+        month = first_day.month
+        daily_rows = app_tables.dailytotals.search(
+          account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+          date=q.between(first_day, last_day)
+        )
+        month_dict = {}
+    
+        month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
+        month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+
+        if str(month) in return_dict.keys():
+            month_dict['income'] += sum(daily_row['total_income'] for daily_row in daily_rows)
+            month_dict['expense'] += sum(daily_row['total_outcome'] for daily_row in daily_rows)
+        else:
+            month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
+            month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+
+        return_dict[str(month)] = month_dict
+  return return_dict, month_list
 
 @anvil.server.callable
 def is_3_get_expense_data(all_accounts = None):

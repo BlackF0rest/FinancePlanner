@@ -56,7 +56,7 @@ class Transactions(TransactionsTemplate):
     
       if self.accounts:
         for account in self.accounts:
-          if account['id'] == anvil.server.call('get_current_account_id', anvil.users.get_user()):
+          if account['id'] == anvil.server.call('get_current_account_id'):
             self.dd_account.selected_value = account['id']
 
   def date_transactions_change(self, **event_args):

@@ -17,12 +17,12 @@ class Insights(InsightsTemplate):
 
     self.accounts = None
     self.selected_accounts = []
-
+    self.currency = anvil.server.call('get_currency')
+    
     self.update_accounts()
     self.update_all_pt()
     self.update_grid_panel()
 
-    self.currency = anvil.server.call('get_currency')
     #self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
@@ -104,12 +104,13 @@ class Insights(InsightsTemplate):
       )
 
   def update_pt_two(self):
-    data = anvil.server.call('is_2_ic_oc_month')
-
-    incomes = [item['income'] for item in data]
-    outcomes = [item['expense'] for item in data]
-
-    months = ['1','2','3','4','5','6','7','8','9','10','11','12']
+    data, months = anvil.server.call('is_2_ic_oc_month')
+    incomes = []
+    outcomes = []
+    
+    for month in months:
+      incomes.append(data[str(month)]['income'])
+      outcomes.append(data[str(month)]['expense'])
 
     self.pt_two.data = [
       go.Bar(
@@ -135,6 +136,7 @@ class Insights(InsightsTemplate):
       yaxis=dict(title=f'Amount in {self.currency}'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
+      xaxis_type='category'
       )
 
   def update_pt_three(self):
