@@ -38,17 +38,36 @@ components:
         name: rd_dollar
         properties: {text: $}
         type: RadioButton
-      - event_bindings: {click: bt_request_feature_click}
-        layout_properties: {col_xs: 6, row: GAFUOK, width_xs: 6}
-        name: bt_request_feature
-        properties: {role: outlined-button, text: Request Feature}
-        type: Button
       layout_properties: {grid_position: 'FGLZDG,AUALZO'}
       name: grid_panel_1
       properties: {}
       type: GridPanel
+    - event_bindings: {click: bt_cancel_click}
+      layout_properties: {grid_position: 'HMBTFZ,NHUPEW'}
+      name: bt_cancel
+      properties: {role: outlined-button, text: Cancel}
+      type: Button
+    - event_bindings: {click: bt_apply_click}
+      layout_properties: {grid_position: 'HMBTFZ,HSZAHL'}
+      name: bt_apply
+      properties: {role: outlined-button, text: Apply}
+      type: Button
     layout_properties: {grid_position: 'KHYOCZ,BMPCYO'}
     name: outlined_card_1
+    properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
+    type: ColumnPanel
+  - components:
+    - event_bindings: {click: lnk_tip_click}
+      layout_properties: {grid_position: 'VAZUVF,ECVVAA'}
+      name: lnk_tip
+      properties: {align: center, border: '', text: Tip the Devs, url: www.paypal.com/paypalme/Ke1S0unD}
+      type: Link
+    - layout_properties: {grid_position: 'VAZUVF,GCFRHU'}
+      name: link_1
+      properties: {align: center, text: Request a Feature, url: 'mailto:max@mustermann.de'}
+      type: Link
+    layout_properties: {grid_position: 'VBPEGH,DWEHEF'}
+    name: outlined_card_2
     properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
     type: ColumnPanel
   layout_properties: {slot: default}
