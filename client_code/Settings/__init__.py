@@ -66,3 +66,7 @@ class Settings(SettingsTemplate):
   def rd_euro_clicked(self, **event_args):
     """This method is called when this radio button is selected"""
     anvil.server.call('set_currency', '€')
+
+  def bt_request_feature_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    pass

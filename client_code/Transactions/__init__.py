@@ -47,7 +47,7 @@ class Transactions(TransactionsTemplate):
   def dd_account_change(self, **event_args):
     """This method is called when an item is selected"""
     selected_account_id = self.dd_account.selected_value
-    anvil.server.call('set_account_setting', selected_account_id, anvil.users.get_user())
+    anvil.server.call('set_account_setting', selected_account_id)
     self.update_transactions()
 
   def update_accounts(self):

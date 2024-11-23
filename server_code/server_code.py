@@ -411,27 +411,31 @@ def get_transactions(date=datetime.now().date()):
     income_data.append({
       'name': income['name'],
       'category': income['Category'],
-      'amount': income['Amount']
+      'amount': income['Amount'],
+      'id':income.get_id()
     })
   for expense in itertools.chain(expenses, extra_expenses):
     expense_data.append({
       'name': expense['name'],
       'category': expense['Category'],
-      'amount': expense['Amount']
+      'amount': expense['Amount'],
+      'id':expense.get_id()
     })
   for transfer in itertools.chain(expense_transfers, expense_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
       'amount': (0 - transfer['Amount']),
-      'to': transfer['To_Account']['account_name']
+      'to': transfer['To_Account']['account_name'],
+      'id':transfer.get_id()
     })
   for transfer in itertools.chain(income_transfers, income_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
       'category': transfer['Category'],
       'amount': transfer['Amount'],
-      'from': transfer['account']['account_name']
+      'from': transfer['account']['account_name'],
+      'id':transfer.get_id()
     })
 
   return income_data, expense_data, transfer_data
@@ -519,3 +523,11 @@ def get_month_range():
         
         month_ranges.append((first_day, last_day))
     return month_ranges
+
+@anvil.server.callable
+def delete_transaction(transaction_id):
+  transaction = app_tables.transactions.get_by_id(transaction_id)
+  account = transaction['account']
+  from_date = transaction['date']
+  transaction.delete()
+  recalc_daily_totals(from_date, account.get_id())
