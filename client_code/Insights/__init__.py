@@ -21,6 +21,8 @@ class Insights(InsightsTemplate):
     self.update_accounts()
     self.update_all_pt()
     self.update_grid_panel()
+
+    self.currency = anvil.server.call('get_currency')
     #self.update_pie_where_went()
     # Any code you write here will run before the form opens.
 
@@ -95,7 +97,7 @@ class Insights(InsightsTemplate):
     self.pt_one.layout = go.Layout(
       title='Fix Costs per Month',
       xaxis=dict(title='Month'),
-      yaxis=dict(title='Amount'),
+      yaxis=dict(title=f'Amount in {self.currency}'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
       xaxis_type='category'
@@ -130,7 +132,7 @@ class Insights(InsightsTemplate):
     self.pt_two.layout = go.Layout(
       title='Income vs. Expenses',
       xaxis=dict(title='Month'),
-      yaxis=dict(title='Amount'),
+      yaxis=dict(title=f'Amount in {self.currency}'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
       )
@@ -166,7 +168,7 @@ class Insights(InsightsTemplate):
     self.pt_five.layout = go.Layout(
       title='Costs per quarter',
       xaxis=dict(title='Quarter'),
-      yaxis=dict(title='Amount'),
+      yaxis=dict(title=f'Amount in {self.currency}'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
       )
