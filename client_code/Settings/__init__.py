@@ -126,3 +126,4 @@ class Settings(SettingsTemplate):
   def bt_logout_click(self, **event_args):
     """This method is called when the button is clicked"""
     anvil.users.logout()
+    open_form('Home')

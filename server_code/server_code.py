@@ -555,3 +555,10 @@ def delete_user():
 def setup_user(account_name):
   curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), account_name=account_name)
   app_tables.settings.add_row(currency='$', current_account=curr_account, max_days_ahead_from_today=15, user=anvil.users.get_user())
+
+@anvil.server.callable
+def is_first_login():
+  if not app_tables.settings.get(user=anvil.users.get_user()):
+    return True
+  else:
+    return False

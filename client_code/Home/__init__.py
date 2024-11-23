@@ -20,9 +20,10 @@ class Home(HomeTemplate):
     # Handle Login
     anvil.users.login_with_form()
 
-    if not app_tables.settings.get(user=anvil.users.get_user()):
+    if anvil.server.call('is_first_login'):
       t = anvil.TextBox(placeholder='Account Name')
-      anvil.alert(content=t, title='Hi, please enter the Name of your first Account :)', dismissible=False, buttons=('Create'), large=True)
+      anvil.alert(content=t, title='Hi, please enter the Name of your first Account :)', dismissible=False, buttons=[('Create')], large=True)
+      anvil.server.call('setup_user', t.text)
       
       
     
