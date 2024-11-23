@@ -122,3 +122,7 @@ class Settings(SettingsTemplate):
       alert('Thank you - Goodbye')
       anvil.server.call('delete_user')
       anvil.users.logout()
+
+  def bt_logout_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    anvil.users.logout()

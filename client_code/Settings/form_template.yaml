@@ -95,6 +95,11 @@ components:
       name: bt_delete_user
       properties: {role: outlined-button, text: Delete User}
       type: Button
+    - event_bindings: {click: bt_logout_click}
+      layout_properties: {grid_position: 'YNGDLE,RWGPEN'}
+      name: bt_logout
+      properties: {role: outlined-button, text: Logout}
+      type: Button
     layout_properties: {grid_position: 'CQKKKD,THYPUJ'}
     name: outlined_card_4
     properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
