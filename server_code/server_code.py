@@ -10,19 +10,6 @@ import random
 import itertools
 import calendar
 
-# This is a server module. It runs on the Anvil server,
-# rather than in the user's browser.
-#
-# To allow anvil.server.call() to call functions here, we mark
-# them with @anvil.server.callable.
-# Here is an example - you can replace it with your own:
-#
-# @anvil.server.callable
-# def say_hello(name):
-#   print("Hello, " + name + "!")
-#   return 42
-#
-
 @anvil.server.callable
 def get_daily_total_data(account_id):
   filters = {}
@@ -92,8 +79,6 @@ def is_1_get_fix_month(accounts=None):
       return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
       month_list.append(first_day.month)
       
-  print(return_dict)
-  print(month_list)
   return return_dict, month_list
 
 @anvil.server.callable
@@ -102,15 +87,15 @@ def is_2_ic_oc_month(accounts=[]):
   month_range = get_month_range()
   return_dict = {}
   month_list = []
+  i = 0
   if accounts != []:
-    i=0
     for account in accounts:
       for first_day, last_day in month_range:
         if i==0:
           month_list.append(first_day.month)
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
-          account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+          account=app_tables.accounts.get_by_id(account),
           date=q.between(first_day, last_day)
         )
         month_dict = {}
@@ -119,19 +104,12 @@ def is_2_ic_oc_month(accounts=[]):
         month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
 
         if str(month) in return_dict.keys():
-            month_dict['income'] += sum(daily_row['total_income'] for daily_row in daily_rows)
-            month_dict['expense'] += sum(daily_row['total_outcome'] for daily_row in daily_rows)
-        else:
-            month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
-            month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
-
-        if str(month) in return_dict.keys():
           for key in month_dict.keys():
             return_dict[str(month)][key] += month_dict[key]
         else:
           return_dict[str(month)] = month_dict
 
-    i += 1
+      i = 1
   else:
     for first_day, last_day in month_range:
         month_list.append(first_day.month)
@@ -170,13 +148,15 @@ def is_3_get_expense_data(accounts = []):
     transactions = itertools.chain.from_iterable(
       app_tables.transactions.search(
         Type='expense', 
-        date=q.between(first_day.date(), last_day.date())
+        date=q.between(first_day.date(), last_day.date()),
+        account=app_tables.accounts.get_by_id(account)
     ) for account in accounts
   )
   else:
     transactions = app_tables.transactions.search(
       Type='expense', 
-      date=q.between(first_day.date(), last_day.date()))
+      date=q.between(first_day.date(), last_day.date()),
+      account=app_tables.settings.get(user=anvil.users.get_user())['current_account'])
 
   category_counts = {}
 
@@ -187,7 +167,6 @@ def is_3_get_expense_data(accounts = []):
       else:
         category_counts[category] = transaction['Amount']
 
-  print(category_counts)
   return category_counts
 
 @anvil.server.callable
@@ -206,7 +185,6 @@ def is_5_costs_qt():
     dailies = app_tables.dailytotals.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], date=q.between(first_day, last_day))
     return_list.append(sum(daily['total_outcome'] for daily in dailies))
 
-  print(return_list)
   return return_list
 
 @anvil.server.callable
@@ -242,39 +220,65 @@ def is_6_saving_goal():
     
   return_list.sort(key= lambda x: x['to_date'], reverse=True)
 
-  print(return_list)
   return return_list
 
 @anvil.server.callable
-def is_7_perc_pm():
+def is_7_perc_pm(accounts = []):
   return_dict = {}
-
   month_range = get_month_range()
+  month_list = []
+  if accounts != []:
+    for start_day, end_day in month_range:
+      month_list.append(start_day.month)
+      acc_total_income = 0
+      acc_total_outcome = 0
+      for account in accounts:
+        results = app_tables.dailytotals.search(
+          account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+          date=q.between(start_day, end_day)
+        )
+        monthly_income = 0
+        monthly_outcome = 0
+    
+        for day in results:
+          monthly_income += day['total_income']
+          monthly_outcome += day['total_outcome']
+
+        acc_total_income += monthly_income
+        acc_total_outcome += monthly_outcome
+    
+      total_month = acc_total_income + acc_total_outcome
+    
+      if total_month == 0:
+        ratio = 0
+      else:
+        ratio = round(((acc_total_income*100/total_month)-(acc_total_outcome*100/total_month)),1)
   
-  for start_day, end_day in month_range:
+      return_dict[f'{start_day.month}']=ratio
+  else:
+    for start_day, end_day in month_range:
+      month_list.append(start_day.month)
+      results = app_tables.dailytotals.search(
+        account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+        date=q.between(start_day, end_day)
+      )
+      monthly_income = 0
+      monthly_outcome = 0
+  
+      for day in results:
+        monthly_income += day['total_income']
+        monthly_outcome += day['total_outcome']
+  
+      total_month = monthly_income + monthly_outcome
+  
+      if total_month == 0:
+        ratio = 0
+      else:
+        ratio = round(((monthly_income*100/total_month)-(monthly_outcome*100/total_month)),1)
+  
+      return_dict[f'{start_day.month}']=ratio
 
-    results = app_tables.dailytotals.search(
-      account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
-      date=q.between(start_day, end_day)
-    )
-    monthly_income = 0
-    monthly_outcome = 0
-
-    for day in results:
-      monthly_income += day['total_income']
-      monthly_outcome += day['total_outcome']
-
-    total_month = monthly_income + monthly_outcome
-
-    if total_month == 0:
-      ratio = 0
-    else:
-      ratio = round(((monthly_income*100/total_month)-(monthly_outcome*100/total_month)),1)
-
-    return_dict[f'{start_day.month}']=ratio
-
-  print(return_dict)
-  return return_dict
+  return return_dict, month_list
     
 @anvil.server.callable
 def get_icon_categories():

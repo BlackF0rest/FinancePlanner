@@ -104,7 +104,7 @@ class Insights(InsightsTemplate):
       )
 
   def update_pt_two(self):
-    data, months = anvil.server.call('is_2_ic_oc_month')
+    data, months = anvil.server.call('is_2_ic_oc_month', self.selected_accounts)
     incomes = []
     outcomes = []
     
@@ -140,7 +140,7 @@ class Insights(InsightsTemplate):
       )
 
   def update_pt_three(self):
-    data = anvil.server.call('is_3_get_expense_data')
+    data = anvil.server.call('is_3_get_expense_data', self.selected_accounts)
 
     categories = list(data.keys())
     amounts = list(data.values())
@@ -212,9 +212,11 @@ class Insights(InsightsTemplate):
         self.lb_amount_payed.text = str(goal['amount_payed']) + currency
 
   def update_pt_seven(self):
-    data = anvil.server.call('is_7_perc_pm')
-    sizes = list(data.values())
-    labels = list(data.keys())
+    data, labels = anvil.server.call('is_7_perc_pm')
+
+    sizes = []
+    for month in labels:
+      sizes.append(data[str(month)])
 
     self.pt_seven.data = go.Scatter(
       x=labels,
@@ -226,6 +228,7 @@ class Insights(InsightsTemplate):
       yaxis=dict(title='Change in %'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
+      v
       )
 
   def dp_accounts_change(self, **event_args):
