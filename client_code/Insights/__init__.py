@@ -228,7 +228,7 @@ class Insights(InsightsTemplate):
       yaxis=dict(title='Change in %'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
-      v
+      xaxis_type='category'
       )
 
   def dp_accounts_change(self, **event_args):
