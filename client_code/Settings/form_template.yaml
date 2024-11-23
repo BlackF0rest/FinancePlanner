@@ -2,7 +2,7 @@ components:
 - components:
   - layout_properties: {grid_position: 'JIVCVT,SABBEH'}
     name: label_1
-    properties: {bold: true, font: arial, font_size: 16, text: Settings}
+    properties: {align: center, bold: true, font: arial, font_size: 16, text: Settings}
     type: Label
   - components:
     - components:
@@ -57,13 +57,56 @@ components:
     properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
     type: ColumnPanel
   - components:
-    - event_bindings: {click: lnk_tip_click}
+    - event_bindings: {clicked: rd_create_account_clicked}
+      layout_properties: {grid_position: 'IUAUIV,TDFZMH'}
+      name: rd_create_account
+      properties: {align: center, group_name: Account_Grp, text: Create Account}
+      type: RadioButton
+    - event_bindings: {clicked: rd_delete_account_clicked}
+      layout_properties: {grid_position: 'IUAUIV,KIIMKD'}
+      name: rd_delete_account
+      properties: {align: center, group_name: Account_Grp, text: Delete Account}
+      type: RadioButton
+    - layout_properties: {grid_position: 'YEMQRX,QKDWNQ FHWEDR,HZMBNU'}
+      name: tb_acc_name
+      properties: {align: center, placeholder: Account Name, visible: false}
+      type: TextBox
+    - layout_properties: {grid_position: 'YEMQRX,QKDWNQ QQFIZK,OSKSJA'}
+      name: dp_accounts
+      properties: {visible: false}
+      type: DropDown
+    - event_bindings: {click: bt_create_account_click}
+      layout_properties: {grid_position: 'YEMQRX,DNARDY FFCEEO,ZSGSDD'}
+      name: bt_create_account
+      properties: {role: outlined-button, text: Create, visible: false}
+      type: Button
+    - event_bindings: {click: bt_delete_account_click}
+      layout_properties: {grid_position: 'YEMQRX,DNARDY CAXARN,WVNBCF'}
+      name: bt_delete_account
+      properties: {role: outlined-button, text: Delete, visible: false}
+      type: Button
+    layout_properties: {grid_position: 'QVLSNE,CJTNGO'}
+    name: outlined_card_3
+    properties: {background: 'rgba(0,0,0,0.2)', col_widths: '{"QKDWNQ":50,"DNARDY":10}', role: outlined-card}
+    type: ColumnPanel
+  - components:
+    - event_bindings: {click: bt_delete_user_click}
+      layout_properties: {grid_position: 'YNGDLE,CWJWIQ'}
+      name: bt_delete_user
+      properties: {role: outlined-button, text: Delete User}
+      type: Button
+    layout_properties: {grid_position: 'CQKKKD,THYPUJ'}
+    name: outlined_card_4
+    properties: {background: 'rgba(0,0,0,0.2)', role: outlined-card}
+    type: ColumnPanel
+  - components:
+    - event_bindings: {}
       layout_properties: {grid_position: 'VAZUVF,ECVVAA'}
       name: lnk_tip
       properties: {align: center, border: '', text: Tip the Devs, url: www.paypal.com/paypalme/Ke1S0unD}
       type: Link
     - layout_properties: {grid_position: 'VAZUVF,GCFRHU'}
-      name: link_1
+      name: lnk_feature
       properties: {align: center, text: Request a Feature, url: 'mailto:max@mustermann.de'}
       type: Link
     layout_properties: {grid_position: 'VBPEGH,DWEHEF'}
@@ -95,7 +138,7 @@ components:
     name: button_insights
     properties: {icon: 'fa:area-chart', role: outlined-button, text: Insights}
     type: Button
-  - event_bindings: {click: button_setting_click}
+  - event_bindings: {}
     layout_properties: {grid_position: 'FAVWWE,LAAHCW'}
     name: button_setting
     properties: {enabled: false, icon: 'fa:gear', role: outlined-button, text: Settings}

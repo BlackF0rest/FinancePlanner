@@ -16,8 +16,10 @@ class Settings(SettingsTemplate):
     self.init_components(**properties)
     self.selected_currency = None
     self.selected_days = None
+    self.accounts = None
     self.update_days()
     self.update_currency()
+    self.update_accounts()
     
   def plot_now_show(self, **event_args):
     """This method is called when the Plot is shown on the screen"""
@@ -46,6 +48,16 @@ class Settings(SettingsTemplate):
     else:
       self.rd_dollar.selected = True
 
+  def update_accounts(self):
+    self.accounts = anvil.server.call('get_user_accounts')
+
+    self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
+
+    if self.accounts:
+      for account in self.accounts:
+        if account['id'] == anvil.server.call('get_current_account_id'):
+          self.dp_accounts.selected_value = account['id']
+
   def bt_plus_days_click(self, **event_args):
     """This method is called when the button is clicked"""
     self.selected_days += 1
@@ -67,8 +79,46 @@ class Settings(SettingsTemplate):
   def bt_cancel_click(self, **event_args):
     """This method is called when the button is clicked"""
     self.update_currency()
+    self.update_days()
 
   def bt_apply_click(self, **event_args):
     """This method is called when the button is clicked"""
     anvil.server.call('set_days_into_future', self.selected_days)
     anvil.server.call('set_currency', self.selected_currency)
+
+  def rd_create_account_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    self.bt_create_account.visible = self.rd_create_account.selected
+    self.tb_acc_name.visible = self.rd_create_account.selected
+    self.bt_delete_account.visible = self.rd_delete_account.selected
+    self.dp_accounts.visible = self.rd_delete_account.selected
+
+  def rd_delete_account_clicked(self, **event_args):
+    """This method is called when this radio button is selected"""
+    self.bt_create_account.visible = self.rd_create_account.selected
+    self.tb_acc_name.visible = self.rd_create_account.selected
+    self.bt_delete_account.visible = self.rd_delete_account.selected
+    self.dp_accounts.visible = self.rd_delete_account.selected
+
+  def bt_create_account_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    if not self.tb_acc_name.text:
+      self.tb_acc_name.border = 'solid red'
+    else:
+      anvil.server.call('create_account', self.tb_acc_name.text)
+      alert('Account Created')
+      open_form('Settings')
+
+  def bt_delete_account_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    if confirm('Do you want to delete this account?'):
+      anvil.server.call('delete_account', self.dp_accounts.selected_value)
+      alert('Account Deleted')
+      open_form('Settings')
+
+  def bt_delete_user_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    if confirm('Do you want to delete your Account on this Website?'):
+      alert('Thank you - Goodbye')
+      anvil.server.call('delete_user')
+      anvil.users.logout()

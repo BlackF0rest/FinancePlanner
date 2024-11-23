@@ -454,12 +454,12 @@ def get_all_icons():
   return icon_list
 
 @anvil.server.callable
-def get_settings(user):
-  return app_tables.settings.get(user=user)
+def get_settings():
+  return app_tables.settings.get(user=anvil.users.get_user())
 
 @anvil.server.callable
-def set_days_into_future(user, days):
-  app_tables.settings.get(user=user).update(max_days_ahead_from_today=days)
+def set_days_into_future(days):
+  app_tables.settings.get(user=anvil.users.get_user()).update(max_days_ahead_from_today=days)
 
 @anvil.server.callable
 def get_time_values():
@@ -531,3 +531,22 @@ def delete_transaction(transaction_id):
   from_date = transaction['date']
   transaction.delete()
   recalc_daily_totals(from_date, account.get_id())
+
+@anvil.server.callable
+def create_account(account_name):
+  app_tables.accounts.add_row(account_name=account_name, user=anvil.users.get_user())
+
+@anvil.server.callable
+def delete_account(account_id):
+  app_tables.accounts.get_by_id(account_id).delete()
+
+@anvil.server.callable
+def delete_user():
+  for account in app_tables.accounts.search(user=anvil.users.get_user()):
+    for transaction in app_tables.transactions.search(account=account):
+      transaction.delete()
+    for daily_total in app_tables.dailytotals.search(account=account):
+      daily_total.delete()
+    account.delete()
+  app_tables.settings.get(user=anvil.users.get_user()).delete()
+  app_tables.users.get_by_id(anvil.users.get_user()).delete()

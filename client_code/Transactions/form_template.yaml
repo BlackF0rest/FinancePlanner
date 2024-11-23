@@ -7,7 +7,7 @@ components:
   - event_bindings: {change: dd_account_change}
     layout_properties: {grid_position: 'TIFFOF,PYBOEU'}
     name: dd_account
-    properties: {include_placeholder: true, placeholder: Konto}
+    properties: {include_placeholder: false, placeholder: ''}
     type: DropDown
   - data_bindings: []
     event_bindings: {change: date_transactions_change}
