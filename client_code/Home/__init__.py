@@ -58,7 +58,7 @@ class Home(HomeTemplate):
   def drop_down_1_change(self, **event_args):
     """This method is called when an item is selected"""
     selected_account_id = self.drop_down_1.selected_value
-    anvil.server.call('set_account_setting')
+    anvil.server.call('set_account_setting', selected_account_id)
     self.update_main_graph()
 
 

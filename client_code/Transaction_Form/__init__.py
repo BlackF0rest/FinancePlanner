@@ -67,11 +67,11 @@ class Transaction_Form(Transaction_FormTemplate):
       if self.rd_recurring.selected:
         if not self.dp_recurring.selected_value:
           self.dp_recurring.border = "2px solid red"
-        if self.dp_recurring.selected_value == 0 and not self.tb_days:
+        if self.dp_recurring.selected_value == 0 and not self.tb_days.text:
           self.tb_days.border = '2px solid red'
         else:
           if self.dp_recurring.selected_value == 0:
-            recurring_days = round(self.tb_days, 0)
+            recurring_days = round(float(self.tb_days.text), 0)
           else:
             recurring_days = self.dp_recurring.selected_value
           today = self.dt_main.date
@@ -84,8 +84,7 @@ class Transaction_Form(Transaction_FormTemplate):
               end_date += timedelta(days=recurring_days)
             else:
               end_date -= timedelta(days=rest_days) # rest tage abziehen
-              end_date += timedelta(days=recurring_days) # last payment means another cycle will start
-            else
+              end_date += timedelta(days=recurring_days) # periode drauf rechnen
           anvil.server.call(
             "write_transaction",
             type=self.type,
