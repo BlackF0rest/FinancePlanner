@@ -78,7 +78,7 @@ class Transaction_Form(Transaction_FormTemplate):
           total_value = float(self.input_numb.text)
           daily_value = round((total_value / recurring_days), 2)
           end_date = self.dt_end_recurring.date
-          print(end_date
+          print(end_date)
           if not end_date:
             end_date += recurring_days
           anvil.server.call(
