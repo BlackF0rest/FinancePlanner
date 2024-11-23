@@ -26,7 +26,7 @@ components:
 - event_bindings: {clicked: rd_one_time_clicked}
   layout_properties: {grid_position: 'VBQMBF,IVYSNJ'}
   name: rd_one_time
-  properties: {align: center, selected: true, text: One TIme}
+  properties: {align: center, selected: true, text: One Time}
   type: RadioButton
 - data_bindings: []
   event_bindings: {change: rd_recurring_change, clicked: rd_recurring_clicked}
@@ -38,10 +38,16 @@ components:
   name: lb_recurring
   properties: {align: center, text: 'When will the next payment be?', visible: false}
   type: Label
-- layout_properties: {grid_position: 'VJRFNI,DMHNMY'}
+- event_bindings: {change: dp_recurring_change}
+  layout_properties: {grid_position: 'VJRFNI,DMHNMY'}
   name: dp_recurring
-  properties: {}
+  properties: {visible: false}
   type: DropDown
+- event_bindings: {change: tb_days_change}
+  layout_properties: {grid_position: 'HNQSVD,UPPAGV'}
+  name: tb_days
+  properties: {align: center, placeholder: Days, type: number, visible: false}
+  type: TextBox
 - layout_properties: {grid_position: 'XRRCER,ETQHSP'}
   name: lb_end_recurring
   properties: {align: center, text: 'When will the last payment be? (Leave empty if forever)', visible: false}

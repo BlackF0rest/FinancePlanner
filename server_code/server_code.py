@@ -460,7 +460,7 @@ def set_days_into_future(user, days):
 @anvil.server.callable
 def get_time_values():
   data = app_tables.time_values.search()
-  time_dict = []
+  time_dict = {}
   for row in data:
     time_dict[row['name']] = row['value']
 
@@ -484,19 +484,17 @@ def get_month_range():
     # Calculate the start and end months
     start_month = current_date.month - 6
     start_year = current_date.year
-    end_month = current_date.month + 6
+    end_month = current_date.month + 5
     end_year = current_date.year
 
 
     # Adjust start year and month if needed
-
     if start_month <= 0:
         start_year -= 1
         start_month += 12
 
 
     # Adjust end year and month if needed
-
     if end_month > 12:
         end_year += 1
         end_month -= 12
@@ -507,7 +505,7 @@ def get_month_range():
 
 
     # Loop through the range of months
-    for i in range(-6, 7):  # From -6 to +6
+    for i in range(-6, 6):  # From -6 to +5
 
         # Calculate the month and year
         month = (current_date.month + i - 1) % 12 + 1

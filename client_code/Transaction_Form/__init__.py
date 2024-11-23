@@ -22,16 +22,14 @@ class Transaction_Form(Transaction_FormTemplate):
     self.rppn_icons.items = anvil.server.call("get_all_icons")
 
     self.dt_main.date = datetime.now().date()
-    #self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
     self.dt_spreadout.min_date = self.dt_main.date + timedelta(days=1)
 
     self.selected_icon = None
 
     self.accounts = None
 
-    #self.intervalls = anvil.server.call('get')
-
-    #self.dp_recurring.items = [(intervall['name'], intervall['id']) for intervall in self.intervalls]
+    self.intervalls = anvil.server.call('get_time_values')
+    self.dp_recurring.items = [(intervall, self.intervalls[intervall]) for intervall in self.intervalls]
 
     if self.type == 'transfer':
       self.dp_accounts.visible = True
@@ -41,9 +39,7 @@ class Transaction_Form(Transaction_FormTemplate):
   def update_accounts(self):
     self.accounts = anvil.server.call("get_user_accounts")
 
-    excluded_account_id = anvil.server.call(
-      "get_current_account_id", anvil.users.get_user()
-    )  # Replace with the account ID you want to exclude
+    excluded_account_id = anvil.server.call("get_current_account_id")  # Replace with the account ID you want to exclude
 
     self.dp_accounts.items = [
       (account["name"], account["id"])
@@ -69,14 +65,19 @@ class Transaction_Form(Transaction_FormTemplate):
       else:
         to_account = None
       if self.rd_recurring.selected:
-        if not self.dt_recurring.date:
-          self.dt_recurring.border = "2px solid red"
+        if not self.dp_recurring.selected_value:
+          self.dp_recurring.border = "2px solid red"
+        if self.dp_recurring.select_value == 0 and not self.tb_days:
+          self.tb_days.border = '2px solid red'
         else:
+          if self.dp_recurring.selected_value == 0:
+            recurring_days = round(self.tb_days, 0)
+          else:
+            
           today = self.dt_main.date
-          recurring_days = (self.dt_recurring.date - today).days
           total_value = float(self.input_numb.text)
           daily_value = round((total_value / recurring_days), 2)
-          end_date = self.dt_end_recurring.date
+          end_date = self.dt_end_recurring.date + round(self.dp_recurring.selected_value,0)
           anvil.server.call(
             "write_transaction",
             type=self.type,
@@ -152,7 +153,7 @@ class Transaction_Form(Transaction_FormTemplate):
     self.rd_recurring.selected != self.rd_recurring.selected
     self.dt_spreadout.visible = False
     self.lb_spreadout.visible = False
-    self.dt_recurring.visible = self.rd_recurring.selected
+    self.dp_recurring.visible = self.rd_recurring.selected
     self.lb_recurring.visible = self.rd_recurring.selected
     self.dt_end_recurring.visible = self.rd_recurring.selected
     self.lb_end_recurring.visible = self.rd_recurring.selected
@@ -160,21 +161,23 @@ class Transaction_Form(Transaction_FormTemplate):
   def rd_spreadout_clicked(self, **event_args):
     """This method is called when this radio button is selected"""
     self.rd_spreadout.selected != self.rd_spreadout.selected
-    self.dt_recurring.visible = False
+    self.dp_recurring.visible = False
     self.lb_recurring.visible = False
     self.dt_end_recurring.visible = False
     self.lb_end_recurring.visible = False
+    self.tb_days =False
     self.dt_spreadout.visible = self.rd_spreadout.selected
     self.lb_spreadout.visible = self.rd_spreadout.selected
 
   def rd_one_time_clicked(self, **event_args):
     """This method is called when this radio button is selected"""
-    self.dt_recurring.visible = False
+    self.dp_recurring.visible = False
     self.lb_recurring.visible = False
     self.dt_spreadout.visible = False
     self.lb_spreadout.visible = False
     self.dt_end_recurring.visible = False
     self.lb_end_recurring.visible = False
+    self.tb_days.visible = False
 
   def input_numb_change(self, **event_args):
     """This method is called when the text in this text box is edited"""
@@ -188,16 +191,18 @@ class Transaction_Form(Transaction_FormTemplate):
 
   def dt_main_change(self, **event_args):
     """This method is called when the selected date changes"""
-    self.dt_recurring.min_date = self.dt_main.date + timedelta(days=1)
     self.dt_spreadout.min_date = self.dt_main.date + timedelta(days=1)
     if self.dt_main.border != "":
       self.dt_main.border = ""
 
-  def dt_recurring_change(self, **event_args):
+  def dp_recurring_change(self, **event_args):
     """This method is called when the selected date changes"""
-    self.dt_end_recurring.min_date = self.dt_recurring.date + timedelta(days=1)
-    if self.dt_recurring.border != "":
-      self.dt_recurring.border = ""
+    if self.dp_recurring.border != "":
+      self.dp_recurring.border = ""
+    if self.dp_recurring.selected_value == 0:
+      self.tb_days.visible = True
+    else:
+      self.tb_days.visible = False
 
   def dt_spreadout_change(self, **event_args):
     """This method is called when the selected date changes"""
@@ -208,3 +213,8 @@ class Transaction_Form(Transaction_FormTemplate):
     """This method is called when an item is selected"""
     if self.dp_accounts.border != "":
       self.dp_accounts.border = ""
+
+  def tb_days_change(self, **event_args):
+    """This method is called when the text in this text box is edited"""
+    if self.tb_days.border != "":
+      self.tb_days.border = ""

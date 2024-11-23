@@ -173,6 +173,7 @@ class Insights(InsightsTemplate):
       yaxis=dict(title=f'Amount in {self.currency}'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
+      xaxis_type='category'
       )
 
   def update_pt_six(self):
