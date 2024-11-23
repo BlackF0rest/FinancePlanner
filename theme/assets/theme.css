@@ -101,8 +101,9 @@ body {
   font-family: Roboto, Noto, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.4286;
-  color: %color:On Surface%;
-  background-color: %color:Background%;
+  height: 100%;
+  margin: 0;
+  background:  linear-gradient(0deg, rgba(65, 164, 253, 1), rgba(14, 244, 255, 1));
   min-height: calc(100vh - 56px)
 }
 
@@ -148,6 +149,12 @@ color: %color:On Primary Container%;
 .anvil-role-input-prompt {
   font-size: 16px;
   line-height: 1.5;
+}
+
+.anvil-role-icon-grid > div {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 3%; /*adjust as needed*/
 }
 
 .anvil-role-body > .label-text, .anvil-role-body .link-text {

@@ -29,6 +29,7 @@ color_scheme:
   - {color: 'rgba(60, 217, 237, 0.05)', name: Primary Overlay 1}
   - {color: 'rgba(60, 217, 237, 0.08)', name: Primary Overlay 2}
   - {color: 'rgba(60, 217, 237, 0.11)', name: Primary Overlay 3}
+  - {color: '#000000', name: Text}
   preset_groups:
   - name: Colour Scheme
     options:
@@ -331,3 +332,4 @@ roles:
   name: outlined-error
 - components: [TextBox, TextArea, DatePicker, DropDown]
   name: input-error
+- {components: null, display_in_toolbox: true, name: icon-grid, title: Icon-Grid}
