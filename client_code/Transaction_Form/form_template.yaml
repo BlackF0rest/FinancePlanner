@@ -50,7 +50,12 @@ components:
   type: TextBox
 - layout_properties: {grid_position: 'XRRCER,ETQHSP'}
   name: lb_end_recurring
-  properties: {align: center, text: 'When will the last payment be? (Leave empty if forever)', visible: false}
+  properties:
+    align: center
+    text: |-
+      When will the last payment be?
+      (Last actual payment Period, if not exact, payment period the date is in will be used. Leave empty if no end is planned.)
+    visible: false
   type: Label
 - layout_properties: {grid_position: 'AHIQDG,IZJNJT'}
   name: dt_end_recurring

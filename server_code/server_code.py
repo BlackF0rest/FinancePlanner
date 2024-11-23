@@ -11,14 +11,14 @@ import itertools
 import calendar
 
 @anvil.server.callable
-def get_daily_total_data(account_id):
+def get_daily_total_data():
   filters = {}
-  if account_id:
-    account = app_tables.accounts.get_by_id(account_id)
-    if account:
-        filters['account'] = account
+  
+  account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
+  if account:
+      filters['account'] = account
 
-  today = date(2024,11,7) #datetime.now().date()
+  today = datetime.now().date()
   yesterday =   today - timedelta(days=1)
   tomorrow =   today + timedelta(days=1)
 
@@ -298,7 +298,7 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
     recurring=recurring, 
     end_date=end_date, 
     spread_out=spread_out)
-  recalc_daily_totals(date, get_current_account_id(anvil.users.get_user()))
+  recalc_daily_totals(date, get_current_account_id())
   if type == 'transfer':
     recalc_daily_totals(date, to_account)
 

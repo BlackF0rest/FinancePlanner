@@ -78,9 +78,14 @@ class Transaction_Form(Transaction_FormTemplate):
           total_value = float(self.input_numb.text)
           daily_value = round((total_value / recurring_days), 2)
           end_date = self.dt_end_recurring.date
-          print(end_date)
-          if not end_date:
-            end_date += recurring_days
+          if end_date is not None:
+            rest_days = round(((end_date - today).days % recurring_days),0)
+            if rest_days == 0:
+              end_date += timedelta(days=recurring_days)
+            else:
+              end_date -= timedelta(days=rest_days) # rest tage abziehen
+              end_date += timedelta(days=recurring_days) # last payment means another cycle will start
+            else
           anvil.server.call(
             "write_transaction",
             type=self.type,
@@ -90,9 +95,7 @@ class Transaction_Form(Transaction_FormTemplate):
             name=self.input_name.text,
             recurring=True,
             end_date=end_date,
-            account_id=anvil.server.call(
-              "get_current_account_id", anvil.users.get_user()
-            ),
+            account_id= anvil.server.call("get_current_account_id"),
             to_account=to_account,
           )
       elif self.rd_spreadout.selected:
@@ -112,9 +115,7 @@ class Transaction_Form(Transaction_FormTemplate):
             name=self.input_name.text,
             recurring=True,
             end_date=end_date,
-            account_id=anvil.server.call(
-              "get_current_account_id", anvil.users.get_user()
-            ),
+            account_id=anvil.server.call("get_current_account_id"),
             to_account=to_account,
           )
       else:
@@ -126,9 +127,7 @@ class Transaction_Form(Transaction_FormTemplate):
           category=self.selected_icon,
           amount=float(self.input_numb.text),
           name=self.input_name.text,
-          account_id=anvil.server.call(
-            "get_current_account_id", anvil.users.get_user()
-          ),
+          account_id=anvil.server.call("get_current_account_id"),
           to_account=to_account,
         )
       open_form("Home")

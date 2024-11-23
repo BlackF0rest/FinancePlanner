@@ -25,7 +25,7 @@ class Home(HomeTemplate):
     # get Users accounts
     self.update_accounts()
     # initialize main graph
-    self.update_main_graph(anvil.server.call('get_current_account_id'))
+    self.update_main_graph()
 
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -58,8 +58,8 @@ class Home(HomeTemplate):
   def drop_down_1_change(self, **event_args):
     """This method is called when an item is selected"""
     selected_account_id = self.drop_down_1.selected_value
-    anvil.server.call('set_account_setting', selected_account_id, anvil.users.get_user())
-    self.update_main_graph(selected_account_id)
+    anvil.server.call('set_account_setting')
+    self.update_main_graph()
 
 
   def update_accounts(self):
@@ -72,8 +72,8 @@ class Home(HomeTemplate):
         if account['id'] == anvil.server.call('get_current_account_id'):
           self.drop_down_1.selected_value = account['id']
 
-  def update_main_graph(self, account_id):
-    data = anvil.server.call('get_daily_total_data', account_id)
+  def update_main_graph(self):
+    data = anvil.server.call('get_daily_total_data')
     dates = data['dates']
     totals = data['net_totals']
 
