@@ -52,73 +52,77 @@ def get_daily_total_data(account_id):
 @anvil.server.callable
 def is_1_get_fix_month(accounts=None):
   # every (actual) Month not theoretical with 30.xx days
-  if accounts:
+  month_range = get_month_range()
+  if accounts != []:
+    return_dict = {}
+    month_list = []
+    i=0
     for account in accounts:
-      year = datetime.now().year
-      return_dict = {}
-      
-      for month in range(1, 13):
-        first_day = datetime(year, month, 1)
-        if month == 12:
-          last_day = datetime(year+1, 1, 1) - timedelta(days=1)
-        else:
-          last_day = datetime(year, month+1, 1) - timedelta(days=1)
-          
+      for first_day, last_day in month_range:
+        month = first_day.month
         transactions = app_tables.transactions.search(
         Type='expense',
         recurring=True,
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
         end_date=q.greater_than_or_equal_to(first_day))
+        if i==0:
+          month_list.append(first_day.month)
 
-        if return_dict[str(month)]:
+        if str(month) in return_dict.keys():
           return_dict[str(month)] += sum(transaction['Amount'] for transaction in transactions)
         else:
           return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
+      i = 1
   else:
-    year = datetime.now().year
+    month_range = get_month_range()
     return_dict = {}
+    month_list = []
     
-    for month in range(1, 13):
-      first_day = datetime(year, month, 1)
-      if month == 12:
-        last_day = datetime(year+1, 1, 1) - timedelta(days=1)
-      else:
-        last_day = datetime(year, month+1, 1) - timedelta(days=1)
+    for first_day, last_day in month_range:
+      month = first_day.month
         
       transactions = app_tables.transactions.search(
-      Type='expense',
-      recurring=True,
-      spread_out=False,
-      date=q.less_than_or_equal_to(last_day),
-      end_date=q.greater_than_or_equal_to(first_day))
+        Type='expense',
+        recurring=True,
+        spread_out=False,
+        date=q.less_than_or_equal_to(last_day),
+        end_date=q.greater_than_or_equal_to(first_day))
 
       return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
-  return return_dict
+      month_list.append(first_day.month)
+  print(return_dict)
+  print(month_list)
+  return return_dict, month_list
 
 @anvil.server.callable
 def is_2_ic_oc_month():
   #total income vs outcome everey month (real month values)
-  year = datetime.now().year
+  month_range = get_month_range()
   return_list = []
-  
-  for month in range(1, 13):
-    first_day = datetime(year, month, 1)
-    if month == 12:
-      last_day = datetime(year+1, 1, 1) - timedelta(days=1)
-    else:
-      last_day = datetime(year, month+1, 1) - timedelta(days=1)
+  if accounts != []:
+    month_list = []
+    i=0
+    for account in accounts:
+      m = 0
+      for first_day, last_day in month_range:
+        daily_rows = app_tables.dailytotals.search(
+          account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
+          date=q.between(first_day, last_day)
+        )
+        month_dict = {}
+    
+        month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
+        month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
 
-    daily_rows = app_tables.dailytotals.search(
-      account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
-      date=q.between(first_day, last_day)
-    )
-    month_dict = {}
+        if str(month) in return_dict.keys():
+            month_dict['income'] += sum(daily_row['total_income'] for daily_row in daily_rows)
+            month_dict['expense'] += sum(daily_row['total_outcome'] for daily_row in daily_rows)
+        else:
+            month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
+            month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
 
-    month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
-    month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
-
-    return_list.append(month_dict)
+        return_list[m]=month_dict
   print(return_list)
   return return_list
 
@@ -289,9 +293,9 @@ def recalc_daily_totals(from_date, account_id):
       
     if app_tables.dailytotals.get(date=day, account=account) is not None:
       print('edited Row')
-      app_tables.dailytotals.get(date=day, account=account).update(total_income=daily_income, total_outcome=daily_expense, net_total=daily_total)
+      app_tables.dailytotals.get(date=day, account=account).update(total_income=round(daily_income,2), total_outcome=round(daily_expense,2), net_total=round(daily_total,2))
     else:
-      app_tables.dailytotals.add_row(account=account, date=day, total_income=daily_income, total_outcome=daily_expense, net_total=daily_total)
+      app_tables.dailytotals.add_row(account=account, date=day, total_income=round(daily_income,2), total_outcome=round(daily_expense,2), net_total=round(daily_total,2))
       print('added Row')
 
 @anvil.server.callable
@@ -435,70 +439,47 @@ def set_currency(currency):
 def get_month_range():
 
     # Get the current date
-
     current_date = datetime.now()
 
     
 
     # Calculate the start and end months
-
     start_month = current_date.month - 6
-
     start_year = current_date.year
-
     end_month = current_date.month + 6
-
     end_year = current_date.year
 
 
     # Adjust start year and month if needed
 
     if start_month <= 0:
-
         start_year -= 1
-
         start_month += 12
 
 
     # Adjust end year and month if needed
 
     if end_month > 12:
-
         end_year += 1
-
         end_month -= 12
 
 
     # Create a list to hold the first and last days of each month
-
     month_ranges = []
 
 
     # Loop through the range of months
-
     for i in range(-6, 7):  # From -6 to +6
 
         # Calculate the month and year
-
         month = (current_date.month + i - 1) % 12 + 1
-
         year = current_date.year + (current_date.month + i - 1) // 12
 
-        
-
         # Get the first day of the month
-
         first_day = datetime(year, month, 1)
-
         
-
         # Get the last day of the month
-
         last_day = datetime(year, month, calendar.monthrange(year, month)[1])
-
         
-
         month_ranges.append((first_day, last_day))
-
-
     return month_ranges

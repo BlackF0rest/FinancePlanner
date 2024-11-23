@@ -29,6 +29,10 @@ class Transaction_Form(Transaction_FormTemplate):
 
     self.accounts = None
 
+    self.intervalls = anvil.server.call('get')
+
+    self.dp_recurring.items = [(intervall['name'], intervall['id']) for intervall in self.intervalls]
+
     if self.type == 'transfer':
       self.dp_accounts.visible = True
       self.dp_accounts.enabled = True

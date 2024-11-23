@@ -67,7 +67,7 @@ class Insights(InsightsTemplate):
     self.update_pt_one()
 
   def update_pie_where_went(self):
-    data = anvil.server.call('is_get_expense_data')
+    data, labels = anvil.server.call('is_get_expense_data')
     labels = list(data.keys())
     sizes = list(data.values())
 
@@ -77,10 +77,15 @@ class Insights(InsightsTemplate):
     )
 
   def update_pt_one(self):
-    data = anvil.server.call('is_1_get_fix_month')
-    labels = list(data.keys())
-    sizes = list(data.values())
+    data, labels = anvil.server.call('is_1_get_fix_month', self.selected_accounts)
+    sizes = []
 
+    for month in labels:
+      sizes.append(data[str(month)])
+
+    self.pt_one.data = []
+    self.pt_one.layout = None
+    
     self.pt_one.data = go.Bar(
       x=labels,
       y=sizes,
@@ -93,6 +98,7 @@ class Insights(InsightsTemplate):
       yaxis=dict(title='Amount'),
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
+      xaxis_type='category'
       )
 
   def update_pt_two(self):
@@ -224,6 +230,7 @@ class Insights(InsightsTemplate):
       self.grid_panel_1.visible = True
     else:
       self.grid_panel_1.visible = False
+      self.selected_accounts = []
       anvil.server.call('set_account_setting', self.dp_accounts.selected_value)
       self.update_all_pt()
 
@@ -248,4 +255,4 @@ class Insights(InsightsTemplate):
         else:
           self.selected_accounts.append(account['id'])
 
-    print(self.selected_accounts)
+    self.update_all_pt()

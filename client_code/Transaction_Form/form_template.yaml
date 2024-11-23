@@ -38,11 +38,10 @@ components:
   name: lb_recurring
   properties: {align: center, text: 'When will the next payment be?', visible: false}
   type: Label
-- event_bindings: {change: dt_recurring_change}
-  layout_properties: {grid_position: 'OSYBJS,LZRNJW'}
-  name: dt_recurring
-  properties: {visible: false}
-  type: DatePicker
+- layout_properties: {grid_position: 'VJRFNI,DMHNMY'}
+  name: dp_recurring
+  properties: {}
+  type: DropDown
 - layout_properties: {grid_position: 'XRRCER,ETQHSP'}
   name: lb_end_recurring
   properties: {align: center, text: 'When will the last payment be? (Leave empty if forever)', visible: false}
