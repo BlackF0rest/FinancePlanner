@@ -36,11 +36,6 @@ components:
     name: grid_panel_1
     properties: {}
     type: GridPanel
-  - event_bindings: {click: tst_bttn_click}
-    layout_properties: {grid_position: 'PAACOB,NFGEMJ'}
-    name: tst_bttn
-    properties: {role: outlined-button, text: test}
-    type: Button
   layout_properties: {slot: default}
   name: content_panel
   properties: {col_widths: '{}'}

@@ -156,7 +156,7 @@ def is_2_ic_oc_month(accounts=[]):
   return return_dict, month_list
 
 @anvil.server.callable
-def is_3_get_expense_data(all_accounts = None):
+def is_3_get_expense_data(accounts = []):
   year = datetime.now().year
   month = datetime.now().month
 
@@ -166,8 +166,13 @@ def is_3_get_expense_data(all_accounts = None):
   else:
     last_day = datetime(year, month+1, 1) - timedelta(days=1)
   
-  if all_accounts:
-    pass
+  if accounts != []:
+    transactions = itertools.chain.from_iterable(
+      app_tables.transactions.search(
+        Type='expense', 
+        date=q.between(first_day.date(), last_day.date())
+    ) for account in accounts
+  )
   else:
     transactions = app_tables.transactions.search(
       Type='expense', 

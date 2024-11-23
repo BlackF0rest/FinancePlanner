@@ -147,15 +147,4 @@ class Home(HomeTemplate):
   def recalc_daily_click(self, **event_args):
     """This method is called when the button is clicked"""
     anvil.server.call('test_recalc')
-
-  def tst_bttn_click(self, **event_args):
-    """This method is called when the button is clicked"""
-    egal = anvil.server.call('is_1_get_fix_month')
-    egal = anvil.server.call('is_2_ic_oc_month')
-    egal = anvil.server.call('is_3_get_expense_data')
-    egal = anvil.server.call('is_5_costs_qt')
-    egal = anvil.server.call('is_6_saving_goal')
-    egal = anvil.server.call('is_7_perc_pm')
-    print('all went good')
-    egal = None
  
