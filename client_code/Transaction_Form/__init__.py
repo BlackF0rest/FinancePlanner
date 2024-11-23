@@ -67,17 +67,20 @@ class Transaction_Form(Transaction_FormTemplate):
       if self.rd_recurring.selected:
         if not self.dp_recurring.selected_value:
           self.dp_recurring.border = "2px solid red"
-        if self.dp_recurring.select_value == 0 and not self.tb_days:
+        if self.dp_recurring.selected_value == 0 and not self.tb_days:
           self.tb_days.border = '2px solid red'
         else:
           if self.dp_recurring.selected_value == 0:
             recurring_days = round(self.tb_days, 0)
           else:
-            
+            recurring_days = self.dp_recurring.selected_value
           today = self.dt_main.date
           total_value = float(self.input_numb.text)
           daily_value = round((total_value / recurring_days), 2)
-          end_date = self.dt_end_recurring.date + round(self.dp_recurring.selected_value,0)
+          end_date = self.dt_end_recurring.date
+          print(end_date
+          if not end_date:
+            end_date += recurring_days
           anvil.server.call(
             "write_transaction",
             type=self.type,
