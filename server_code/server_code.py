@@ -550,3 +550,8 @@ def delete_user():
     account.delete()
   app_tables.settings.get(user=anvil.users.get_user()).delete()
   app_tables.users.get_by_id(anvil.users.get_user()).delete()
+
+@anvil.server.callable
+def setup_user(account_name):
+  curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), account_name=account_name)
+  app_tables.settings.add_row(currency='$', current_account=curr_account, max_days_ahead_from_today=15, user=anvil.users.get_user())

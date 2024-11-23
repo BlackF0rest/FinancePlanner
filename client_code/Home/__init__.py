@@ -18,9 +18,13 @@ class Home(HomeTemplate):
     self.accounts = None
 
     # Handle Login
-    self.user = anvil.users.login_with_form()
+    anvil.users.login_with_form()
 
-    #anvil.server.call('update_daily_totals')
+    if not app_tables.settings.get(user=anvil.users.get_user()):
+      t = anvil.TextBox(placeholder='Account Name')
+      anvil.alert(content=t, title='Hi, please enter the Name of your first Account :)', dismissible=False, buttons=('Create'), large=True)
+      
+      
     
     # get Users accounts
     self.update_accounts()
