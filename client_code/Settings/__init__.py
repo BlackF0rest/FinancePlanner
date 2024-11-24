@@ -31,7 +31,7 @@ class Settings(SettingsTemplate):
 
   def button_logs_click(self, **event_args):
     """This method is called when the button is clicked"""
-    open_form('InOut')
+    open_form('Transactions')
 
   def button_insights_click(self, **event_args):
     """This method is called when the button is clicked"""

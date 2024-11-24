@@ -60,9 +60,9 @@ class Home(HomeTemplate):
     """This method is called when the button is clicked"""
     open_form('Transaction_Form', type='expense')
 
-  def drop_down_1_change(self, **event_args):
+  def dp_accounts_change(self, **event_args):
     """This method is called when an item is selected"""
-    selected_account_id = self.drop_down_1.selected_value
+    selected_account_id = self.dp_accounts.selected_value
     anvil.server.call('set_account_setting', selected_account_id)
     self.update_main_graph()
 
@@ -70,12 +70,12 @@ class Home(HomeTemplate):
   def update_accounts(self):
     self.accounts = anvil.server.call('get_user_accounts')
 
-    self.drop_down_1.items = [(account['name'], account['id']) for account in self.accounts]
+    self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
 
     if self.accounts:
       for account in self.accounts:
         if account['id'] == anvil.server.call('get_current_account_id'):
-          self.drop_down_1.selected_value = account['id']
+          self.dp_accounts.selected_value = account['id']
 
   def update_main_graph(self):
     data = anvil.server.call('get_daily_total_data')

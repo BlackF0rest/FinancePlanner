@@ -57,19 +57,19 @@ components:
       type: Image
     - layout_properties: {grid_position: 'IIEBNT,NOEZLA YSSHOH,WBOQGY'}
       name: lb_name
-      properties: {align: center}
+      properties: {align: center, foreground: 'theme:Text'}
       type: Label
     - layout_properties: {grid_position: 'IIEBNT,NOEZLA FCPJLN,SGQPVV'}
       name: lb_amount
-      properties: {align: center}
+      properties: {align: center, foreground: 'theme:Text'}
       type: Label
     - layout_properties: {grid_position: 'IIEBNT,NOEZLA FCPJLN,AZYSZO'}
       name: lb_amount_payed
-      properties: {align: center}
+      properties: {align: center, foreground: 'theme:Text'}
       type: Label
     - layout_properties: {grid_position: 'IIEBNT,NOEZLA KDHCDY,LYFNYP'}
       name: lb_days_to_go
-      properties: {align: center}
+      properties: {align: center, foreground: 'theme:Text'}
       type: Label
     layout_properties: {grid_position: 'XWIEBH,KKYFGM'}
     name: outlined_card_6
