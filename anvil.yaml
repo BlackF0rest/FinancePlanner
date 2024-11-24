@@ -145,9 +145,9 @@ db_schema:
     server: full
     title: Users
 dependencies: []
-metadata: {title: Finance Planner}
-name: Finance Planner
-package_name: Finance_Planner
+metadata: {logo_img: 'asset:FlowFin.png', title: FlowFin}
+name: FlowFin
+package_name: FlowFin
 renamed: true
 runtime_options:
   client_version: '3'
