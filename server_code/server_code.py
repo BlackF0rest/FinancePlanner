@@ -330,11 +330,9 @@ def recalc_daily_totals(from_date, account_id):
       daily_total = daily_income - daily_expense
       
     if app_tables.dailytotals.get(date=day, account=account) is not None:
-      print('edited Row')
       app_tables.dailytotals.get(date=day, account=account).update(total_income=round(daily_income,2), total_outcome=round(daily_expense,2), net_total=round(daily_total,2))
     else:
       app_tables.dailytotals.add_row(account=account, date=day, total_income=round(daily_income,2), total_outcome=round(daily_expense,2), net_total=round(daily_total,2))
-      print('added Row')
 
 @anvil.server.callable
 def get_account_from_id(account_id):
@@ -479,48 +477,37 @@ def set_currency(currency):
   app_tables.settings.get(user=anvil.users.get_user()).update(currency=currency)
 
 def get_month_range():
-
     # Get the current date
     current_date = datetime.now()
-
-    
 
     # Calculate the start and end months
     start_month = current_date.month - 6
     start_year = current_date.year
     end_month = current_date.month + 5
     end_year = current_date.year
-
-
+  
     # Adjust start year and month if needed
     if start_month <= 0:
         start_year -= 1
         start_month += 12
-
 
     # Adjust end year and month if needed
     if end_month > 12:
         end_year += 1
         end_month -= 12
 
-
     # Create a list to hold the first and last days of each month
     month_ranges = []
 
-
     # Loop through the range of months
     for i in range(-6, 6):  # From -6 to +5
-
         # Calculate the month and year
         month = (current_date.month + i - 1) % 12 + 1
         year = current_date.year + (current_date.month + i - 1) // 12
-
         # Get the first day of the month
         first_day = datetime(year, month, 1)
-        
         # Get the last day of the month
         last_day = datetime(year, month, calendar.monthrange(year, month)[1])
-        
         month_ranges.append((first_day, last_day))
     return month_ranges
 
