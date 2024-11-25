@@ -71,7 +71,7 @@ class Home(HomeTemplate):
     """Update the main Graph with new Data. This automatically uses the Account which is set in the """
     self.accounts = anvil.server.call('get_user_accounts') # get all accounts of the user
 
-    self.drop_down_1.items = [(account['name'], account['id']) for account in self.accounts] # set the Dropdown to the names and ids of the accounts
+    self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts] # set the Dropdown to the names and ids of the accounts
 
     if self.accounts:
       for account in self.accounts:
