@@ -54,7 +54,7 @@ def is_1_get_fix_month(accounts=None):
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
         end_date=q.greater_than_or_equal_to(first_day),
-        account=app_tables.accounts.get(user=anvil.users.get_user()))
+        account=app_tables.accounts.get(account)['current_account'])
         if i==0:
           month_list.append(first_day.month)
 
@@ -77,7 +77,7 @@ def is_1_get_fix_month(accounts=None):
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
         end_date=q.greater_than_or_equal_to(first_day),
-        account=app_tables.accounts.get(user=anvil.users.get_user())
+        account=app_tables.settings.get(user=anvil.users.get_user())['current_account']
       )
       
 
@@ -150,14 +150,14 @@ def is_3_get_expense_data(accounts = []):
     transactions = itertools.chain.from_iterable(
       app_tables.transactions.search(
         Type='expense', 
-        date=q.all_of(q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True)),
+        date=q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True),
         account=app_tables.accounts.get_by_id(account)
     ) for account in accounts
   )
   else:
     transactions = app_tables.transactions.search(
       Type='expense', 
-      date=q.between(first_day.date(), last_day.date()),
+      date=q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True),
       account=app_tables.settings.get(user=anvil.users.get_user())['current_account'])
 
   category_counts = {}
