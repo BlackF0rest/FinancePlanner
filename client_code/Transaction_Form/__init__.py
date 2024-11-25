@@ -105,7 +105,7 @@ class Transaction_Form(Transaction_FormTemplate):
           daily_value = round((total_value / (end_date - today).days), 2)
           anvil.server.call(
             "write_transaction",
-            type="transfer",
+            type=self.type,
             date=today,
             category=self.selected_icon,
             amount=daily_value,
@@ -119,7 +119,7 @@ class Transaction_Form(Transaction_FormTemplate):
         today = self.dt_main.date
         anvil.server.call(
           "write_transaction",
-          type="transfer",
+          type=self.type,
           date=today,
           category=self.selected_icon,
           amount=float(self.input_numb.text),
