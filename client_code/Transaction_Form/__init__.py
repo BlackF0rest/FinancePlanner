@@ -57,13 +57,11 @@ class Transaction_Form(Transaction_FormTemplate):
       self.img_icon.border = "2px solid red"
     elif not self.dt_main.date:
       self.dt_main.border = "2px solid red"
-    elif self.type == 'transfer' and not self.dp_accounts:
+    elif self.type == 'transfer' and not self.dp_accounts.selected_value:
       self.dp_accounts.border = "2px solid red"
     else:
       if self.type == 'transfer':
         to_account = anvil.server.call("get_account_from_id", self.dp_accounts.selected_value)
-      else:
-        to_account = None
       if self.rd_recurring.selected:
         if not self.dp_recurring.selected_value:
           self.dp_recurring.border = "2px solid red"
@@ -94,7 +92,7 @@ class Transaction_Form(Transaction_FormTemplate):
             name=self.input_name.text,
             recurring=True,
             end_date=end_date,
-            account_id= anvil.server.call("get_current_account_id"),
+            account_id=anvil.server.call("get_current_account_id"),
             to_account=to_account,
           )
       elif self.rd_spreadout.selected:
