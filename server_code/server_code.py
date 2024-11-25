@@ -502,7 +502,7 @@ def get_month_range():
     month_ranges = []
 
     # Loop through the range of months
-    for i in range(-6, 6):  # From -6 to +5
+    for i in range(-6, 5):  # From -6 to +5
         # Calculate the month and year
         month = (current_date.month + i - 1) % 12 + 1
         year = current_date.year + (current_date.month + i - 1) // 12
@@ -510,7 +510,7 @@ def get_month_range():
         first_day = datetime(year, month, 1)
         # Get the last day of the month
         last_day = datetime(year, month, calendar.monthrange(year, month)[1])
-        month_ranges.append((first_day, (last_day)))
+        month_ranges.append((first_day, (last_day+timedelta(days=1)))
     return month_ranges
 
 @anvil.server.callable
