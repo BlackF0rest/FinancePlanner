@@ -77,10 +77,12 @@ class Transaction_Form(Transaction_FormTemplate):
           total_value = float(self.input_numb.text)
           daily_value = round((total_value / recurring_days), 2)
           end_date = self.dt_end_recurring.date
+          print (end_date)
           if end_date is not None:
             rest_days = ((end_date - today).days % recurring_days)
+            print(rest_days)
             if rest_days == 0:
-              end_date += timedelta(days=recurring_days)
+              pass
             else:
               end_date -= timedelta(days=rest_days) # rest tage abziehen
               end_date += timedelta(days=recurring_days) # periode drauf rechnen

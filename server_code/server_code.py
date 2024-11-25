@@ -102,7 +102,7 @@ def is_2_ic_oc_month(accounts=[]):
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.accounts.get_by_id(account),
-          date=q.between(first_day, last_day)
+          date=q.all_of(q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True))
         )
         month_dict = {}
     
@@ -150,7 +150,7 @@ def is_3_get_expense_data(accounts = []):
     transactions = itertools.chain.from_iterable(
       app_tables.transactions.search(
         Type='expense', 
-        date=q.between(first_day.date(), last_day.date()),
+        date=q.all_of(q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True)),
         account=app_tables.accounts.get_by_id(account)
     ) for account in accounts
   )
