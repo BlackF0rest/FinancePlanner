@@ -122,16 +122,13 @@ def is_2_ic_oc_month(accounts=[]):
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
-          date=q.all_of(q.greater_than_or_equal_to(first_day), q.less_than_or_equal_to(last_day))
+          date=q.all_of(q.greater_than_or_equal_to(first_day-timedelta(days=1)),q.less_than_or_equal_to(last_day))
         )
-        print(f'\n{month}:')
-        safety_counter = 0
+        print(f'\n{first_day} - {last_day}:')
         for daiy in daily_rows:
-          print(daiy['total_income'])
-          safety_counter += daiy['total_income']  
-          print(safety_counter)
+          print(daiy['date'])
         month_dict = {}
-    
+
         month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
         month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
 
