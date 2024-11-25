@@ -53,7 +53,8 @@ def is_1_get_fix_month(accounts=None):
         recurring=True,
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
-        end_date=q.greater_than_or_equal_to(first_day))
+        end_date=q.greater_than_or_equal_to(first_day),
+        account=account)
         if i==0:
           month_list.append(first_day.month)
 
@@ -75,7 +76,8 @@ def is_1_get_fix_month(accounts=None):
         recurring=True,
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
-        end_date=q.greater_than_or_equal_to(first_day))
+        end_date=q.greater_than_or_equal_to(first_day),
+        account=anvil.users.get_user())
 
       return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
       month_list.append(first_day.month)
