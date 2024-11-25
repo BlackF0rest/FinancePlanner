@@ -102,7 +102,7 @@ def is_2_ic_oc_month(accounts=[]):
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.accounts.get_by_id(account),
-          date=q.all_of(q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True))
+          date=q.all_of(q.between(first_day-timedelta(days=1), last_day+timedelta(days=1), min_inclusive=False ,max_inclusive=False))
         )
         month_dict = {}
     
