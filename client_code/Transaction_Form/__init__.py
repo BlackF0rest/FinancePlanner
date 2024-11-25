@@ -49,7 +49,7 @@ class Transaction_Form(Transaction_FormTemplate):
 
   def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
-    if not self.input_numb.text:
+    if not self.input_numb.text or float(self.input_numb.text)<0:
       self.input_numb.border = "2px solid red"
     elif not self.input_name.text:
       self.input_name.border = "2px solid red"
