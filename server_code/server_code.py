@@ -126,15 +126,8 @@ def is_2_ic_oc_month(accounts=[]):
         )
         month_dict = {}
     
-        #month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
-        #month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
-
-        if str(month) in return_dict.keys():
-            month_dict['income'] += round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
-            month_dict['expense'] += round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
-        else:
-            month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
-            month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
+        month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
+        month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
 
         return_dict[str(month)] = month_dict
   return return_dict, month_list
@@ -510,7 +503,7 @@ def get_month_range():
         first_day = datetime(year, month, 1)
         # Get the last day of the month
         last_day = datetime(year, month, calendar.monthrange(year, month)[1])
-        month_ranges.append(((first_day+timedelta(days=1)), (last_day+timedelta(days=1))))
+        month_ranges.append(((first_day), (last_day+timedelta(days=1))))
     return month_ranges
 
 @anvil.server.callable
