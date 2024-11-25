@@ -17,10 +17,10 @@ class Transactions(TransactionsTemplate):
     self.accounts = None
     
     self.init_components(**properties)
-    self.update_accounts()
-    self.update_transactions()
+    self.update_accounts() # Update Account Dropdown
+    self.update_transactions() # Load and show all transactions of current account
 
-    self.date_transactions.date = datetime.now().date()  
+    self.date_transactions.date = datetime.now().date()
 
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
