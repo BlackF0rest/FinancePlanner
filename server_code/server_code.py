@@ -54,7 +54,7 @@ def is_1_get_fix_month(accounts=None):
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
         end_date=q.greater_than_or_equal_to(first_day),
-        account=app_tables.accounts.get(account)['current_account'])
+        account=app_tables.accounts.get_by_id(account))
         if i==0:
           month_list.append(first_day.month)
 

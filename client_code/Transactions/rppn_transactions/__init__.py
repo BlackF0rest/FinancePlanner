@@ -21,12 +21,9 @@ class rppn_transactions(rppn_transactionsTemplate):
     
     if 'to' in self.item :
       self.lb_to.visible = True
-      self.lb_arrow.visible = True
       self.lb_to.text = self.item['to']
     if 'from' in self.item:
       self.lb_to.visible = True
-      self.lb_arrow.icon = 'fa:arrow-right'
-      self.lb_arrow.visible = True
       self.lb_to.text = self.item['from']
 
   def bt_delete_click(self, **event_args):
