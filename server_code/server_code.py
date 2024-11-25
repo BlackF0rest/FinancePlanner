@@ -12,6 +12,7 @@ import calendar
 
 @anvil.server.callable
 def get_daily_total_data():
+  """Get data from Databases for the dailytotals ye"""
   filters = {}
   
   account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
