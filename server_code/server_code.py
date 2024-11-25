@@ -122,7 +122,7 @@ def is_2_ic_oc_month(accounts=[]):
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
-          date=q.between(first_day, last_day)
+          date=q.all_of(q.greater_than_or_equal_to(first_day), q.less_than_or_equal_to(last_day))
         )
         month_dict = {}
     
