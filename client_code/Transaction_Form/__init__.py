@@ -35,7 +35,7 @@ class Transaction_Form(Transaction_FormTemplate):
       self.dp_accounts.enabled = True
       self.update_accounts()
 
-  def update_accounts(self):
+  def update_to_accounts(self):
     self.accounts = anvil.server.call("get_user_accounts")
 
     excluded_account_id = anvil.server.call("get_current_account_id")  # Replace with the account ID you want to exclude
@@ -48,7 +48,7 @@ class Transaction_Form(Transaction_FormTemplate):
 
   def bt_add_click(self, **event_args):
     """This method is called when the button is clicked"""
-    if not self.input_numb.text or float(self.input_numb.text)<0:
+    if not self.input_numb.text or float(self.input_numb.text)<0.01:
       self.input_numb.border = "2px solid red"
     elif not self.input_name.text:
       self.input_name.border = "2px solid red"
@@ -130,7 +130,7 @@ class Transaction_Form(Transaction_FormTemplate):
         )
       open_form("Home")
 
-  def outlined_button_2_click(self, **event_args):
+  def bt_cancel_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form("Home")
 

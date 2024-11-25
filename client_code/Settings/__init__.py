@@ -25,7 +25,7 @@ class Settings(SettingsTemplate):
     """This method is called when the Plot is shown on the screen"""
     pass
     
-  def button_now_click(self, **event_args):
+  def button_home_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')
 
