@@ -301,11 +301,7 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
     spread_out=spread_out)
   recalc_daily_totals(date, get_current_account_id())
   if type == 'transfer':
-    recalc_daily_totals(date, to_account)
-
-@anvil.server.callable
-def test_recalc():
-  recalc_daily_totals(datetime.now().date(), anvil.users.get_user())
+    recalc_daily_totals(date, to_account.get_id())
 
 def recalc_daily_totals(from_date, account_id):
   account = app_tables.accounts.get_by_id(account_id)
