@@ -35,7 +35,7 @@ class Transaction_Form(Transaction_FormTemplate):
       self.dp_accounts.enabled = True
       self.update_accounts()
 
-  def update_to_accounts(self):
+  def update_accounts(self):
     self.accounts = anvil.server.call("get_user_accounts")
 
     excluded_account_id = anvil.server.call("get_current_account_id")  # Replace with the account ID you want to exclude
