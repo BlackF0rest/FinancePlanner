@@ -318,8 +318,8 @@ def recalc_daily_totals(from_date, account_id):
                      + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type=q.any_of('expense', 'transfer'), recurring=True, account=account)))
     daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', date=day, account=account)) 
                     + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', date=day, To_Account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type='income', recurring=True, account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type='transfer', recurring=True, To_Account=account)))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), date=q.not_(day),Type='income', recurring=True, account=account))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), date=q.not_(day),Type='transfer', recurring=True, To_Account=account)))
     
     if app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account) is not None:
       daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account)['net_total'] + daily_income - daily_expense
