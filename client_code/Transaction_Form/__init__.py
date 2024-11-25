@@ -11,11 +11,10 @@ from datetime import datetime, timedelta, date
 
 
 class Transaction_Form(Transaction_FormTemplate):
-  def __init__(self, type,**properties):
+  def __init__(self, type, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     self.type = type
-    print(self.type)
 
     self.set_event_handler("x-set-icon", self.set_selected_icon)
 
@@ -62,6 +61,8 @@ class Transaction_Form(Transaction_FormTemplate):
     else:
       if self.type == 'transfer':
         to_account = anvil.server.call("get_account_from_id", self.dp_accounts.selected_value)
+      else:
+        to_account = None
       if self.rd_recurring.selected:
         if not self.dp_recurring.selected_value:
           self.dp_recurring.border = "2px solid red"
