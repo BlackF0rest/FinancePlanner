@@ -16,10 +16,6 @@ components:
   name: lb_name
   properties: {align: center, bold: false, font: arial, font_size: 20, foreground: 'theme:Text'}
   type: Label
-- layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,WYIMPY'}
-  name: lb_arrow
-  properties: {align: center, font_size: 20, foreground: 'theme:Text', icon: 'fa:arrow-right', visible: false}
-  type: Label
 - layout_properties: {grid_position: 'WNWLDO,FYJUFK KKBLZX,PLQWTN'}
   name: lb_to
   properties: {align: center, font_size: 20, foreground: 'theme:Text', visible: false}
@@ -27,7 +23,7 @@ components:
 container:
   properties:
     border: solid rgb(0,0,0,0.5) 1px
-    col_widths: '{"QEHSPP":15,"FYJUFK":45,"DJTYDH":30,"WYIMPY":5,"PLQWTN":25,"WTVUKF":65,"HFONQO":15}'
+    col_widths: '{"QEHSPP":15,"FYJUFK":45,"DJTYDH":30,"PLQWTN":25,"WTVUKF":65,"HFONQO":15}'
     spacing:
       margin: [0, null, 3, null]
   type: ColumnPanel

@@ -533,7 +533,8 @@ def delete_user():
       daily_total.delete()
     account.delete()
   app_tables.settings.get(user=anvil.users.get_user()).delete()
-  app_tables.users.get_by_id(anvil.users.get_user()).delete()
+  app_tables.users.get_by_id(anvil.users.get_user().get_id()).delete()
+  
 
 @anvil.server.callable
 def setup_user(account_name):
