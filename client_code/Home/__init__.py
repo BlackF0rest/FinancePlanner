@@ -25,8 +25,6 @@ class Home(HomeTemplate):
       anvil.alert(content=t, title='Hi, please enter the Name of your first Account :)', dismissible=False, buttons=[('Create')], large=True) # Get Name of first Account
       anvil.server.call('setup_user', t.text) # Call setup function on Server
       
-      
-    
     # get Users accounts
     self.update_accounts()
     # initialize main graph
