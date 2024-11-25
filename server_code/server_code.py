@@ -79,7 +79,8 @@ def is_1_get_fix_month(accounts=None):
 
       return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
       month_list.append(first_day.month)
-      
+
+  print(return_dict)
   return return_dict, month_list
 
 @anvil.server.callable
@@ -505,7 +506,7 @@ def get_month_range():
         first_day = datetime(year, month, 1)
         # Get the last day of the month
         last_day = datetime(year, month, calendar.monthrange(year, month)[1])
-        month_ranges.append((first_day, last_day))
+        month_ranges.append((first_day, (last_day+timedelta(days=1))))
     return month_ranges
 
 @anvil.server.callable
