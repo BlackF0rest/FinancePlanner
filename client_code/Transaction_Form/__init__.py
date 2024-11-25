@@ -166,7 +166,7 @@ class Transaction_Form(Transaction_FormTemplate):
     self.lb_recurring.visible = False
     self.dt_end_recurring.visible = False
     self.lb_end_recurring.visible = False
-    self.tb_days =False
+    self.tb_days.visible =False
     self.dt_spreadout.visible = self.rd_spreadout.selected
     self.lb_spreadout.visible = self.rd_spreadout.selected
 

@@ -39,13 +39,14 @@ class Transactions(TransactionsTemplate):
     open_form('Settings')
 
   def update_transactions(self, date=datetime.now().date()):
+    """Load Transactions and hand to different repeating Panels"""
     incomes, expenses, transfers = anvil.server.call('get_transactions', date)
     self.rppn_income.items = incomes
     self.rppn_transfers.items = transfers
     self.rppn_expense.items = expenses
 
   def dd_account_change(self, **event_args):
-    """This method is called when an item is selected"""
+    """This method is called when the """
     selected_account_id = self.dd_account.selected_value
     anvil.server.call('set_account_setting', selected_account_id)
     self.update_transactions()
