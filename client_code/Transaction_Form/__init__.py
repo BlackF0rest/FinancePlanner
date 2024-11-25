@@ -78,7 +78,7 @@ class Transaction_Form(Transaction_FormTemplate):
           daily_value = round((total_value / recurring_days), 2)
           end_date = self.dt_end_recurring.date
           if end_date is not None:
-            rest_days = round(((end_date - today).days % recurring_days),0)
+            rest_days = ((end_date - today).days % recurring_days)
             if rest_days == 0:
               end_date += timedelta(days=recurring_days)
             else:
