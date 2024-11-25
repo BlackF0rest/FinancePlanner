@@ -26,6 +26,8 @@ def get_daily_total_data():
   filters['date'] = q.any_of(*[today, yesterday, tomorrow])
   
   daily_totals = app_tables.dailytotals.search(**filters)
+  
+  daily_totals = app_tables.dailytotals.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], date=q.any_of(*[today, yesterday, tomorrow]))
 
   # Preparation for plotting
   dates = []
