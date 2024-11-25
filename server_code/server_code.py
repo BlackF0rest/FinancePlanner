@@ -122,7 +122,7 @@ def is_2_ic_oc_month(accounts=[]):
         month = first_day.month
         daily_rows = app_tables.dailytotals.search(
           account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
-          date=q.all_of(q.between(first_day-timedelta(days=1), last_day+timedelta(hours = 23, minutes =59), min_inclusive=False ,max_inclusive=False))
+          date=q.all_of(q.between(first_day-timedelta(days=1), last_day+timedelta(hours=23, minutes=59), min_inclusive=False ,max_inclusive=False))
         )
         print(f'\n{first_day} - {last_day + timedelta(hours = 23, minutes =59)}:')
         for daiy in daily_rows:
@@ -311,10 +311,16 @@ def recalc_daily_totals(from_date, account_id):
     days_to_calc = ((datetime.now().date() + timedelta(days=days_ahead_from_today)) - from_date).days
   else:
     days_to_calc = days_ahead_from_today
+
+  print(days_to_calc)
   
   daterange = [from_date + timedelta(days=x) for x in range(days_to_calc)]
+
+  i = 0
   
   for day in daterange:
+    print(i)
+    i += 1
     daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type=q.any_of('expense', 'transfer'), date=day, account=account))
                      + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type=q.any_of('expense', 'transfer'), recurring=True, account=account)))
     daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', date=day, account=account)) 
