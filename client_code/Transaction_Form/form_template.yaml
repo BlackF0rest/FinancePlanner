@@ -1,7 +1,7 @@
 components:
 - layout_properties: {grid_position: 'JUGDFK,UPZXTC'}
   name: img_icon
-  properties: {background: 'theme:Text', border: '', height: 147}
+  properties: {background: '', border: solid black 2px, height: 147}
   type: Image
 - event_bindings: {change: input_numb_change}
   layout_properties: {grid_position: 'JUGDFK,GSCWYE XUPBBL,NCFLZY'}
