@@ -41,9 +41,9 @@ components:
   properties: {col_widths: '{}'}
   type: ColumnPanel
 - components:
-  - event_bindings: {click: button_now_click}
+  - event_bindings: {click: button_home_click}
     layout_properties: {grid_position: 'TDTDDO,KECLQX'}
-    name: button_now
+    name: button_home
     properties: {enabled: false, icon: 'fa:line-chart', role: outlined-button, text: Home}
     type: Button
   - event_bindings: {click: button_transaction_click}

@@ -32,7 +32,7 @@ class Home(HomeTemplate):
     # initialize main graph
     self.update_main_graph()
 
-  def button_now_click(self, **event_args):
+  def button_home_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')
 
