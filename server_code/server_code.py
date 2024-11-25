@@ -106,8 +106,8 @@ def is_2_ic_oc_month(accounts=[]):
         )
         month_dict = {}
     
-        month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
-        month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+        month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
+        month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
 
         if str(month) in return_dict.keys():
           for key in month_dict.keys():
@@ -126,15 +126,15 @@ def is_2_ic_oc_month(accounts=[]):
         )
         month_dict = {}
     
-        month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
-        month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+        #month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
+        #month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
 
         if str(month) in return_dict.keys():
-            month_dict['income'] += sum(daily_row['total_income'] for daily_row in daily_rows)
-            month_dict['expense'] += sum(daily_row['total_outcome'] for daily_row in daily_rows)
+            month_dict['income'] += round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
+            month_dict['expense'] += round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
         else:
-            month_dict['income'] = sum(daily_row['total_income'] for daily_row in daily_rows)
-            month_dict['expense'] = sum(daily_row['total_outcome'] for daily_row in daily_rows)
+            month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
+            month_dict['expense'] = round(sum(daily_row['total_outcome'] for daily_row in daily_rows),2)
 
         return_dict[str(month)] = month_dict
   return return_dict, month_list
