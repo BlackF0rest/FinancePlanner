@@ -97,7 +97,7 @@ class Transaction_Form(Transaction_FormTemplate):
             to_account=to_account,
           )
       elif self.rd_spreadout.selected:
-        if not self.rd_spreadout.date:
+        if not self.dt_spreadout.date:
           self.rd_spreadout.border = "2px solid red"
         else:
           today = self.dt_main.date
