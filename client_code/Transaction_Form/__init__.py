@@ -118,6 +118,7 @@ class Transaction_Form(Transaction_FormTemplate):
             end_date=end_date,
             account_id=anvil.server.call("get_current_account_id"),
             to_account=to_account,
+            spread_out=True
           )
       else:
         today = self.dt_main.date
