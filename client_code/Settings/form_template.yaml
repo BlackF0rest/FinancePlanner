@@ -152,6 +152,10 @@ components:
   name: column_panel_1
   properties: {}
   type: ColumnPanel
+- layout_properties: {slot: nav-right}
+  name: logo
+  properties: {height: '80', source: _/theme/FlowFin.png}
+  type: Image
 container:
   properties: {html: '@theme:standard-page.html', visible: true}
   type: HtmlTemplate
