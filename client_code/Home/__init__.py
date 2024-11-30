@@ -92,7 +92,9 @@ class Home(HomeTemplate):
         if i == 0:  # First marker
             if totals[i] < 0:  
                 marker_colors.append('red')   
-            else: 
+            elif totals[i] > 0:
+                marker_colors.append('green')
+            else:
                 marker_colors.append('black')
         elif i == 1:  # Second marker
             if totals[i] > totals[i - 1]:   

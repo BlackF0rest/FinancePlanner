@@ -78,15 +78,15 @@ class Transaction_Form(Transaction_FormTemplate):
           daily_value = round((total_value / recurring_days), 2)
           end_date = self.dt_end_recurring.date
           print (end_date)
-          #if end_date is not None:
-            #rest_days = ((end_date - today).days % recurring_days)
-            #print(rest_days)
-            #if rest_days == 0:
-              #pass
-            #else:
-              #end_date -= timedelta(days=rest_days) # rest tage abziehen
-              #end_date += timedelta(days=recurring_days) # periode drauf rechnen
-            #print(end_date)
+          if end_date is not None:
+            rest_days = ((end_date - today).days % recurring_days)
+            print(rest_days)
+            if rest_days == 0:
+              pass
+            else:
+              end_date -= timedelta(days=rest_days) # rest tage abziehen
+              end_date += timedelta(days=recurring_days) # periode drauf rechnen
+            print(end_date)
           anvil.server.call(
             "write_transaction",
             type=self.type,
@@ -118,7 +118,7 @@ class Transaction_Form(Transaction_FormTemplate):
             end_date=end_date,
             account_id=anvil.server.call("get_current_account_id"),
             to_account=to_account,
-            s
+            spread_out=True
           )
       else:
         today = self.dt_main.date
