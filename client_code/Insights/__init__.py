@@ -191,7 +191,7 @@ class Insights(InsightsTemplate):
       self.lb_name.text = self.six_data[0]['name']
       self.lb_amount.text = str(self.six_data[0]['amount']) + currency
       self.lb_amount_payed.text = str(self.six_data[0]['amount_payed']) + currency
-      self.lb_days_to_go.text = str(-self.six_data[0]['to_go']) + ' Days to go'
+      self.lb_days_to_go.text = str(self.six_data[0]['to_go']) + ' Days to go'
     else:
       self.dp_six.items = []
       self.lb_progress.width = 0
@@ -208,7 +208,7 @@ class Insights(InsightsTemplate):
       if goal['name'] == self.dp_six.selected_value:
         self.lb_name.text = goal['name']
         self.lb_amount.text = str(goal['amount']) + currency
-        self.lb_days_to_go.text = str(-goal['to_go']) + ' Days to go'
+        self.lb_days_to_go.text = str(goal['to_go']) + ' Days to go'
         self.lb_progress.width = str(goal['perc_done'])+'%'
         self.img_six.source = goal['icon']
         self.lb_amount_payed.text = str(goal['amount_payed']) + currency
