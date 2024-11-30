@@ -558,20 +558,10 @@ def delete_account(account_id):
   for day in app_tables.dailytotals.search(account=account):
     day.delete()
 
-  recalc_account_dict = {}
-  for transaction in app_tables.transactions.search(q.any_of(account=account, To_Account=account)):
-    if transaction['account'] != account:
-      if transaction['account'].get_id() in recalc_account_dict.keys():
-        if recalc_account_dict[transaction['account'].get_id()] > transaction['date']:
-          recalc_account_dict[transaction['account'].get_id()] = transaction['date']
-      else:
-        recalc_account_dict[transaction['account'].get_id()] = transaction['date']
+  for transaction in app_tables.transactions.search(account=account, Type=q.not_('transfer')):
     transaction.delete()
 
-  for rec_account in recalc_account_dict.keys():
-    recalc_daily_totals(recalc_account_dict[rec_account], get_account_from_id(rec_account))
-
-  account.delete()
+  account.update(user=None) # don't Delete account name, so transfers still show the name of the account
 
 @anvil.server.callable
 def delete_user():
