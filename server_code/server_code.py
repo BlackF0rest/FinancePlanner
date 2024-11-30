@@ -12,30 +12,40 @@ import calendar
 
 @anvil.server.callable
 def get_daily_total_data():
-  """Get data from Databases for the dailytotals ye"""
-  filters = {}
+  """Get data from Daily Total Database yesterday, today and tomorrow to display on the main Graph."""
   
-  account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
-  if account:
-      filters['account'] = account
+  account = app_tables.settings.get(user=anvil.users.get_user())['current_account'] # get the current account
 
+  # get Dates from yesterday, today and tomorrow
   today = datetime.now().date()
   yesterday =   today - timedelta(days=1)
   tomorrow =   today + timedelta(days=1)
 
-  filters['date'] = q.any_of(*[today, yesterday, tomorrow])
-  
-  daily_totals = app_tables.dailytotals.search(**filters)
-  
-  daily_totals = app_tables.dailytotals.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], date=q.any_of(*[today, yesterday, tomorrow]))
-
-  # Preparation for plotting
+  # create Lists
   dates = []
   net_totals = []
 
-  for day in daily_totals:
-    dates.append(day['date'])
-    net_totals.append(day['net_total'])
+  # check if yesterday exists in the database, io not return 0
+  net_yesterday = app_tables.dailytotals.get(account=account, date=yesterday)
+  dates.append(yesterday)
+  if net_yesterday is not None:
+    net_totals.append(net_yesterday['net_total'])
+  else:
+    net_totals.append(0)
+  # check if today exists in the database, io not return 0
+  net_today =  app_tables.dailytotals.get(account=account, date=today)
+  dates.append(today)
+  if net_today is not None:
+    net_totals.append(net_today['net_total'])
+  else:
+    net_totals.append(0)
+  # check if tomorrow exists in the database, io not return 0
+  net_tomorrow =  app_tables.dailytotals.get(account=account, date=tomorrow)
+  dates.append(tomorrow)
+  if net_tomorrow is not None:
+    net_totals.append(net_tomorrow['net_total'])
+  else:
+    net_totals.append(0)
 
   return {"dates": dates, "net_totals" : net_totals}
   
@@ -313,22 +323,34 @@ def recalc_daily_totals(from_date, account_id):
     days_to_calc = ((datetime.now().date() + timedelta(days=days_ahead_from_today)) - from_date).days
   else:
     days_to_calc = days_ahead_from_today
-
-  print(days_to_calc)
   
-  daterange = [from_date + timedelta(days=x) for x in range(days_to_calc)]
-
-  i = 0
+  daterange = [from_date + timedelta(days=x) for x in range((days_to_calc+1))]
   
   for day in daterange:
-    print(i)
-    i += 1
-    daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type=q.any_of('expense', 'transfer'), date=day, account=account))
-                     + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than(day)), date=q.not_(day),Type=q.any_of('expense', 'transfer'), recurring=True, account=account)))
-    daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', date=day, account=account)) 
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', date=day, To_Account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), date=q.not_(day),Type='income', recurring=True, account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), date=q.not_(day),Type='transfer', recurring=True, To_Account=account)))
+    daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type=q.any_of('expense', 'transfer'), 
+                                                                                                 date=day, 
+                                                                                                 account=account))
+                     + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                                                                                                   date=q.less_than(day),
+                                                                                                   Type=q.any_of('expense', 'transfer'), 
+                                                                                                   recurring=True, 
+                                                                                                   account=account)))
+    daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', 
+                                                                                                date=day, 
+                                                                                                account=account)) 
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', 
+                                                                                                  date=day, 
+                                                                                                  To_Account=account))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                                                                                                  date=q.less_than(day),
+                                                                                                  Type='income', 
+                                                                                                  recurring=True, 
+                                                                                                  account=account))
+                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                                                                                                  date=q.less_than(day),
+                                                                                                  Type='transfer', 
+                                                                                                  recurring=True, 
+                                                                                                  To_Account=account)))
     
     if app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account) is not None:
       daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account)['net_total'] + daily_income - daily_expense
@@ -370,7 +392,7 @@ def get_transactions(date=datetime.now().date()):
                                            recurring=False, 
                                            account=curr_account)
   extra_incomes = app_tables.transactions.search(Type='income',
-                                                date=q.less_than_or_equal_to(datetime.now().date()),
+                                                date=q.less_than_or_equal_to(date),
                                                 recurring=True,
                                                 account=curr_account,
                                                 end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
@@ -380,7 +402,7 @@ def get_transactions(date=datetime.now().date()):
                                             account=curr_account
                                            )
   extra_expenses = app_tables.transactions.search(Type='expense',
-                                                date=q.less_than_or_equal_to(datetime.now().date()),
+                                                date=q.less_than_or_equal_to(date),
                                                 recurring=True,
                                                 account=curr_account,
                                                 end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
@@ -390,7 +412,7 @@ def get_transactions(date=datetime.now().date()):
                                             account=curr_account,
                                             )
   expense_extra_transfers = app_tables.transactions.search(Type='transfer',
-                                                  date=q.less_than_or_equal_to(datetime.now().date()),
+                                                  date=q.less_than_or_equal_to(date),
                                                   recurring=True,
                                                   account=curr_account,
                                                   end_date=q.any_of(None, q.greater_than_or_equal_to(date))
@@ -401,7 +423,7 @@ def get_transactions(date=datetime.now().date()):
                                               To_Account=curr_account,
                                               )
   income_extra_transfers = app_tables.transactions.search(Type='transfer',
-                                                  date=q.less_than_or_equal_to(datetime.now().date()),
+                                                  date=q.less_than_or_equal_to(date),
                                                   recurring=True,
                                                   To_Account=curr_account,
                                                   end_date=q.any_of(None, q.greater_than_or_equal_to(date))
