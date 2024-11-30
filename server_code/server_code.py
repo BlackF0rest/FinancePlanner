@@ -61,7 +61,7 @@ def is_1_get_fix_month(accounts=None):
       for first_day, last_day in month_range:
         month = first_day.month
         transactions = app_tables.transactions.search(
-        Type='expense',
+        type='expense',
         recurring=True,
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
@@ -71,9 +71,9 @@ def is_1_get_fix_month(accounts=None):
           month_list.append(first_day.month)
 
         if str(month) in return_dict.keys():
-          return_dict[str(month)] += sum(transaction['Amount'] for transaction in transactions)
+          return_dict[str(month)] += sum(transaction['amount'] for transaction in transactions)
         else:
-          return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
+          return_dict[str(month)] = sum(transaction['amount'] for transaction in transactions)
       i = 1
   else:
     month_range = get_month_range()
@@ -84,7 +84,7 @@ def is_1_get_fix_month(accounts=None):
       month = first_day.month
         
       transactions = app_tables.transactions.search(
-        Type='expense',
+        type='expense',
         recurring=True,
         spread_out=False,
         date=q.less_than_or_equal_to(last_day),
@@ -93,7 +93,7 @@ def is_1_get_fix_month(accounts=None):
       )
       
 
-      return_dict[str(month)] = sum(transaction['Amount'] for transaction in transactions)
+      return_dict[str(month)] = sum(transaction['amount'] for transaction in transactions)
       month_list.append(first_day.month)
 
   print(return_dict)
@@ -161,25 +161,25 @@ def is_3_get_expense_data(accounts = []):
   if accounts != []:
     transactions = itertools.chain.from_iterable(
       app_tables.transactions.search(
-        Type='expense', 
+        type='expense', 
         date=q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True),
         account=app_tables.accounts.get_by_id(account)
     ) for account in accounts
   )
   else:
     transactions = app_tables.transactions.search(
-      Type='expense', 
+      type='expense', 
       date=q.between(first_day-timedelta(days=1), last_day, min_inclusive=False ,max_inclusive=True),
       account=app_tables.settings.get(user=anvil.users.get_user())['current_account'])
 
   category_counts = {}
 
   for transaction in transactions:
-      category = transaction['Category']['category']
+      category = transaction['category']['category']
       if category in category_counts.keys():
-        category_counts[category] += transaction['Amount']
+        category_counts[category] += transaction['amount']
       else:
-        category_counts[category] = transaction['Amount']
+        category_counts[category] = transaction['amount']
 
   return category_counts
 
@@ -204,12 +204,12 @@ def is_5_costs_qt():
 @anvil.server.callable
 def is_6_saving_goal():
   last_day = datetime.now().date() - timedelta(days=30)
-  results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], Type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
+  results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
 
   return_list = []
 
   for result in results:
-    total_amount = (result['end_date'] - result['date']).days * result['Amount']
+    total_amount = (result['end_date'] - result['date']).days * result['amount']
     if result['end_date'] <= datetime.now().date():
       perc_done = 100
       to_go = (result['end_date']-result['date']).days
@@ -221,7 +221,7 @@ def is_6_saving_goal():
     else:
       perc_done = round((((datetime.now().date() - result['date']).days / (result['end_date'] - result['date']).days) * 100), 0)
       to_go = (result['end_date']-datetime.now().date()).days
-      amount_payed = amount_payed = (datetime.now().date() - result['date']).days * result['Amount']
+      amount_payed = amount_payed = (datetime.now().date() - result['date']).days * result['amount']
     return_list.append({
       'name':result['name'],
       'amount':total_amount,
@@ -229,7 +229,7 @@ def is_6_saving_goal():
       'to_date':result['end_date'],
       'to_go':to_go,
       'perc_done': perc_done,
-      'icon':result['Category']['Icon']
+      'icon':result['category']['icon']
     })
     
   return_list.sort(key= lambda x: x['to_date'], reverse=True)
@@ -303,12 +303,12 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
   # Write the transaction different, depending on what it is.
   print("writing transactions")
   app_tables.transactions.add_row(
-    Type=type, 
-    Category=app_tables.icons.get(category=category), 
-    Amount=amount, 
+    type=type, 
+    category=app_tables.icons.get(category=category), 
+    amount=amount, 
     name=name, 
     account=app_tables.accounts.get_by_id(account_id), 
-    date=date,To_Account=to_account, 
+    date=date,to_account=to_account, 
     recurring=recurring, 
     end_date=end_date, 
     spread_out=spread_out)
@@ -318,7 +318,7 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
 
 def recalc_daily_totals(from_date, account_id):
   account = app_tables.accounts.get_by_id(account_id)
-  days_ahead_from_today = app_tables.settings.get(user=anvil.users.get_user())['max_days_ahead_from_today']
+  days_ahead_from_today = app_tables.settings.get(user=anvil.users.get_user())['calculate_days_ahead']
   if from_date != datetime.now().date():
     days_to_calc = ((datetime.now().date() + timedelta(days=days_ahead_from_today)) - from_date).days
   else:
@@ -327,30 +327,30 @@ def recalc_daily_totals(from_date, account_id):
   daterange = [from_date + timedelta(days=x) for x in range((days_to_calc+1))]
   
   for day in daterange:
-    daily_expense = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type=q.any_of('expense', 'transfer'), 
+    daily_expense = (sum(transaction['amount'] for transaction in app_tables.transactions.search(type=q.any_of('expense', 'transfer'), 
                                                                                                  date=day, 
                                                                                                  account=account))
-                     + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                     + sum(transaction['amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
                                                                                                    date=q.less_than(day),
-                                                                                                   Type=q.any_of('expense', 'transfer'), 
+                                                                                                   type=q.any_of('expense', 'transfer'), 
                                                                                                    recurring=True, 
                                                                                                    account=account)))
-    daily_income = (sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='income', 
+    daily_income = (sum(transaction['amount'] for transaction in app_tables.transactions.search(type='income', 
                                                                                                 date=day, 
                                                                                                 account=account)) 
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(Type='transfer', 
+                    + sum(transaction['amount'] for transaction in app_tables.transactions.search(type='transfer', 
                                                                                                   date=day, 
-                                                                                                  To_Account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                                                                                                  to_account=account))
+                    + sum(transaction['amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
                                                                                                   date=q.less_than(day),
-                                                                                                  Type='income', 
+                                                                                                  type='income', 
                                                                                                   recurring=True, 
                                                                                                   account=account))
-                    + sum(transaction['Amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
+                    + sum(transaction['amount'] for transaction in app_tables.transactions.search(end_date=q.any_of(None, q.greater_than_or_equal_to(day)), 
                                                                                                   date=q.less_than(day),
-                                                                                                  Type='transfer', 
+                                                                                                  type='transfer', 
                                                                                                   recurring=True, 
-                                                                                                  To_Account=account)))
+                                                                                                  to_account=account)))
     
     if app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account) is not None:
       daily_total = app_tables.dailytotals.get(date=(day - timedelta(days=1)), account=account)['net_total'] + daily_income - daily_expense
@@ -372,7 +372,7 @@ def get_user_accounts():
 
   if user:
     accounts = tables.app_tables.accounts.search(user=user)
-    return [{'id': account.get_id(), 'name': account['account_name']} for account in accounts]
+    return [{'id': account.get_id(), 'name': account['name']} for account in accounts]
   else:
     return []
 
@@ -387,45 +387,45 @@ def get_current_account_id():
 @anvil.server.callable
 def get_transactions(date=datetime.now().date()):
   curr_account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
-  incomes = app_tables.transactions.search(Type='income', 
+  incomes = app_tables.transactions.search(type='income', 
                                            date=date, 
                                            recurring=False, 
                                            account=curr_account)
-  extra_incomes = app_tables.transactions.search(Type='income',
+  extra_incomes = app_tables.transactions.search(type='income',
                                                 date=q.less_than_or_equal_to(date),
                                                 recurring=True,
                                                 account=curr_account,
                                                 end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
-  expenses = app_tables.transactions.search(Type='expense', 
+  expenses = app_tables.transactions.search(type='expense', 
                                             date=date,
                                             recurring=False,
                                             account=curr_account
                                            )
-  extra_expenses = app_tables.transactions.search(Type='expense',
+  extra_expenses = app_tables.transactions.search(type='expense',
                                                 date=q.less_than_or_equal_to(date),
                                                 recurring=True,
                                                 account=curr_account,
                                                 end_date=q.any_of(None, q.greater_than_or_equal_to(date)))
-  expense_transfers = app_tables.transactions.search(Type='transfer', 
+  expense_transfers = app_tables.transactions.search(type='transfer', 
                                             date=date,
                                             recurring=False,
                                             account=curr_account,
                                             )
-  expense_extra_transfers = app_tables.transactions.search(Type='transfer',
+  expense_extra_transfers = app_tables.transactions.search(type='transfer',
                                                   date=q.less_than_or_equal_to(date),
                                                   recurring=True,
                                                   account=curr_account,
                                                   end_date=q.any_of(None, q.greater_than_or_equal_to(date))
                                                   )
-  income_transfers = app_tables.transactions.search(Type='transfer', 
+  income_transfers = app_tables.transactions.search(type='transfer', 
                                               date=date,
                                               recurring=False,
-                                              To_Account=curr_account,
+                                              to_account=curr_account,
                                               )
-  income_extra_transfers = app_tables.transactions.search(Type='transfer',
+  income_extra_transfers = app_tables.transactions.search(type='transfer',
                                                   date=q.less_than_or_equal_to(date),
                                                   recurring=True,
-                                                  To_Account=curr_account,
+                                                  to_account=curr_account,
                                                   end_date=q.any_of(None, q.greater_than_or_equal_to(date))
                                                   )
   
@@ -436,31 +436,31 @@ def get_transactions(date=datetime.now().date()):
   for income in itertools.chain(incomes, extra_incomes):
     income_data.append({
       'name': income['name'],
-      'category': income['Category'],
-      'amount': income['Amount'],
+      'category': income['category'],
+      'amount': income['amount'],
       'id':income.get_id()
     })
   for expense in itertools.chain(expenses, extra_expenses):
     expense_data.append({
       'name': expense['name'],
-      'category': expense['Category'],
-      'amount': expense['Amount'],
+      'category': expense['category'],
+      'amount': expense['amount'],
       'id':expense.get_id()
     })
   for transfer in itertools.chain(expense_transfers, expense_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
-      'category': transfer['Category'],
-      'amount': (0 - transfer['Amount']),
-      'to': transfer['To_Account']['account_name'],
+      'category': transfer['category'],
+      'amount': (0 - transfer['amount']),
+      'to': transfer['to_account']['name'],
       'id':transfer.get_id()
     })
   for transfer in itertools.chain(income_transfers, income_extra_transfers):
     transfer_data.append({
       'name': transfer['name'],
-      'category': transfer['Category'],
-      'amount': transfer['Amount'],
-      'from': transfer['account']['account_name'],
+      'category': transfer['category'],
+      'amount': transfer['amount'],
+      'from': transfer['account']['name'],
       'id':transfer.get_id()
     })
 
@@ -468,14 +468,14 @@ def get_transactions(date=datetime.now().date()):
 
 @anvil.server.callable
 def get_icon(icon_category):
-  return app_tables.icons.get(category=icon_category)['Icon']
+  return app_tables.icons.get(category=icon_category)['icon']
 
 @anvil.server.callable
 def get_all_icons():
   rows = app_tables.icons.search()
   icon_list = []
   for row in rows:
-    icon_list.append({row['category']:row['Icon']})
+    icon_list.append({row['category']:row['icon']})
     
   return icon_list
 
@@ -485,7 +485,7 @@ def get_settings():
 
 @anvil.server.callable
 def set_days_into_future(days):
-  app_tables.settings.get(user=anvil.users.get_user()).update(max_days_ahead_from_today=days)
+  app_tables.settings.get(user=anvil.users.get_user()).update(calculate_days_ahead=days)
 
 @anvil.server.callable
 def get_time_values():
@@ -548,8 +548,8 @@ def delete_transaction(transaction_id):
   recalc_daily_totals(from_date, account.get_id())
 
 @anvil.server.callable
-def create_account(account_name):
-  app_tables.accounts.add_row(account_name=account_name, user=anvil.users.get_user())
+def create_account(name):
+  app_tables.accounts.add_row(name=name, user=anvil.users.get_user())
 
 @anvil.server.callable
 def delete_account(account_id):
@@ -558,7 +558,7 @@ def delete_account(account_id):
   for day in app_tables.dailytotals.search(account=account):
     day.delete()
 
-  for transaction in app_tables.transactions.search(account=account, Type=q.not_('transfer')):
+  for transaction in app_tables.transactions.search(account=account, type=q.not_('transfer')):
     transaction.delete()
 
   account.update(user=None) # don't Delete account name, so transfers still show the name of the account
@@ -575,9 +575,9 @@ def delete_user():
   app_tables.users.get_by_id(anvil.users.get_user().get_id()).delete()
   
 @anvil.server.callable
-def setup_user(account_name):
-  curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), account_name=account_name)
-  app_tables.settings.add_row(currency='$', current_account=curr_account, max_days_ahead_from_today=15, user=anvil.users.get_user())
+def setup_user(name):
+  curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), name=name)
+  app_tables.settings.add_row(currency='$', current_account=curr_account, calculate_days_ahead=15, user=anvil.users.get_user())
 
 @anvil.server.callable
 def is_first_login():

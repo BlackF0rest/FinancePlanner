@@ -38,7 +38,7 @@ class Settings(SettingsTemplate):
     open_form('Insights')
 
   def update_days(self):
-    self.selected_days = anvil.server.call('get_settings')['max_days_ahead_from_today']
+    self.selected_days = anvil.server.call('get_settings')['calculate_days_ahead']
     self.lb_days_future.text = self.selected_days
 
   def update_currency(self):

@@ -17,7 +17,7 @@ class rppn_transactions(rppn_transactionsTemplate):
 
     self.lb_name.text = self.item['name']
     self.lb_amount.text = f"${self.item['amount']:.2f}{self.currency}"
-    self.img_icon.source = self.item['category']['Icon']
+    self.img_icon.source = self.item['category']['icon']
     
     if 'to' in self.item :
       self.lb_to.visible = True
