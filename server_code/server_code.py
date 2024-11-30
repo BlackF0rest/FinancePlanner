@@ -136,7 +136,6 @@ def is_2_ic_oc_month(accounts=[]):
           date=q.all_of(q.between(first_day-timedelta(days=1), last_day+timedelta(hours=23, minutes=59), min_inclusive=False ,max_inclusive=False))
         )
       
-        for daiy in daily_rows:
         month_dict = {}
 
         month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
