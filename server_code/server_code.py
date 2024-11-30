@@ -553,7 +553,25 @@ def create_account(account_name):
 
 @anvil.server.callable
 def delete_account(account_id):
-  app_tables.accounts.get_by_id(account_id).delete()
+  account = app_tables.accounts.get_by_id(account_id)
+
+  for day in app_tables.dailytotals.search(account=account):
+    day.delete()
+
+  recalc_account_dict = {}
+  for transaction in app_tables.transactions.search(q.any_of(account=account, To_Account=account)):
+    if transaction['account'] != account:
+      if transaction['account'].get_id() in recalc_account_dict.keys():
+        if recalc_account_dict[transaction['account'].get_id()] > transaction['date']:
+          recalc_account_dict[transaction['account'].get_id()] = transaction['date']
+      else:
+        recalc_account_dict[transaction['account'].get_id()] = transaction['date']
+    transaction.delete()
+
+  for rec_account in recalc_account_dict.keys():
+    recalc_daily_totals(recalc_account_dict[rec_account], get_account_from_id(rec_account))
+
+  account.delete()
 
 @anvil.server.callable
 def delete_user():
@@ -566,7 +584,6 @@ def delete_user():
   app_tables.settings.get(user=anvil.users.get_user()).delete()
   app_tables.users.get_by_id(anvil.users.get_user().get_id()).delete()
   
-
 @anvil.server.callable
 def setup_user(account_name):
   curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), account_name=account_name)
