@@ -15,7 +15,7 @@ components:
     properties: {visible: false}
     type: GridPanel
   - data_bindings: []
-    event_bindings: {show: pt_one_show}
+    event_bindings: {}
     layout_properties: {grid_position: 'ZBYIFD,ZIVJPE', row_background: 'rgba(255,255,255,0.2)'}
     name: pt_one
     properties: {interactive: false}

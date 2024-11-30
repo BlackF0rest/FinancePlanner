@@ -96,7 +96,6 @@ def is_1_get_fix_month(accounts=None):
       return_dict[str(month)] = sum(transaction['amount'] for transaction in transactions)
       month_list.append(first_day.month)
 
-  print(return_dict)
   return return_dict, month_list
 
 @anvil.server.callable
@@ -136,9 +135,8 @@ def is_2_ic_oc_month(accounts=[]):
           account=app_tables.settings.get(user=anvil.users.get_user())['current_account'],
           date=q.all_of(q.between(first_day-timedelta(days=1), last_day+timedelta(hours=23, minutes=59), min_inclusive=False ,max_inclusive=False))
         )
-        print(f'\n{first_day} - {last_day + timedelta(hours = 23, minutes =59)}:')
+      
         for daiy in daily_rows:
-          print(daiy['date'])
         month_dict = {}
 
         month_dict['income'] = round(sum(daily_row['total_income'] for daily_row in daily_rows),2)
@@ -301,7 +299,6 @@ def get_icon_categories():
 @anvil.server.callable
 def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None, recurring=False, end_date=None, spread_out=False):
   # Write the transaction different, depending on what it is.
-  print("writing transactions")
   app_tables.transactions.add_row(
     type=type, 
     category=app_tables.icons.get(category=category), 

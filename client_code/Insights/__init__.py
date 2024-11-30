@@ -23,21 +23,13 @@ class Insights(InsightsTemplate):
     self.update_all_pt()
     self.update_grid_panel()
 
-    #self.update_pie_where_went()
-    # Any code you write here will run before the form opens.
-
   def update_all_pt(self):
     self.update_pt_one()
     self.update_pt_two()
     self.update_pt_three()
-    self.update_pt_four()
     self.update_pt_five()
     self.update_pt_six()
     self.update_pt_seven()
-  
-  def pt_one_show(self, **event_args):
-    """This method is called when the Plot is shown on the screen"""
-    pass
     
   def button_now_click(self, **event_args):
     """This method is called when the button is clicked"""
@@ -64,19 +56,6 @@ class Insights(InsightsTemplate):
       for account in self.accounts:
         if account['id'] == anvil.server.call('get_current_account_id'):
           self.dp_accounts.selected_value = account['id']
-
-  def update_charts(self):
-    self.update_pt_one()
-
-  def update_pie_where_went(self):
-    data, labels = anvil.server.call('is_get_expense_data')
-    labels = list(data.keys())
-    sizes = list(data.values())
-
-    self.pt_pie_where_went_money.data = go.Pie(
-      labels=labels,
-      values=sizes
-    )
 
   def update_pt_one(self):
     data, labels = anvil.server.call('is_1_get_fix_month', self.selected_accounts)
@@ -155,9 +134,6 @@ class Insights(InsightsTemplate):
       paper_bgcolor='rgba(0,0,0,0.2)',
       plot_bgcolor='rgba(255,255,255,0)',
       )
-
-  def update_pt_four(self):
-    pass
 
   def update_pt_five(self):
     data = anvil.server.call('is_5_costs_qt')

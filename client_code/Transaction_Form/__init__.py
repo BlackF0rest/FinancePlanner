@@ -138,10 +138,6 @@ class Transaction_Form(Transaction_FormTemplate):
     """This method is called when the button is clicked"""
     open_form("Home")
 
-  def rd_recurring_change(self, **event_args):
-    """This method is called when this radio button is selected (but not deselected)"""
-    pass
-
   def set_selected_icon(self, **event_args):
     self.selected_icon = event_args["icon_category"]
     self.rppn_icons.visible = False

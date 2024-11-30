@@ -21,10 +21,6 @@ class Settings(SettingsTemplate):
     self.update_currency()
     self.update_accounts()
     
-  def plot_now_show(self, **event_args):
-    """This method is called when the Plot is shown on the screen"""
-    pass
-    
   def button_home_click(self, **event_args):
     """This method is called when the button is clicked"""
     open_form('Home')

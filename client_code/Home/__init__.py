@@ -64,7 +64,6 @@ class Home(HomeTemplate):
     anvil.server.call('set_account_setting', selected_account_id) # set new account id in Server
     self.update_main_graph() # Update the Main Graph
 
-
   def update_accounts(self):
     """Update the main Graph with new Data. This automatically uses the Account which is set in the """
     self.accounts = anvil.server.call('get_user_accounts') # get all accounts of the user
@@ -146,3 +145,4 @@ class Home(HomeTemplate):
     )
 
     self.plot_now.interactive = False # don't allow user interaction 
+    
