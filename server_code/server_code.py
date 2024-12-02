@@ -12,6 +12,16 @@ import calendar
 
 @anvil.server.callable
 def get_daily_total_data():
+  """
+  Get data from the Daily Total Database for yesterday, today, and tomorrow to display on the main graph.
+  This function retrieves the net total amounts for the current user's account for the dates of yesterday, today, 
+  and tomorrow. If data for any of these dates does not exist in the database, a net total of 0 is returned for 
+  that date.
+  Returns:
+    dict: A dictionary containing two keys:
+      - "dates" (list): A list of three dates (yesterday, today, and tomorrow).
+      - "net_totals" (list): A list of net total amounts corresponding to the dates.
+  """
   """Get data from Daily Total Database yesterday, today and tomorrow to display on the main Graph."""
   
   account = app_tables.settings.get(user=anvil.users.get_user())['current_account'] # get the current account
@@ -51,6 +61,21 @@ def get_daily_total_data():
   
 @anvil.server.callable
 def is_1_get_fix_month(accounts=None):
+  """
+  Fetches fixed monthly expenses for given accounts or the current user's account.
+  This function calculates the total fixed expenses for each month within the 
+  actual month range (not theoretical with 30.xx days) for the provided accounts 
+  or the current user's account if no accounts are provided.
+  Args:
+    accounts (list, optional): List of account IDs to fetch expenses for. 
+                  Defaults to None.
+  Returns:
+    tuple: A tuple containing:
+      - return_dict (dict): A dictionary where keys are month numbers (as strings) 
+                  and values are the total fixed expenses for that month.
+      - month_list (list): A list of month numbers (as integers) corresponding to 
+                the months in the range.
+  """
   # every (actual) Month not theoretical with 30.xx days
   month_range = get_month_range()
   if accounts != []:
@@ -100,6 +125,17 @@ def is_1_get_fix_month(accounts=None):
 
 @anvil.server.callable
 def is_2_ic_oc_month(accounts=[]):
+  """
+  Calculate the total income and outcome for each month for given accounts.
+  This function retrieves the total income and outcome for each month for the provided accounts.
+  If no accounts are provided, it uses the current user's account.
+  Args:
+    accounts (list): A list of account IDs to calculate the income and outcome for. Defaults to an empty list.
+  Returns:
+    tuple: A tuple containing:
+      - return_dict (dict): A dictionary where the keys are month numbers (as strings) and the values are dictionaries with 'income' and 'expense' keys.
+      - month_list (list): A list of month numbers (as integers) corresponding to the months in the range.
+  """
   #total income vs outcome everey month (real month values)
   month_range = get_month_range()
   return_dict = {}
@@ -146,6 +182,13 @@ def is_2_ic_oc_month(accounts=[]):
 
 @anvil.server.callable
 def is_3_get_expense_data(accounts = []):
+  """
+  Fetches and aggregates expense data for the specified accounts within the current month.
+  Args:
+    accounts (list, optional): A list of account IDs to fetch expense data for. Defaults to an empty list.
+  Returns:
+    dict: A dictionary where the keys are expense categories and the values are the total amounts spent in each category for the specified accounts within the current month.
+  """
   year = datetime.now().year
   month = datetime.now().month
 
@@ -182,6 +225,13 @@ def is_3_get_expense_data(accounts = []):
 
 @anvil.server.callable
 def is_5_costs_qt():
+  """
+  Calculate the total outcome for each quarter of the current year.
+  This function retrieves daily total outcomes from the database for each quarter of the current year
+  and sums them up. It returns a list containing the total outcome for each quarter.
+  Returns:
+    list: A list of four elements, each representing the total outcome for a quarter of the current year.
+  """
   year = datetime.now().year
   qt_starts = [date(year,1,1), date(year,4,1), date(year,7,1), date(year,10,1)]
   return_list = []
@@ -200,6 +250,21 @@ def is_5_costs_qt():
 
 @anvil.server.callable
 def is_6_saving_goal():
+  """
+  Calculate the progress of saving goals over the past 30 days.
+  This function retrieves transactions from the past 30 days for the current user's account,
+  calculates the total amount, amount paid, percentage done, and days to go for each transaction,
+  and returns a sorted list of these details.
+  Returns:
+    list: A list of dictionaries, each containing the following keys:
+      - 'name' (str): The name of the transaction.
+      - 'amount' (float): The total amount of the transaction.
+      - 'amount_payed' (float): The amount paid so far.
+      - 'to_date' (datetime.date): The end date of the transaction.
+      - 'to_go' (int or str): The number of days remaining or 'Done' if the transaction is complete.
+      - 'perc_done' (float): The percentage of the transaction that is completed.
+      - 'icon' (str): The icon associated with the transaction category.
+  """
   last_day = datetime.now().date() - timedelta(days=30)
   results = app_tables.transactions.search(account=app_tables.settings.get(user=anvil.users.get_user())['current_account'], type=q.any_of('expense','transfer'), spread_out=True, end_date=q.greater_than_or_equal_to(last_day))
 
@@ -235,6 +300,17 @@ def is_6_saving_goal():
 
 @anvil.server.callable
 def is_7_perc_pm(accounts = []):
+  """
+  Calculate the monthly income to outcome ratio for given accounts.
+  This function calculates the ratio of total income to total outcome for each month
+  within a specified range. If no accounts are provided, it uses the current user's
+  account settings to perform the calculations.
+  Args:
+    accounts (list): A list of account objects to calculate the ratios for. Defaults to an empty list.
+  Returns:
+    tuple: A dictionary with months as keys and their corresponding income to outcome ratios as values,
+          and a list of months within the specified range.
+  """
   return_dict = {}
   month_range = get_month_range()
   month_list = []
@@ -293,10 +369,36 @@ def is_7_perc_pm(accounts = []):
     
 @anvil.server.callable
 def get_icon_categories():
+  """
+  Retrieves icon categories from the database.
+
+  This function queries the 'icons' table in the database and returns the search results.
+
+  Returns:
+    list: A list of icon categories retrieved from the database.
+  """
   return app_tables.icons.search()
 
 @anvil.server.callable
 def write_transaction(type, category, amount, name, account_id, date=datetime.now().date(), to_account=None, recurring=False, end_date=None, spread_out=False):
+  """
+  Records a financial transaction in the system.
+
+  Parameters:
+  type (str): The type of transaction (e.g., 'expense', 'income', 'transfer').
+  category (str): The category of the transaction.
+  amount (float): The amount of the transaction.
+  name (str): The name or description of the transaction.
+  account_id (str): The ID of the account associated with the transaction.
+  date (datetime.date, optional): The date of the transaction. Defaults to today's date.
+  to_account (str, optional): The ID of the account to which the amount is transferred (if applicable). Defaults to None.
+  recurring (bool, optional): Indicates if the transaction is recurring. Defaults to False.
+  end_date (datetime.date, optional): The end date for a recurring transaction. Defaults to None.
+  spread_out (bool, optional): Indicates if the transaction amount should be spread out over a period. Defaults to False.
+
+  Returns:
+  None
+  """
   # Write the transaction different, depending on what it is.
   app_tables.transactions.add_row(
     type=type, 
@@ -313,6 +415,17 @@ def write_transaction(type, category, amount, name, account_id, date=datetime.no
     recalc_daily_totals(date, to_account.get_id())
 
 def recalc_daily_totals(from_date, account_id):
+  """
+  Recalculate daily totals for a given account starting from a specified date.
+  This function calculates the daily income, daily expense, and net total for each day
+  from the specified `from_date` to a number of days ahead as defined in the settings.
+  It updates or adds rows in the `dailytotals` table with the calculated values.
+  Parameters:
+  from_date (datetime.date): The date from which to start the recalculation.
+  account_id (str): The ID of the account for which to recalculate the daily totals.
+  Returns:
+  None
+  """
   account = app_tables.accounts.get_by_id(account_id)
   days_ahead_from_today = app_tables.settings.get(user=anvil.users.get_user())['calculate_days_ahead']
   if from_date != datetime.now().date():
@@ -360,10 +473,25 @@ def recalc_daily_totals(from_date, account_id):
 
 @anvil.server.callable
 def get_account_from_id(account_id):
+  """
+  Retrieve an account from the database using the provided account ID.
+
+  Args:
+    account_id (str): The unique identifier of the account to retrieve.
+
+  Returns:
+    dict: A dictionary representing the account details if found, otherwise None.
+  """
   return app_tables.accounts.get_by_id(account_id)
 
 @anvil.server.callable
 def get_user_accounts():
+  """
+  Retrieves the accounts associated with the currently logged-in user.
+  Returns:
+    list: A list of dictionaries, each containing the 'id' and 'name' of an account.
+        If no user is logged in, returns an empty list.
+  """
   user = anvil.users.get_user()
 
   if user:
@@ -374,14 +502,44 @@ def get_user_accounts():
 
 @anvil.server.callable
 def set_account_setting(account_id):
+  """
+  Updates the current account setting for the logged-in user.
+
+  Args:
+    account_id (str): The ID of the account to set as the current account.
+
+  Returns:
+    None
+  """
   app_tables.settings.get(user=anvil.users.get_user()).update(current_account=app_tables.accounts.get_by_id(account_id))
 
 @anvil.server.callable
 def get_current_account_id():
+  """
+  Retrieve the current account ID for the logged-in user.
+
+  This function fetches the current user's settings from the 'settings' table
+  and returns the ID of the 'current_account' associated with the user.
+
+  Returns:
+    str: The ID of the current account for the logged-in user.
+  """
   return app_tables.settings.get(user=anvil.users.get_user())['current_account'].get_id()
 
 @anvil.server.callable
 def get_transactions(date=datetime.now().date()):
+  """
+  Retrieve transactions for the current account on a given date.
+  This function fetches income, expense, and transfer transactions for the current account
+  from the database. It includes both one-time and recurring transactions.
+  Args:
+    date (datetime.date, optional): The date for which to retrieve transactions. Defaults to today's date.
+  Returns:
+    tuple: A tuple containing three lists:
+      - income_data (list): A list of dictionaries representing income transactions.
+      - expense_data (list): A list of dictionaries representing expense transactions.
+      - transfer_data (list): A list of dictionaries representing transfer transactions.
+  """
   curr_account = app_tables.settings.get(user=anvil.users.get_user())['current_account']
   incomes = app_tables.transactions.search(type='income', 
                                            date=date, 
@@ -464,10 +622,27 @@ def get_transactions(date=datetime.now().date()):
 
 @anvil.server.callable
 def get_icon(icon_category):
+  """
+  Retrieve an icon from the app_tables based on the given category.
+
+  Args:
+    icon_category (str): The category of the icon to retrieve.
+
+  Returns:
+    str: The icon associated with the given category.
+  """
   return app_tables.icons.get(category=icon_category)['icon']
 
 @anvil.server.callable
 def get_all_icons():
+  """
+  Retrieve all icons from the database.
+  This function searches the `icons` table in the database and retrieves all rows.
+  It then constructs a list of dictionaries, where each dictionary contains a 
+  category and its corresponding icon.
+  Returns:
+    list: A list of dictionaries, each containing a 'category' key and an 'icon' key.
+  """
   rows = app_tables.icons.search()
   icon_list = []
   for row in rows:
@@ -477,14 +652,40 @@ def get_all_icons():
 
 @anvil.server.callable
 def get_settings():
+  """
+  Retrieve the settings for the currently logged-in user.
+
+  This function fetches the settings from the 'settings' table in the database
+  for the user who is currently authenticated.
+
+  Returns:
+    dict: A dictionary containing the settings for the current user.
+  """
   return app_tables.settings.get(user=anvil.users.get_user())
 
 @anvil.server.callable
 def set_days_into_future(days):
+  """
+  Update the number of days into the future for a user's settings.
+
+  Args:
+    days (int): The number of days to set for the user's future calculation.
+
+  Returns:
+    None
+  """
   app_tables.settings.get(user=anvil.users.get_user()).update(calculate_days_ahead=days)
 
 @anvil.server.callable
 def get_time_values():
+  """
+  Retrieves time values from the app_tables.time_values table and returns them as a dictionary.
+  The function searches the time_values table for all entries, then iterates through the results,
+  creating a dictionary where the keys are the 'name' fields and the values are the 'value' fields
+  from each row.
+  Returns:
+    dict: A dictionary containing time values with 'name' as keys and 'value' as values.
+  """
   data = app_tables.time_values.search()
   time_dict = {}
   for row in data:
@@ -494,13 +695,34 @@ def get_time_values():
 
 @anvil.server.callable
 def get_currency():
+  """
+  Retrieves the currency setting for the currently logged-in user.
+
+  Returns:
+    str: The currency setting of the current user.
+  """
   return app_tables.settings.get(user=anvil.users.get_user())['currency']
 
 @anvil.server.callable
 def set_currency(currency):
+  """
+  Update the currency setting for the current user.
+
+  Args:
+    currency (str): The new currency to be set for the user.
+
+  Returns:
+    None
+  """
   app_tables.settings.get(user=anvil.users.get_user()).update(currency=currency)
 
 def get_month_range():
+    """
+    Calculate the date ranges for the past 6 months and the next 5 months from the current date.
+    Returns:
+      list of tuple: A list of tuples where each tuple contains the first and last day of each month 
+               in the range from 6 months ago to 5 months in the future.
+    """
     # Get the current date
     current_date = datetime.now()
 
@@ -537,6 +759,15 @@ def get_month_range():
 
 @anvil.server.callable
 def delete_transaction(transaction_id):
+  """
+  Deletes a transaction by its ID and recalculates daily totals for the associated account.
+
+  Args:
+    transaction_id (str): The ID of the transaction to be deleted.
+
+  Returns:
+    None
+  """
   transaction = app_tables.transactions.get_by_id(transaction_id)
   account = transaction['account']
   from_date = transaction['date']
@@ -545,10 +776,29 @@ def delete_transaction(transaction_id):
 
 @anvil.server.callable
 def create_account(name):
+  """
+  Creates a new account with the given name and associates it with the current user.
+
+  Args:
+    name (str): The name of the account to be created.
+
+  Returns:
+    None
+  """
   app_tables.accounts.add_row(name=name, user=anvil.users.get_user())
 
 @anvil.server.callable
 def delete_account(account_id):
+  """
+  Deletes an account and its associated daily totals and transactions, except for transfers.
+  Parameters:
+  account_id (str): The unique identifier of the account to be deleted.
+  The function performs the following steps:
+  1. Retrieves the account using the provided account_id.
+  2. Deletes all daily totals associated with the account.
+  3. Deletes all transactions associated with the account, except for those of type 'transfer'.
+  4. Updates the account to remove the user association but retains the account name for transfer records.
+  """
   account = app_tables.accounts.get_by_id(account_id)
 
   for day in app_tables.dailytotals.search(account=account):
@@ -561,6 +811,18 @@ def delete_account(account_id):
 
 @anvil.server.callable
 def delete_user():
+  """
+  Deletes the current user and all associated data from the database.
+
+  This function performs the following steps:
+  1. Searches for all accounts associated with the current user.
+  2. For each account, deletes all related transactions and daily totals.
+  3. Deletes the account itself.
+  4. Deletes the user's settings.
+  5. Deletes the user record from the users table.
+
+  Note: This function assumes the presence of the `app_tables` and `anvil.users` modules.
+  """
   for account in app_tables.accounts.search(user=anvil.users.get_user()):
     for transaction in app_tables.transactions.search(account=account):
       transaction.delete()
@@ -572,11 +834,29 @@ def delete_user():
   
 @anvil.server.callable
 def setup_user(name):
+  """
+  Sets up a new user account and initializes user settings.
+
+  Args:
+    name (str): The name of the user.
+
+  Returns:
+    None
+  """
   curr_account = app_tables.accounts.add_row(user=anvil.users.get_user(), name=name)
   app_tables.settings.add_row(currency='$', current_account=curr_account, calculate_days_ahead=15, user=anvil.users.get_user())
 
 @anvil.server.callable
 def is_first_login():
+  """
+  Check if the current user is logging in for the first time.
+
+  This function checks the 'settings' table in the 'app_tables' to determine if there is an entry for the current user.
+  If no entry is found, it indicates that the user is logging in for the first time.
+
+  Returns:
+    bool: True if the user is logging in for the first time, False otherwise.
+  """
   if not app_tables.settings.get(user=anvil.users.get_user()):
     return True
   else:

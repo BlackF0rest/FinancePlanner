@@ -39,7 +39,17 @@ class Transactions(TransactionsTemplate):
     open_form('Settings')
 
   def update_transactions(self, date=datetime.now().date()):
-    """Load Transactions and hand to different repeating Panels"""
+    """
+    Updates the transactions for the given date by loading them from the server
+    and assigning them to the respective repeating panels.
+
+    Args:
+      date (datetime.date, optional): The date for which to load transactions.
+                       Defaults to the current date.
+
+    Returns:
+      None
+    """
     incomes, expenses, transfers = anvil.server.call('get_transactions', date)
     self.rppn_income.items = incomes
     self.rppn_transfers.items = transfers
@@ -52,6 +62,14 @@ class Transactions(TransactionsTemplate):
     self.update_transactions()
 
   def update_accounts(self):
+      """
+      Updates the accounts information for the client.
+      This method retrieves the user's accounts from the server and updates the
+      dropdown menu items with the account names and IDs. It also sets the selected
+      value of the dropdown to the current account ID if it exists.
+      Returns:
+        None
+      """
       self.accounts = anvil.server.call('get_user_accounts')
       self.dd_account.items = [(account['name'], account['id']) for account in self.accounts]
     

@@ -59,13 +59,30 @@ class Home(HomeTemplate):
     open_form('Transaction_Form', type='expense')
 
   def dp_accounts_change(self, **event_args):
+    """
+    This method is called when a different account is selected in the Dropdown.
+
+    Args:
+      **event_args: Arbitrary keyword arguments.
+
+    Functionality:
+      - Retrieves the selected account ID from the dropdown.
+      - Calls the server function 'set_account_setting' to update the account ID.
+      - Updates the main graph to reflect changes based on the new account selection.
+    """
     """This method is called when a different account is selected in the Dropdown"""
     selected_account_id = self.dp_accounts.selected_value
     anvil.server.call('set_account_setting', selected_account_id) # set new account id in Server
     self.update_main_graph() # Update the Main Graph
 
   def update_accounts(self):
-    """Update the main Graph with new Data. This automatically uses the Account which is set in the """
+    """
+    Update the main graph with new data.
+    This method retrieves all user accounts from the server and updates the dropdown menu with the account names and IDs.
+    If there are any accounts, it sets the selected account in the dropdown to the globally selected account.
+    Returns:
+      None
+    """
     self.accounts = anvil.server.call('get_user_accounts') # get all accounts of the user
 
     self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts] # set the Dropdown to the names and ids of the accounts
@@ -76,6 +93,20 @@ class Home(HomeTemplate):
           self.dp_accounts.selected_value = account['id'] # Set selected Account to the global selected account
 
   def update_main_graph(self):
+    """
+    Update the main graph with daily totals from yesterday, today, and tomorrow.
+    This method retrieves daily total data from the server, processes the data,
+    and updates the graph with the new values. The graph markers are colored
+    based on the following conditions:
+    - The first marker is red if the total is negative, green if positive, and black if zero.
+    - The second marker is green if the total is greater than the previous total, black if equal, and red if less.
+    - The third marker is green if the total is greater than the previous total, black if equal, and red if less.
+    The graph is updated with the processed data and customized layout settings.
+    Parameters:
+    None
+    Returns:
+    None
+    """
     """Upadte Main Graph with daily Totals from yesterday, today and tomorrow."""
     data = anvil.server.call('get_daily_total_data') # Get data from Server
     dates = data['dates']

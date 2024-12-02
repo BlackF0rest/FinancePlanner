@@ -36,6 +36,16 @@ class Transaction_Form(Transaction_FormTemplate):
       self.update_accounts()
 
   def update_accounts(self):
+    """
+    Updates the accounts list by fetching user accounts from the server and excluding a specific account.
+    This method performs the following steps:
+    1. Calls the server to get the list of user accounts and assigns it to `self.accounts`.
+    2. Calls the server to get the current account ID that needs to be excluded.
+    3. Filters out the account with the excluded ID from the list of accounts.
+    4. Updates `self.dp_accounts.items` with the filtered list of account names and IDs.
+    Note:
+      The server functions `get_user_accounts` and `get_current_account_id` must be defined on the server side.
+    """
     self.accounts = anvil.server.call("get_user_accounts")
 
     excluded_account_id = anvil.server.call("get_current_account_id")  # Replace with the account ID you want to exclude
@@ -47,6 +57,26 @@ class Transaction_Form(Transaction_FormTemplate):
     ]
 
   def bt_add_click(self, **event_args):
+    """
+    This method is called when the button is clicked. It performs validation on various input fields and 
+    then processes the transaction based on the type and recurrence settings.
+
+    Validations:
+    - Checks if the input number is provided and greater than 0.01.
+    - Checks if the input name is provided.
+    - Checks if an icon is selected.
+    - Checks if the date is provided.
+    - For 'transfer' type, checks if an account is selected.
+    - For recurring transactions, checks if recurrence settings are provided and valid.
+    - For spread out transactions, checks if the end date is provided.
+
+    Actions:
+    - If the transaction is a transfer, retrieves the target account.
+    - If the transaction is recurring, calculates the daily value and adjusts the end date if necessary.
+    - If the transaction is spread out, calculates the daily value based on the date range.
+    - Calls the server to write the transaction with the appropriate details.
+    - Opens the "Home" form after processing the transaction.
+    """
     """This method is called when the button is clicked"""
     if not self.input_numb.text or float(self.input_numb.text)<0.01:
       self.input_numb.border = "2px solid red"
@@ -139,6 +169,16 @@ class Transaction_Form(Transaction_FormTemplate):
     open_form("Home")
 
   def set_selected_icon(self, **event_args):
+    """
+    Sets the selected icon based on the provided event arguments.
+
+    Args:
+      event_args (dict): A dictionary containing event arguments. 
+                 Expected key is "icon_category" which specifies the category of the icon.
+
+    Returns:
+      None
+    """
     self.selected_icon = event_args["icon_category"]
     self.rppn_icons.visible = False
     self.img_icon.source = anvil.server.call("get_icon", event_args["icon_category"])

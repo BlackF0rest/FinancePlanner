@@ -34,10 +34,26 @@ class Settings(SettingsTemplate):
     open_form('Insights')
 
   def update_days(self):
+    """
+    Updates the selected days and the label text with the number of days ahead.
+
+    This method calls the 'get_settings' function on the server to retrieve the 
+    'calculate_days_ahead' value from the settings. It then updates the 
+    'selected_days' attribute and the text of the 'lb_days_future' label with 
+    this value.
+    """
     self.selected_days = anvil.server.call('get_settings')['calculate_days_ahead']
     self.lb_days_future.text = self.selected_days
 
   def update_currency(self):
+    """
+    Updates the selected currency for the application.
+
+    This method calls the server to get the current currency setting and updates
+    the radio button selection based on the returned currency. If the currency
+    is '€', the Euro radio button is selected; otherwise, the Dollar radio button
+    is selected.
+    """
     self.selected_currency =  anvil.server.call('get_currency')
     if self.selected_currency == '€':
       self.rd_euro.selected = True
@@ -45,6 +61,14 @@ class Settings(SettingsTemplate):
       self.rd_dollar.selected = True
 
   def update_accounts(self):
+    """
+    Updates the accounts information for the user.
+    This method retrieves the user's accounts from the server and updates the
+    `dp_accounts` dropdown items with the account names and IDs. It also sets
+    the selected value of the dropdown to the current account ID if it exists.
+    Returns:
+      None
+    """
     self.accounts = anvil.server.call('get_user_accounts')
 
     self.dp_accounts.items = [(account['name'], account['id']) for account in self.accounts]
